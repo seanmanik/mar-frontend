@@ -8,6 +8,7 @@ import App from './App.tsx'
 import { config } from './wagmi.ts'
 
 import './index.css'
+import { BrowserRouter } from 'react-router-dom'
 
 globalThis.Buffer = Buffer
 
@@ -17,8 +18,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </QueryClientProvider>
     </WagmiProvider>
+
   </React.StrictMode>,
 )
