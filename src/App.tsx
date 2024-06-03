@@ -16,7 +16,7 @@ function App() {
         <div>
           blance: <Balance address={(account.addresses || [])[0] || ''} />
           <br/>
-          status: {account.status}
+          status: {account.isConnected ? 'true' : 'false'}
           <br />
           addresses: {JSON.stringify(account.addresses)}
           <br />

@@ -1,5 +1,5 @@
 import { Box, DialogContent, DialogTitle, Modal, ModalClose, ModalDialog, ModalProps, Typography } from "@mui/joy";
-import React, { memo } from "react";
+import { memo } from "react";
 import { ImageLogoFullBlack, ImageLogoWhite } from "../../images";
 
 export default memo<ModalProps & {
