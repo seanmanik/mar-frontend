@@ -2,15 +2,15 @@ import { Box, Button, Stack } from "@mui/joy";
 import { memo, useState } from "react";
 import { ImageLogoFullBlue } from "../../images";
 import { IconGroupAdd } from "../../icons";
-import ModalUserAgreement from "../ModalUserAgreement";
-import ModalConnectWallet from "../ModalConnectWallet";
+import ModalUserAgreement from "../../components/ModalUserAgreement";
+import ModalConnectWallet from "../../components/ModalConnectWallet";
 import ConnectButton from "./ConnectButton";
 
 export default memo(() => {
     const [ openModalConnectWallet, setOpenModalConnectWallet ] = useState(false)
     const [ openModalUserAgreement, setOpenModalUserAgreement ] = useState(false)
     return (
-        <Box bgcolor={'white'}>
+        <Box bgcolor={'white'} width={'100%'}>
             <Stack direction={"row"} maxWidth={1420} paddingLeft={'20px'} paddingRight={'20px'} height={60} alignItems={"center"} margin={"auto"} justifyContent={"space-between"}>
                 <img src={ImageLogoFullBlue} width={140}/>
                 <Stack direction={"row"}>
