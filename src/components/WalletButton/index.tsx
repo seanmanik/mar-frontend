@@ -1,12 +1,14 @@
 import { Button, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { memo } from "react";
 import { useAccount, useDisconnect } from "wagmi";
-import { IconETH, IconWallet } from "../../icons";
-import { ArrowDropDown } from "@mui/icons-material";
+import { IconETH } from "../../icons";
+import { ArrowDropDown, Wallet } from "@mui/icons-material";
 
 export default memo<{
     onClick: () => void
-}>(({onClick}) => {
+    onInviteFriendsClick?: () => void
+    onAccountDetailsClick?: () => void
+}>(({onClick, onInviteFriendsClick, onAccountDetailsClick}) => {
 
     const account = useAccount()
     const { disconnect } = useDisconnect()
@@ -15,8 +17,9 @@ export default memo<{
         return (
             <Button color="primary"
                 onClick={onClick}
+                endDecorator={<Wallet fontSize="small" />}
             >
-                Connect <img src={IconWallet} style={{marginLeft: 5}} />
+                Connect
             </Button>
         )
     }
@@ -27,8 +30,11 @@ export default memo<{
                     {account.address?.slice(0, 6)}...{account.address?.slice(-4)}
             </MenuButton>
             <Menu sx={{ minWidth: 160, '--ListItemDecorator-size': '24px' }}>
-                <MenuItem>
+                <MenuItem onClick={onAccountDetailsClick}>
                     Account Details
+                </MenuItem>
+                <MenuItem onClick={onInviteFriendsClick}>
+                    Invite Friends
                 </MenuItem>
                 <MenuItem onClick={() => disconnect()}>
                     Disconnect

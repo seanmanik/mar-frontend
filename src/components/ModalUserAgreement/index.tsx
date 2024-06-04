@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Button, Checkbox, Link, Stack, Typography } from "@mui/joy";
-import { IconWallet } from "../../icons";
+import { Wallet } from "@mui/icons-material";
 
 export default memo<{
     open: boolean
@@ -20,8 +20,9 @@ export default memo<{
                 <Button sx={{width: '100%', marginTop: 4}}
                     disabled={!agree}
                     onClick={onAgreed}
+                    endDecorator={<Wallet fontSize="small"/>}
                 >
-                    Connect Wallet <img src={IconWallet} style={{marginLeft: 10}}/>
+                    Connect Wallet
                 </Button>
             </Stack>
         </ModalBlue>

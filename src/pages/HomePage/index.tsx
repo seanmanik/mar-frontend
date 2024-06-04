@@ -1,5 +1,4 @@
 import { Grid, Stack } from "@mui/joy";
-import React from "react";
 import PoolCard from "../../components/Pool/PoolCard";
 
 const HomePage = () => {
