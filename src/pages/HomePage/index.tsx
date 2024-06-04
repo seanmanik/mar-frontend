@@ -2,6 +2,7 @@ import { Box, Grid, Stack } from "@mui/joy";
 import PoolCard from "../../components/Pool/PoolCard";
 import ModalDepositToken from "../../components/ModalDepositToken";
 import { useState } from "react";
+import ModalDepositNFT from "../../components/ModalDepositNFT";
 
 const HomePage = () => {
     const [openModalDeposit, setOpenModalDeposit] = useState(false)
@@ -20,7 +21,7 @@ const HomePage = () => {
                 </Grid>
             ))}
         </Grid>
-        <ModalDepositToken open={openModalDeposit} onClose={() => setOpenModalDeposit(false)}/>
+        <ModalDepositNFT open={openModalDeposit} onClose={() => setOpenModalDeposit(false)}/>
     </Stack>
 }
 

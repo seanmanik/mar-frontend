@@ -15,3 +15,5 @@ export { default as IconMarPoint } from './resource/icon-mar-point.png'
 export { default as IconMyStake } from './resource/icon-mystake.png'
 export { default as IconPending } from './resource/icon-pending.png'
 export { default as IconTotalValueStake } from './resource/icon-total-value-stake.png'
+
+export { default as IconCheckOne } from './resource/check-one.png'

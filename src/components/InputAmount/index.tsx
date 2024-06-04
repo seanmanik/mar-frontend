@@ -39,7 +39,6 @@ export default memo<{
     balance,
     onChange
 }) => {
-    const inputRef = useRef(null)
     const btPercentStyle = {
         size: "sm",
         variant: "outlined",
@@ -50,13 +49,7 @@ export default memo<{
     const error = value > balance ? "Not Enough Balance" : ""
 
     return (
-    <Box onClick={() => {
-        try {
-            var input = inputRef?.current as any
-            (input as any)?.focus();
-        }
-        catch (ex) {}
-    }}>
+    <Box>
         <Box sx={{borderRadius: '12px', border: '1px solid #e0e0e0', borderColor: error ? '#ff9595' : '#e0e0e0', padding: 1}}>
             <Stack direction={"row"} spacing={1} alignItems={"center"}>
                 <img src={TokenToIcon[symbol]} width={40} />
@@ -66,7 +59,6 @@ export default memo<{
                         <Typography level="title-sm" color="neutral" textAlign={"right"}>Your Balance: {parseFloat(balance.toFixed(2)).toLocaleString()} {symbol}</Typography>
                     </Stack>
                     <Input
-                        ref={inputRef}
                         endDecorator={
                             <Stack direction={"row"} alignItems={"center"} justifyContent={"flex-end"} spacing={1}>
                                 <Button {...btPercentStyle as any} onClick={() => {

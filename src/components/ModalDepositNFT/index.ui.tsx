@@ -3,56 +3,60 @@ import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Button, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
-import { IconMarPoint, IconMyStake, IconPending, IconTotalValueStake } from "../../icons";
+import { IconMarPoint, IconMyStake, IconPending, IconPudgy, IconTotalValueStake } from "../../icons";
 import { Bolt } from "@mui/icons-material";
 import { ImageLogoBlueCircle, ImageLogoWhite } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
+import NFTDisplay from "../NFTDisplay";
+import InputNFT from "../InputNFT";
 
 export default memo<{
     open: boolean
+    symbol: string
+    nftIds: {
+        id: number
+        image: string
+    }[]
     marPoint: number
     puppyPoint: number
     totalValue: number
     stakeAmount: number
     pendingValue: number
-    balance: number
-    symbol: string
     isSuccess: boolean
     onClose: () => void
-    onDeposit: (amount: number) => void
+    onDeposit: (value: number[]) => void
 }>(({ 
     open,
+    symbol,
+    nftIds,
     marPoint,
     puppyPoint,
     totalValue,
     stakeAmount,
     pendingValue,
-    symbol,
-    balance,
     isSuccess,
     onClose,
     onDeposit
  }) => {
-    const [amount, setAmount] = useState(0)
-
+    const [value, setValue] = useState<number[]>([])
     return (
         <ModalBlue
             open={open}
             onClose={onClose}
-            title={isSuccess ? `${symbol}
-            Deposited Successfully`
-            : `Deposit your USDT
+            title={isSuccess ? `NFT Deposited
+            Successfully`
+            : `Deposit your NFT
             to earn points`}
         >
             
             <Box maxWidth={550}>
                 {!isSuccess &&(<>
                     <Box maxWidth={'100%'} overflow={'hidden'}>
-                        <InputAmount 
+                        <InputNFT
                             symbol={symbol} 
-                            balance={balance}
-                            value={amount} 
-                            onChange={v => setAmount(v)}
+                            onChange={v => setValue(v)}
+                            value={value}
+                            nftIds={nftIds}
                         />
                     </Box>
                     <Grid marginTop={4} container spacing={2} sx={{flexGrow: 1}}>
@@ -84,7 +88,7 @@ export default memo<{
                         </Grid>
                     </Grid>
                     <Button sx={{width: '100%', marginTop: 5}} endDecorator={<Bolt fontSize="small"/>}
-                        onClick={() => onDeposit && onDeposit(amount)}>
+                        onClick={() => onDeposit && onDeposit(value)}>
                         Deposit
                     </Button>
                 </>)}
@@ -98,7 +102,7 @@ export default memo<{
                         <Typography fontSize={32} lineHeight={'34px'} fontWeight={500} textAlign={"center"}>Congrats, you are earning<br/>like a pro!</Typography>
                     </Stack>
                     <Typography level="title-sm" marginBottom={1}>Token Deposit</Typography>
-                    <TokenAmountDisplay amount={amount} symbol={symbol} name={`${parseFloat(amount.toFixed(2)).toLocaleString()}`} icon={TokenToIcon[symbol]}/>
+                    <NFTDisplay symbol={symbol} icon={TokenToIcon[symbol]} nftIds={nftIds.filter(e => value.includes(e.id))}/>
                     <Button variant="outlined" color="neutral" sx={{width: '100%', marginTop: 5}}
                         onClick={() => window.open('https://etherscan.io')}
                     >
