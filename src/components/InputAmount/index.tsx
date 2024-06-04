@@ -3,6 +3,7 @@ import React, { memo, useRef } from "react";
 import { IconUSDT } from "../../icons";
 import { NumericFormat, NumericFormatProps } from "react-number-format";
 import { Error as ErrorIcon } from "@mui/icons-material";
+import TokenToIcon from "../../utils/TokenToIcon";
 
 const NumericFormatAdapter = React.forwardRef<NumericFormatProps, any>(
     function NumericFormatAdapter(props, ref) {
@@ -58,8 +59,8 @@ export default memo<{
     }}>
         <Box sx={{borderRadius: '12px', border: '1px solid #e0e0e0', borderColor: error ? '#ff9595' : '#e0e0e0', padding: 1}}>
             <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                <img src={IconUSDT} width={40} />
-                <Box>
+                <img src={TokenToIcon[symbol]} width={40} />
+                <Box flex={1}>
                     <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
                         <Typography level="title-sm" color="neutral">Deposit {symbol}</Typography>
                         <Typography level="title-sm" color="neutral" textAlign={"right"}>Your Balance: {parseFloat(balance.toFixed(2)).toLocaleString()} {symbol}</Typography>

@@ -1,7 +1,7 @@
 import { Box, Divider, Stack, Typography } from "@mui/joy";
 import React, { memo } from "react";
-import { IconBTC, IconETH, IconPudgy, IconUSDT } from "../../icons";
-import { ArrowLeft, ArrowRight, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from "@mui/icons-material";
+import { KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from "@mui/icons-material";
+import TokenToIcon from "../../utils/TokenToIcon";
 
 export default memo(() => {
     const data = [{
@@ -37,12 +37,6 @@ export default memo(() => {
         nftIds: [123, 441],
         stakeValue: 2000
     }]
-    const icons: any = {
-        'WETH': IconETH,
-        'WBTC': IconBTC,
-        'USDT': IconUSDT,
-        'Pudgy': IconPudgy
-    }
     
     return (
         <Box>
@@ -53,7 +47,7 @@ export default memo(() => {
                     }
                     <Stack direction={"row"} marginBottom={2} marginTop={2} alignItems={"center"} justifyContent={"space-between"}>
                         <Stack direction={"row"}>
-                            <img src={icons[e.poolName]} width={40} style={{marginRight: 10}}/>
+                            <img src={TokenToIcon[e.poolName]} width={40} style={{marginRight: 10}}/>
                             <Box>
                                 <Typography level="title-sm" fontWeight={600}>{e.type == 'withdraw' ? 'Withdraw funds' : 'Deposit funds'}</Typography>
                                 <Typography level="body-sm" color="neutral">{e.symbol}</Typography>

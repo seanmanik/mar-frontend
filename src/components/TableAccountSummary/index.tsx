@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Typography } from "@mui/joy";
 import React, { memo } from "react";
-import { IconBTC, IconETH, IconPudgy } from "../../icons";
+import TokenToIcon from "../../utils/TokenToIcon";
 
 export default memo(() => {
     const data = [{
@@ -31,12 +31,6 @@ export default memo(() => {
         puppyReward: 150000,
         TVL: 250000000
     }]
-
-    const icons: any = {
-        'WETH': IconETH,
-        'WBTC': IconBTC,
-        'Pudgy': IconPudgy
-    }
     return (
         <Box>
             <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -58,7 +52,7 @@ export default memo(() => {
                 <Box key={i}>
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                         <Grid xs={2} display={'flex'} flexDirection={"row"} alignItems={"center"} justifyContent={"center"}>
-                            <img src={icons[e.poolName]} width={16} style={{marginRight: 5}}/> 
+                            <img src={TokenToIcon[e.poolName]} width={16} style={{marginRight: 5}}/> 
                             <Typography fontWeight={700} level="title-sm" textAlign={"center"}>
                                 {e.poolName}
                             </Typography>
