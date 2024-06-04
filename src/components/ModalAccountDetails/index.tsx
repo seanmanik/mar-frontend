@@ -77,12 +77,12 @@ export default memo<{
                         })}
                     >
                         <TabPanel value={0} sx={{padding: 0}}>
-                            <Box marginTop={3} height={350} overflow={'auto'}>
+                            <Box marginTop={3} height={350}>
                                 <TableAccountSummary />
                             </Box>
                         </TabPanel>
                         <TabPanel value={1} sx={{padding: 0}}>
-                            <Box marginTop={3} height={350} overflow={'auto'}>
+                            <Box marginTop={3} height={350}>
                                 <TableAccountActivity />
                             </Box>
                         </TabPanel>

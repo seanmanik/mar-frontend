@@ -1,7 +1,10 @@
-import { Grid, Stack } from "@mui/joy";
+import { Box, Grid, Stack } from "@mui/joy";
 import PoolCard from "../../components/Pool/PoolCard";
+import ModalDepositToken from "../../components/ModalDepositToken";
+import { useState } from "react";
 
 const HomePage = () => {
+    const [openModalDeposit, setOpenModalDeposit] = useState(false)
     return <Stack gap={3} direction="column" maxWidth={1420} paddingLeft={'20px'} paddingRight={'20px'} paddingBottom={'84px'} paddingTop={"44px"} alignItems="flex-start" margin={"auto"} justifyContent="flex-start">
         <Grid
             container
@@ -11,10 +14,13 @@ const HomePage = () => {
         >
             {Array.from(Array(12)).map((_, index) => (
                 <Grid xs={2} sm={4} md={4} lg={4} key={index}>
-                    <PoolCard />
+                    <Box onClick={() => setOpenModalDeposit(true)}>
+                        <PoolCard />
+                    </Box>
                 </Grid>
             ))}
         </Grid>
+        <ModalDepositToken open={openModalDeposit} onClose={() => setOpenModalDeposit(false)}/>
     </Stack>
 }
 
