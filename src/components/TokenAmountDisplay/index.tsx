@@ -3,9 +3,10 @@ import React, { memo } from "react";
 
 export default memo<{
     amount: number
+    symbol?: string
     name: string
     icon?: string
-}>(({amount, name, icon}) => {
+}>(({amount, name, icon, symbol}) => {
     return (
         <Stack sx={{
             background: '#F5F5F5',
@@ -16,8 +17,8 @@ export default memo<{
                 {icon && <img src={icon} width={40} />}
             </Box>
             <Box>
-                <Typography level="title-lg">{parseFloat(amount.toFixed(2)).toLocaleString()}</Typography>
-                <Typography level="title-sm" color="neutral">{name}</Typography>
+                <Typography level="title-lg">{parseFloat(amount.toFixed(2)).toLocaleString()}{symbol ? ` ${symbol}`: ''}</Typography>
+                <Typography level="body-sm" color="neutral">{name}</Typography>
             </Box>
         </Stack>
     )

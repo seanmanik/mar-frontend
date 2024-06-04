@@ -1,15 +1,32 @@
-import React, { memo, useState } from "react";
+import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
-import { Box, Button, Grid, Stack, Typography } from "@mui/joy";
+import { Box, Button, Grid, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
-import { IconETH, IconUSDT } from "../../icons";
+import { IconMarPoint, IconMyStake, IconPending, IconTotalValueStake } from "../../icons";
 import { Bolt } from "@mui/icons-material";
 
 export default memo<{
     open: boolean
+    marPoint: number
+    puppyPoint: number
+    totalValue: number
+    stakeAmount: number
+    pendingValue: number
+    balance: number
+    symbol: string
     onClose: () => void
-}>(({ open, onClose }) => {
+}>(({ 
+    open,
+    marPoint,
+    puppyPoint,
+    totalValue,
+    stakeAmount,
+    pendingValue,
+    symbol,
+    balance,
+    onClose,
+ }) => {
     const [amount, setAmount] = useState(0)
     return (
         <ModalBlue
@@ -21,8 +38,8 @@ export default memo<{
             <Box>
                 <Box maxWidth={'100%'} overflow={'hidden'}>
                     <InputAmount 
-                    symbol="USDC" 
-                    balance={1000000000}
+                    symbol={symbol} 
+                    balance={balance}
                     value={amount} 
                     onChange={v => setAmount(v)}
                     />
@@ -33,27 +50,27 @@ export default memo<{
                             <Typography level="title-sm">My Rewards</Typography>
                         </Grid>
                         <Grid xs={12} sm={6}>
-                            <TokenAmountDisplay amount={467000.129387192837} name="Mar points" icon={IconUSDT}/>
+                            <TokenAmountDisplay amount={marPoint} name="Mar points" icon={IconMarPoint}/>
                         </Grid>
                         <Grid xs={12} sm={6}>
                             {/* <Typography level="title-sm">&nbsp;</Typography> */}
-                            <TokenAmountDisplay amount={467000.129387192837} name="Mar points" icon={IconETH}/>
+                            <TokenAmountDisplay amount={puppyPoint} name="Puppy points" icon={IconMarPoint}/>
                         </Grid>
 
                         <Grid xs={12} sm={6}>
                             <Typography level="title-sm" paddingBottom={1}>Total Value Staked</Typography>
-                            <TokenAmountDisplay amount={467000.129387192837} name="Mar points" icon={IconUSDT}/>
+                            <TokenAmountDisplay amount={totalValue} name="USD" icon={IconTotalValueStake}/>
                         </Grid>
                         <Grid xs={12} sm={6}>
                             <Typography level="title-sm" paddingBottom={1}>My Staked</Typography>
-                            <TokenAmountDisplay amount={467000.129387192837} name="Mar points" icon={IconETH}/>
+                            <TokenAmountDisplay amount={stakeAmount} name="USDC" icon={IconMyStake}/>
                         </Grid>
 
                         <Grid xs={12} paddingBottom={-2}>
                             <Typography level="title-sm">Pending Deposits</Typography>
                         </Grid>
                         <Grid xs={12} sm={12}>
-                            <TokenAmountDisplay amount={467000.129387192837} name="Mar points" icon={IconUSDT}/>
+                            <TokenAmountDisplay amount={pendingValue} symbol={symbol} name="in processing" icon={IconPending}/>
                         </Grid>
                     </Grid>
                 </Box>
