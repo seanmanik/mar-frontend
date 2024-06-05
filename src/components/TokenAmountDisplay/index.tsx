@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/joy";
 import React, { memo } from "react";
-import BoxInfoDisplay from "../BoxInfoDisplay";
+import ValueDisplay from "../ValueDisplay";
 
 export default memo<{
     amount: number
@@ -9,9 +9,9 @@ export default memo<{
     icon?: string
 }>(({amount, name, icon, symbol}) => {
     return (
-        <BoxInfoDisplay 
+        <ValueDisplay 
             text={`${parseFloat(amount.toFixed(2)).toLocaleString()} ${symbol ? ` ${symbol}`: ''}`}
-            description={name}
+            name={name}
             icon={icon}
         />
         // <Stack sx={{

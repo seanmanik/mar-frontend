@@ -3,10 +3,10 @@ import React, { memo } from "react";
 
 export default memo<{
     text: string
-    description?: string
+    name?: string
     icon?: string
     images?: string[]
-} & StackProps>(({icon, text, description, images, ...stackProps}) => {
+} & StackProps>(({icon, text, name, images, ...stackProps}) => {
     return (
         <Stack sx={{
             background: '#F5F5F5',
@@ -19,7 +19,7 @@ export default memo<{
                 </Box>
                 <Box>
                     <Typography level="title-lg">{text}</Typography>
-                    {description && <Typography level="body-sm" color="neutral">{description}</Typography>}
+                    {name && <Typography level="body-sm" color="neutral">{name}</Typography>}
                 </Box>
             </Stack>
             {images && images.length > 0 &&

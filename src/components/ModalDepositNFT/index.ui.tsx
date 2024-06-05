@@ -9,7 +9,7 @@ import { ImageLogoBlueCircle, ImageLogoWhite } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import NFTDisplay from "../NFTDisplay";
 import InputNFT from "../InputNFT";
-import BoxInfoDisplay from "../BoxInfoDisplay";
+import ValueDisplay from "../ValueDisplay";
 
 export default memo<{
     open: boolean
@@ -94,8 +94,8 @@ export default memo<{
                         </Grid>
                         <Grid xs={12} sm={12}>
                             {/* <TokenAmountDisplay amount={pendingValue} symbol={symbol} name="in processing" icon={IconPending}/> */}
-                            <BoxInfoDisplay 
-                                icon={TokenToIcon[symbol]} text={`${symbol} #123`} description="in processing" 
+                            <ValueDisplay 
+                                icon={TokenToIcon[symbol]} text={`${symbol} #123`} name="in processing" 
                                 images={['https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk?auto=format&dpr=1&w=1000']}/>
                         </Grid>
                     </Grid>

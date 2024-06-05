@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/joy";
 import React, { memo } from "react";
-import BoxInfoDisplay from "../BoxInfoDisplay";
+import ValueDisplay from "../ValueDisplay";
 
 export default memo<{
     symbol?: string
@@ -11,10 +11,10 @@ export default memo<{
     icon?: string
 }>(({icon, symbol, nftIds}) => {
     return (
-        <BoxInfoDisplay
+        <ValueDisplay
             icon={icon}
             text={`${symbol} ${nftIds.map(e => `#${e.id}`).join(' ')}`}
-            description=""
+            name=""
             images={nftIds.map(e => e.image)}
         />
         // <Stack sx={{

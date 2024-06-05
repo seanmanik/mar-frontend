@@ -18,12 +18,7 @@ const HomePage = () => {
             {Array.from(Array(12)).map((_, index) => (
                 <Grid xs={2} sm={4} md={4} lg={4} key={index}>
                     <Box onClick={() => setOpenModalDeposit(index)}>
-                        <PoolCard>
-                            {index == 1 && <>ModalWithdrawNFT</>}
-                            {index == 2 && <>ModalWithdrawToken</>}
-                            {index == 3 && <>ModalDepositToken</>}
-                            {index == 4 && <>ModalDepositNFT</>}
-                        </PoolCard>
+                        <PoolCard />
                     </Box>
                 </Grid>
             ))}
