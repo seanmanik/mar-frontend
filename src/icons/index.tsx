@@ -20,3 +20,4 @@ export { default as IconYourDailyReward } from './resource/icon-your-daily-rewar
 export { default as IconYourDeposited } from './resource/icon-your-deposited.png'
 
 export { default as IconCheckOne } from './resource/check-one.png'
+export { default as IconCoin } from './resource/icon-coin.png'
