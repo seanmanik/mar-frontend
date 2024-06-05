@@ -2,6 +2,7 @@ import { Box, Card, Stack } from "@mui/joy";
 import React from "react";
 import ValueDisplay from "../ValueDisplay";
 import { IconDailyReward, IconETH, IconMarPoint, IconPending, IconTotalValueStake, IconUSDT, IconYourDailyReward, IconYourDeposited } from "../../icons";
+import { Paid, Redeem } from "@mui/icons-material";
 
 const PoolCard = (props:any) => {
     return <Card sx={{
@@ -11,8 +12,8 @@ const PoolCard = (props:any) => {
         borderRadius: '12px'
     }}>
         <Stack direction={"row"} alignItems={"flex-start"} spacing={1} >
-            <ValueDisplay name="TVL" text="$23,231,234" isNameAbove flex={1}/>
-            <ValueDisplay name="DAILY" text="$23,231,234" align="right" isNameAbove flex={1} />
+            <ValueDisplay name="TVL" text="$23,231,234" isNameAbove flex={1} nameIcon={<Paid sx={{fontSize: 15, color: 'gray', marginRight: 0.5}}/>}/>
+            <ValueDisplay name="DAILY" text="$23,231,234" align="right" isNameAbove flex={1}  nameIcon={<Redeem sx={{fontSize: 15, color: 'gray', marginLeft: 0.5}}/>}/>
         </Stack>
         <Box>
             <ValueDisplay variant="small" name="Total value Staked" text="$20,000,000" icon={IconTotalValueStake} />
