@@ -21,3 +21,8 @@ export { default as IconYourDeposited } from './resource/icon-your-deposited.png
 
 export { default as IconCheckOne } from './resource/check-one.png'
 export { default as IconCoin } from './resource/icon-coin.png'
+export { default as IconLanguage } from './resource/icon-language.png'
+export { default as IconDiscord } from './resource/icon-discord.png'
+export { default as IconGithub } from './resource/icon-github.png'
+export { default as IconTele } from './resource/icon-tele.png'
+export { default as IconTwitter } from './resource/icon-twitter.png'
