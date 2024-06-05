@@ -9,31 +9,36 @@ import ValueDisplay from "../../components/ValueDisplay";
 import { IconMarPoint, IconMyStake, IconPudgy, IconTotalValueStake } from "../../icons";
 import AccountLevel from "../../components/AccountLevel";
 import StatsCard from "../../components/StatsCard";
+import PoolsSelection from "../../components/PoolsSelection";
 
 const HomePage = () => {
     const [openModalDeposit, setOpenModalDeposit] = useState(0)
+    const [poolSelected, setPoolSelected] = useState('all')
+
     return (
         <Box maxWidth={1420} paddingLeft={'20px'} paddingRight={'20px'} paddingBottom={'84px'} paddingTop={"44px"} margin={"auto"}>
             <Box marginBottom={2}>
                 <AccountLevel />
             </Box>
+            
             <Grid container
                     spacing={{ xs: 1, md: 2 }}
                     sx={{ flexGrow: 1, marginBottom: 2 }}>
-                <Grid xs={6} md={3}>
+                <Grid xs={12} sm={6} md={3} lg={3}>
                     <StatsCard title="TVL" value="$500,000,000" icon={IconTotalValueStake} />
                 </Grid>
-                <Grid xs={6} md={3}>
+                <Grid xs={12} sm={6} md={3} lg={3}>
                     <StatsCard title="MY STAKE" value="$12,000" icon={IconMyStake} />
                 </Grid>
-                <Grid xs={6} md={3}>
+                <Grid xs={12} sm={6} md={3} lg={3}>
                     <StatsCard title="MAR POINTS" value="$500,000,000" icon={IconMarPoint} />
                 </Grid>
-                <Grid xs={6} md={3}>
+                <Grid xs={12} sm={6} md={3} lg={3}>
                     <StatsCard title="PUPPY POINTS" value="$500,000,000" icon={IconMarPoint} />
                 </Grid>
             </Grid>
-            <Stack gap={3} direction="column" alignItems="flex-start" justifyContent="flex-start">
+            <PoolsSelection poolSelected={poolSelected} setPoolSelected={setPoolSelected}/>
+            <Stack gap={3} direction="column" alignItems="flex-start" justifyContent="flex-start" marginTop={3}>
                 <Grid
                     container
                     spacing={{ xs: 1, md: 2 }}

@@ -13,7 +13,10 @@ export default memo(() => {
             borderRadius: '10px',
             padding: 1.5
         }}>
-            <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+            <Stack direction={{
+                md: "row",
+                sm: 'column'
+            }} alignItems={"center"} justifyContent={"space-between"} gap={1}>
                 <Box>
                     <Typography level="title-sm" fontSize={'12px'} color="neutral" fontWeight={'700'}>DBM.sol</Typography>
                     <Tooltip title={
