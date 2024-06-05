@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/joy";
+import { Box, Stack, StackProps, Typography } from "@mui/joy";
 import React, { memo } from "react";
 
 export default memo<{
@@ -6,13 +6,13 @@ export default memo<{
     description?: string
     icon?: string
     images?: string[]
-}>(({icon, text, description, images}) => {
+} & StackProps>(({icon, text, description, images, ...stackProps}) => {
     return (
         <Stack sx={{
             background: '#F5F5F5',
             padding: 1,
             borderRadius: 10
-        }} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+        }} direction={"row"} alignItems={"center"} justifyContent={"space-between"}  {...stackProps}>
             <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <Box width={'40px'} height={'40px'}>
                     {icon && <img src={icon} width={40} />}
