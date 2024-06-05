@@ -62,6 +62,7 @@ export default memo<{
                                     display: 'block',
                                     borderRadius: 10,
                                     border: value.includes(e.id) ? '3px solid #1D72DC' : '3px solid transparent',
+                                    cursor: 'pointer'
                                 }}
                                 onClick={() => {
                                     if (value.includes(e.id)) {
