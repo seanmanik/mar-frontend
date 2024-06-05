@@ -32,8 +32,8 @@ export default memo<{
                     </Box>
                 )}
                 <Stack direction={"column"} alignItems={align == 'left' ? "flex-start" : 'flex-end'}>
-                    {variant == 'medium' && isNameAbove && align == 'left' && name && <Typography level="title-sm" color="neutral" fontWeight={700} display={'inline-flex'} alignItems={'center'}>{nameIcon}{name}</Typography>}
-                    {variant == 'medium' && isNameAbove && align == 'right' && name && <Typography level="title-sm" color="neutral" fontWeight={700} display={'inline-flex'} alignItems={'center'}>{name}{nameIcon}</Typography>}
+                    {variant == 'medium' && isNameAbove && align == 'left' && name && <Typography level="title-sm" fontSize={"12px"} color="neutral" fontWeight={700} display={'inline-flex'} alignItems={'center'}>{nameIcon}{name}</Typography>}
+                    {variant == 'medium' && isNameAbove && align == 'right' && name && <Typography level="title-sm" fontSize={"12px"} color="neutral" fontWeight={700} display={'inline-flex'} alignItems={'center'}>{name}{nameIcon}</Typography>}
                     {variant == 'medium' && <Typography level="title-lg">{text}</Typography>}
                     {variant == 'medium' && !isNameAbove && name && <Typography level="title-sm" color="neutral">{name}</Typography>}
                     {variant == 'small' && name && <Typography level="title-lg">{name}</Typography>}
