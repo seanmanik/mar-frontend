@@ -84,11 +84,15 @@ export default memo<{
                             input: {
                                 component: NumericFormatAdapter,
                                 max: balance,
-                                min: 0
+                                min: 0,
+                                sx: {
+                                    width: '100%'
+                                }
                             },
                         }}
                         variant="plain"
                         sx={{
+                            width: '100%',
                             fontSize: '20px',
                             fontWeight: 600,
                             padding: 0,
@@ -113,7 +117,6 @@ export default memo<{
                             },
                         }}
                     />
-
                 </Box>
             </Stack>
         </Box>
