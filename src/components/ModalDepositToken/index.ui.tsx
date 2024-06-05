@@ -48,7 +48,8 @@ export default memo<{
             <Box maxWidth={550}>
                 {!isSuccess &&(<>
                     <Box maxWidth={'100%'} overflow={'hidden'}>
-                        <InputAmount 
+                        <InputAmount
+                            title={`Deposit ${symbol}`}
                             symbol={symbol} 
                             balance={balance}
                             value={amount} 
@@ -99,7 +100,7 @@ export default memo<{
                         <Typography fontSize={32} lineHeight={'34px'} fontWeight={500} textAlign={"center"}>Congrats, you are earning<br/>like a pro!</Typography>
                     </Stack>
                     <Typography level="title-sm" marginBottom={1}>Token Deposit</Typography>
-                    <TokenAmountDisplay amount={amount} symbol={symbol} name={`${parseFloat(amount.toFixed(2)).toLocaleString()}`} icon={TokenToIcon[symbol]}/>
+                    <TokenAmountDisplay amount={amount} symbol={symbol} name={`$${parseFloat(amount.toFixed(2)).toLocaleString()}`} icon={TokenToIcon[symbol]}/>
                     <Button variant="outlined" color="neutral" sx={{width: '100%', marginTop: 5}}
                         onClick={() => window.open('https://etherscan.io')}
                     >

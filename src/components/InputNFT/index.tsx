@@ -5,6 +5,7 @@ import { IconCheckOne } from "../../icons";
 import { Link } from "react-router-dom";
 
 export default memo<{
+    title: string
     symbol: string
     nftIds: {
         id: number
@@ -15,6 +16,7 @@ export default memo<{
     value: number[]
     onChange?: (value: number[]) => void
 }>(({
+    title,
     symbol,
     nftIds,
     value,
@@ -29,7 +31,7 @@ export default memo<{
             <Stack direction={"row"} spacing={1} alignItems={"flex-start"} justifyContent={"space-between"}>
                 <img src={TokenToIcon[symbol]} width={40} />
                 {nftIds.length > 0 && <Box flex={1}>
-                    <Typography level="title-sm" color="neutral">Deposit {symbol}</Typography>
+                    <Typography level="title-sm" color="neutral">{title}</Typography>
                     <Typography level="title-lg">{symbol} {value.map(e => `#${e}`).join(' ')}</Typography>
                 </Box>
                 }

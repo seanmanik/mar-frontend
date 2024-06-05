@@ -4,7 +4,7 @@ import { Avatar, AvatarGroup, Box, Button, Grid, Stack, Typography } from "@mui/
 import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
 import { IconMarPoint, IconMyStake, IconPending, IconPudgy, IconTotalValueStake } from "../../icons";
-import { Bolt } from "@mui/icons-material";
+import { ArrowForward, Bolt } from "@mui/icons-material";
 import { ImageLogoBlueCircle, ImageLogoWhite } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import NFTDisplay from "../NFTDisplay";
@@ -28,7 +28,7 @@ export default memo<{
     openseaLink?: string,
     blurLink?: string,
     onClose: () => void
-    onDeposit: (value: number[]) => void
+    onWithdraw: (value: number[]) => void
 }>(({ 
     open,
     symbol,
@@ -42,24 +42,24 @@ export default memo<{
     openseaLink,
     blurLink,
     onClose,
-    onDeposit
+    onWithdraw
  }) => {
     const [value, setValue] = useState<number[]>([])
     return (
         <ModalBlue
             open={open}
             onClose={onClose}
-            title={isSuccess ? `NFT Deposited
-            Successfully`
-            : `Deposit your NFT
-            to earn points`}
+            title={isSuccess ? `NFT
+            Withdrawn Successfully`
+            : `Withdraw your NFT
+            from this pool`}
         >
             
             <Box maxWidth={550}>
                 {!isSuccess &&(<>
                     <Box maxWidth={'100%'} overflow={'hidden'}>
                         <InputNFT
-                            title={`Deposit ${symbol}`}
+                            title={`Available to Withdraw`}
                             symbol={symbol} 
                             onChange={v => setValue(v)}
                             value={value}
@@ -90,7 +90,7 @@ export default memo<{
                         </Grid>
 
                         <Grid xs={12} paddingBottom={-2}>
-                            <Typography level="title-sm">Pending Deposits</Typography>
+                            <Typography level="title-sm">Pending Withdrawals</Typography>
                         </Grid>
                         <Grid xs={12} sm={12}>
                             {/* <TokenAmountDisplay amount={pendingValue} symbol={symbol} name="in processing" icon={IconPending}/> */}
@@ -99,10 +99,10 @@ export default memo<{
                                 images={['https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk?auto=format&dpr=1&w=1000']}/>
                         </Grid>
                     </Grid>
-                    <Button sx={{width: '100%', marginTop: 5}} endDecorator={<Bolt fontSize="small"/>}
+                    <Button sx={{width: '100%', marginTop: 5}} endDecorator={<ArrowForward fontSize="small"/>}
                         disabled={value.length == 0}
-                        onClick={() => onDeposit && onDeposit(value)}>
-                        Deposit
+                        onClick={() => onWithdraw && onWithdraw(value)}>
+                        Withdraw
                     </Button>
                 </>)}
 
@@ -112,9 +112,9 @@ export default memo<{
                             <Avatar src={ImageLogoBlueCircle} />
                             <Avatar src={TokenToIcon[symbol]} />
                         </AvatarGroup>
-                        <Typography fontSize={32} lineHeight={'34px'} fontWeight={500} textAlign={"center"}>Congrats, you are earning<br/>like a pro!</Typography>
+                        <Typography fontSize={32} lineHeight={'34px'} fontWeight={500} textAlign={"center"} padding={5}>Congrats, you have withdrawn your NFT, keep exploring</Typography>
                     </Stack>
-                    <Typography level="title-sm" marginBottom={1}>NFT Deposit</Typography>
+                    <Typography level="title-sm" marginBottom={1}>NFT Withdrawn</Typography>
                     <NFTDisplay symbol={symbol} icon={TokenToIcon[symbol]} nftIds={nftIds.filter(e => value.includes(e.id))}/>
                     <Button variant="outlined" color="neutral" sx={{width: '100%', marginTop: 5}}
                         onClick={() => window.open('https://etherscan.io')}

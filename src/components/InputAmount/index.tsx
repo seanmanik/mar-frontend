@@ -29,6 +29,7 @@ const NumericFormatAdapter = React.forwardRef<NumericFormatProps, any>(
   );
 
 export default memo<{
+    title: string
     symbol: string
     value: number
     balance: number
@@ -37,6 +38,7 @@ export default memo<{
     symbol,
     value,
     balance,
+    title,
     onChange
 }) => {
     const btPercentStyle = {
@@ -55,7 +57,7 @@ export default memo<{
                 <img src={TokenToIcon[symbol]} width={40} />
                 <Box flex={1}>
                     <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
-                        <Typography level="title-sm" color="neutral">Deposit {symbol}</Typography>
+                        <Typography level="title-sm" color="neutral">{title}</Typography>
                         <Typography level="title-sm" color="neutral" textAlign={"right"}>Your Balance: {parseFloat(balance.toFixed(2)).toLocaleString()} {symbol}</Typography>
                     </Stack>
                     <Input
