@@ -43,8 +43,8 @@ export default memo<{
                 {variant=='small' && text && <Typography level="title-lg" textAlign={'left'}>{text}</Typography>}
                 {images && images.length > 0 &&
                     <Stack direction={"row"} alignItems={"center"} justifyContent={align == 'left' ? "flex-end" : 'flex-start'} flexWrap={"wrap"}>
-                        {images.slice(0, 3).map(e => (
-                            <img src={e} width={sizeImage} height={sizeImage} style={{objectFit: 'cover', margin: 2, borderRadius: 5}}/>
+                        {images.slice(0, 3).map((e, i) => (
+                            <img key={i} src={e} width={sizeImage} height={sizeImage} style={{objectFit: 'cover', margin: 2, borderRadius: 5}}/>
                         ))}
                         {images.length > 3 && (
                             <Stack alignItems={"center"} justifyContent={"center"} sx={{background: 'white', borderRadius: 5, margin: '2px'}} height={sizeImage} width={sizeImage}>
