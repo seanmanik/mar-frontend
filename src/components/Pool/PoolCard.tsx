@@ -1,21 +1,22 @@
 import { Box, Card, Stack } from "@mui/joy";
 import React from "react";
 import ValueDisplay from "../ValueDisplay";
-import { IconDailyReward, IconETH, IconMarPoint, IconPending, IconTotalValueStake, IconUSDT, IconYourDailyReward, IconYourDeposited } from "../../icons";
+import { IconDailyReward, IconDeposit, IconETH, IconMarPoint, IconPending, IconTotalValueStake, IconUSDT, IconWallet, IconWithdraw, IconYourDailyReward, IconYourDeposited } from "../../icons";
 import PoolTitle from "./PoolTitle";
 import { Paid, Redeem } from "@mui/icons-material";
+import Button from "../Button";
 
 const PoolCard = (props: any) => {
     return <Card sx={{
-        // height: 285,
+        height: '100%',
         padding: 2,
         backgroundColor: 'white',
         borderRadius: '12px'
     }}>
         <PoolTitle />
         <Stack direction={"row"} alignItems={"flex-start"} spacing={1} >
-            <ValueDisplay name="TVL" text="$23,231,234" isNameAbove flex={1} nameIcon={<Paid sx={{fontSize: 15, color: 'gray', marginRight: 0.5}}/>}/>
-            <ValueDisplay name="DAILY" text="$23,231,234" align="right" isNameAbove flex={1}  nameIcon={<Redeem sx={{fontSize: 15, color: 'gray', marginLeft: 0.5}}/>}/>
+            <ValueDisplay name="TVL" text="$23,231,234" isNameAbove flex={1} nameIcon={<Paid sx={{ fontSize: 15, color: 'gray', marginRight: 0.5 }} />} />
+            <ValueDisplay name="DAILY" text="$23,231,234" align="right" isNameAbove flex={1} nameIcon={<Redeem sx={{ fontSize: 15, color: 'gray', marginLeft: 0.5 }} />} />
         </Stack>
         <Box>
             <ValueDisplay variant="small" name="Total value Staked" text="$20,000,000" icon={IconTotalValueStake} />
@@ -34,6 +35,27 @@ const PoolCard = (props: any) => {
                 'https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk',
             ]} />
         </Box>
+        <Stack gap={1} direction="column">
+            <Button buttonType="primary" endDecorator={<img src={IconWallet} width={24} height={24} />} fullWidth>
+                Connect Wallet
+            </Button>
+        </Stack>
+        <Stack gap={1} direction="column">
+            <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
+                Deposit
+            </Button>
+            <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
+                Withdraw
+            </Button>
+        </Stack>
+        <Stack gap={1} direction="row">
+            <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
+                Deposit
+            </Button>
+            <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
+                Withdraw
+            </Button>
+        </Stack>
         {props.children}
     </Card>
 }
