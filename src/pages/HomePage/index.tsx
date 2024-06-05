@@ -8,6 +8,7 @@ import ModalDepositNFT from "../../components/ModalDepositNFT";
 import ValueDisplay from "../../components/ValueDisplay";
 import { IconMarPoint, IconMyStake, IconPudgy, IconTotalValueStake } from "../../icons";
 import AccountLevel from "../../components/AccountLevel";
+import StatsCard from "../../components/StatsCard";
 
 const HomePage = () => {
     const [openModalDeposit, setOpenModalDeposit] = useState(0)
@@ -20,16 +21,16 @@ const HomePage = () => {
                     spacing={{ xs: 1, md: 2 }}
                     sx={{ flexGrow: 1, marginBottom: 2 }}>
                 <Grid xs={6} md={3}>
-                    <ValueDisplay isNameAbove name="TVL" text="$500,000,000" icon={IconTotalValueStake} />
+                    <StatsCard title="TVL" value="$500,000,000" icon={IconTotalValueStake} />
                 </Grid>
                 <Grid xs={6} md={3}>
-                    <ValueDisplay isNameAbove name="MY STAKE" text="$12,000" icon={IconMyStake} />
+                    <StatsCard title="MY STAKE" value="$12,000" icon={IconMyStake} />
                 </Grid>
                 <Grid xs={6} md={3}>
-                    <ValueDisplay isNameAbove name="MAR POINTS" text="$500,000,000" icon={IconMarPoint} />
+                    <StatsCard title="MAR POINTS" value="$500,000,000" icon={IconMarPoint} />
                 </Grid>
                 <Grid xs={6} md={3}>
-                    <ValueDisplay isNameAbove name="PUPPY POINTS" text="$500,000,000" icon={IconMarPoint} />
+                    <StatsCard title="PUPPY POINTS" value="$500,000,000" icon={IconMarPoint} />
                 </Grid>
             </Grid>
             <Stack gap={3} direction="column" alignItems="flex-start" justifyContent="flex-start">
