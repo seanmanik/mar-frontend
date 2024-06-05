@@ -5,7 +5,8 @@ import { ImageLogoFullBlack, ImageLogoWhite } from "../../images";
 export default memo<ModalProps & {
     title?: string
     header?: React.ReactElement
-}>(({title, header, children, ...modalProps}) => {
+    headerChildren?: React.ReactElement
+}>(({title, header, headerChildren, children, ...modalProps}) => {
     return <Modal {...modalProps}>
         <ModalDialog variant={"outlined"} size="sm" sx={{
             background: 'linear-gradient(162deg, #0351F8 47.17%, #FBC4C6 92.89%);',
@@ -45,6 +46,10 @@ export default memo<ModalProps & {
                     <img src={ImageLogoFullBlack} width={140}/>
                 </DialogTitle>
             )}
+            {headerChildren && <Box marginTop={1} marginRight={2} marginLeft={2}>
+                {headerChildren}
+            </Box>
+            }
             <DialogContent>
                 <Box maxWidth={'700px'} minWidth={'400px'} bgcolor={"white"} borderRadius={10} padding={2} marginTop={2}>
                     {children}
