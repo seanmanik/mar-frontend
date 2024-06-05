@@ -7,28 +7,39 @@ export default memo<{
     icon?: string
     images?: string[]
     variant?: 'medium' | 'small'
-} & StackProps>(({icon, text, name, images, variant = 'medium', ...stackProps}) => {
+    isNameAbove?: boolean
+    align?: 'left' | 'right'
+} & StackProps>(({
+    icon, text, name, images, 
+    variant = 'medium', 
+    isNameAbove = false, 
+    align = 'left',
+    ...stackProps
+}) => {
     const sizeImage = variant == 'medium' ? '40px' : '25px'
     return (
         <Stack sx={{
             background: '#F5F5F5',
             padding: 1,
             borderRadius: 10
-        }} direction={"row"} alignItems={"center"} justifyContent={"space-between"}  {...stackProps}>
-            <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <Box width={'40px'} height={'40px'}>
-                    {icon && <img src={icon} width={40} />}
-                </Box>
+        }} direction={align == 'left' ? "row" : 'row-reverse'} alignItems={"center"} justifyContent={"space-between"}  {...stackProps}>
+            <Stack direction={align == 'left' ? "row" : 'row-reverse'} alignItems={"center"} spacing={1}>
+                {icon && (
+                    <Box width={'40px'} height={'40px'}>
+                        <img src={icon} width={40} />
+                    </Box>
+                )}
                 <Box>
-                    {variant == 'medium' && <Typography level="title-lg">{text}</Typography>}
-                    {variant == 'medium' && name && <Typography level="body-sm" color="neutral">{name}</Typography>}
-                    {variant == 'small' && name && <Typography level="title-lg">{name}</Typography>}
+                    {variant == 'medium' && isNameAbove && name && <Typography level="title-sm" color="neutral" textAlign={align} fontWeight={700}>{name}</Typography>}
+                    {variant == 'medium' && <Typography level="title-lg" textAlign={align} >{text}</Typography>}
+                    {variant == 'medium' && !isNameAbove && name && <Typography level="title-sm" color="neutral" textAlign={align} >{name}</Typography>}
+                    {variant == 'small' && name && <Typography level="title-lg" textAlign={align} >{name}</Typography>}
                 </Box>
             </Stack>
-            <Stack direction={"column"} alignItems={'flex-end'}>
+            <Stack direction={"column"} alignItems={align == 'left' ? "flex-end" : 'flex-start'}>
                 {variant=='small' && text && <Typography level="title-lg" textAlign={'left'}>{text}</Typography>}
                 {images && images.length > 0 &&
-                    <Stack direction={"row"} alignItems={"center"} justifyContent={"flex-end"} flexWrap={"wrap"}>
+                    <Stack direction={"row"} alignItems={"center"} justifyContent={align == 'left' ? "flex-end" : 'flex-start'} flexWrap={"wrap"}>
                         {images.slice(0, 3).map(e => (
                             <img src={e} width={sizeImage} height={sizeImage} style={{objectFit: 'cover', margin: 2, borderRadius: 5}}/>
                         ))}
