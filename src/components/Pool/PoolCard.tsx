@@ -1,12 +1,19 @@
 import { Box, Card, Stack } from "@mui/joy";
-import React from "react";
+import React, { ReactNode } from "react";
 import ValueDisplay from "../ValueDisplay";
 import { IconDailyReward, IconDeposit, IconETH, IconMarPoint, IconPending, IconTotalValueStake, IconUSDT, IconWallet, IconWithdraw, IconYourDailyReward, IconYourDeposited } from "../../icons";
 import PoolTitle from "./PoolTitle";
 import { Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
+import { useAccount } from "wagmi";
 
-const PoolCard = (props: any) => {
+export interface IPoolCard {
+    // children: ReactNode
+}
+
+const PoolCard = () => {
+    const account = useAccount()
+
     return <Card sx={{
         height: '100%',
         padding: 2,
@@ -35,28 +42,28 @@ const PoolCard = (props: any) => {
                 'https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk',
             ]} />
         </Box>
-        <Stack gap={1} direction="column">
-            <Button buttonType="primary" endDecorator={<img src={IconWallet} width={24} height={24} />} fullWidth>
-                Connect Wallet
-            </Button>
-        </Stack>
-        <Stack gap={1} direction="column">
-            <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
-                Deposit
-            </Button>
-            <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
-                Withdraw
-            </Button>
-        </Stack>
-        <Stack gap={1} direction="row">
-            <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
-                Deposit
-            </Button>
-            <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
-                Withdraw
-            </Button>
-        </Stack>
-        {props.children}
+        {
+            !account || !account.isConnected ? <Stack gap={1} direction="column">
+                <Button buttonType="primary" endDecorator={<img src={IconWallet} width={24} height={24} />} fullWidth>
+                    Connect Wallet
+                </Button>
+            </Stack> : <Stack gap={1} direction="row">
+                <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
+                    Deposit
+                </Button>
+                <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
+                    Withdraw
+                </Button>
+            </Stack>
+            // <Stack gap={1} direction="column">
+            //     <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
+            //         Deposit
+            //     </Button>
+            //     <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
+            //         Withdraw
+            //     </Button>
+            // </Stack>
+        }
     </Card>
 }
 
