@@ -9,11 +9,13 @@ export default memo<{
     variant?: 'medium' | 'small'
     isNameAbove?: boolean
     align?: 'left' | 'right'
+    nameIcon?: any
 } & StackProps>(({
     icon, text, name, images, 
     variant = 'medium', 
     isNameAbove = false, 
     align = 'left',
+    nameIcon,
     ...stackProps
 }) => {
     const sizeImage = variant == 'medium' ? '40px' : '25px'
@@ -29,12 +31,13 @@ export default memo<{
                         <img src={icon} width={40} />
                     </Box>
                 )}
-                <Box>
-                    {variant == 'medium' && isNameAbove && name && <Typography level="title-sm" color="neutral" textAlign={align} fontWeight={700}>{name}</Typography>}
-                    {variant == 'medium' && <Typography level="title-lg" textAlign={align} >{text}</Typography>}
-                    {variant == 'medium' && !isNameAbove && name && <Typography level="title-sm" color="neutral" textAlign={align} >{name}</Typography>}
-                    {variant == 'small' && name && <Typography level="title-lg" textAlign={align} >{name}</Typography>}
-                </Box>
+                <Stack direction={"column"} alignItems={align == 'left' ? "flex-start" : 'flex-end'}>
+                    {variant == 'medium' && isNameAbove && align == 'left' && name && <Typography level="title-sm" fontSize={"12px"} color="neutral" fontWeight={700} display={'inline-flex'} alignItems={'center'}>{nameIcon}{name}</Typography>}
+                    {variant == 'medium' && isNameAbove && align == 'right' && name && <Typography level="title-sm" fontSize={"12px"} color="neutral" fontWeight={700} display={'inline-flex'} alignItems={'center'}>{name}{nameIcon}</Typography>}
+                    {variant == 'medium' && <Typography level="title-lg">{text}</Typography>}
+                    {variant == 'medium' && !isNameAbove && name && <Typography level="title-sm" color="neutral">{name}</Typography>}
+                    {variant == 'small' && name && <Typography level="title-lg">{name}</Typography>}
+                </Stack>
             </Stack>
             <Stack direction={"column"} alignItems={align == 'left' ? "flex-end" : 'flex-start'}>
                 {variant=='small' && text && <Typography level="title-lg" textAlign={'left'}>{text}</Typography>}
