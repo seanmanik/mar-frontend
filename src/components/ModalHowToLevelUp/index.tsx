@@ -23,8 +23,8 @@ export default memo<{
                     <Stack marginTop={4} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
                         <Button endDecorator={<Bolt fontSize="small" />}>Mint NFT Booster</Button>
                         <Stack direction={"row"} alignItems={"center"} justifyContent={"flex-end"} flexWrap={"wrap"}>
-                            {images.map(e => (
-                                <img src={e} width={40} height={40} style={{objectFit: 'cover', margin: 2, borderRadius: 5}}/>
+                            {images.map((e, i) => (
+                                <img key={i} src={e} width={40} height={40} style={{objectFit: 'cover', margin: 2, borderRadius: 5}}/>
                             ))}
                             {images.length > 0 && 
                                 <Typography level="title-sm" marginLeft={1}>NFTs Minted</Typography> }

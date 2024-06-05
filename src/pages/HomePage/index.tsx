@@ -7,11 +7,15 @@ import ModalDepositToken from "../../components/ModalDepositToken";
 import ModalDepositNFT from "../../components/ModalDepositNFT";
 import ValueDisplay from "../../components/ValueDisplay";
 import { IconMarPoint, IconMyStake, IconPudgy, IconTotalValueStake } from "../../icons";
+import AccountLevel from "../../components/AccountLevel";
 
 const HomePage = () => {
     const [openModalDeposit, setOpenModalDeposit] = useState(0)
     return (
         <Box maxWidth={1420} paddingLeft={'20px'} paddingRight={'20px'} paddingBottom={'84px'} paddingTop={"44px"} margin={"auto"}>
+            <Box marginBottom={2}>
+                <AccountLevel />
+            </Box>
             <Grid container
                     spacing={{ xs: 1, md: 2 }}
                     sx={{ flexGrow: 1, marginBottom: 2 }}>
