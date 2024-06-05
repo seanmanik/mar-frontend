@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import Layout from './layouts'
 import HomePage from './pages/HomePage'
+import "./fonts/PPNeueMachina-PlainRegular.otf"
 
 function App() {
 

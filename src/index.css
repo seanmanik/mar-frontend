@@ -17,6 +17,12 @@ body {
   margin: 0;
 }
 
+@font-face {
+  font-family: "PP Neue Machina";   /*Can be any text*/
+  src: local("PPNeueMachina-PlainRegular"),
+    url("./fonts/PPNeueMachina-PlainRegular.otf") format("opentype");
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     background-color: #f8f8f8;
