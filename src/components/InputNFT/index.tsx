@@ -1,8 +1,8 @@
 import { Box, Stack, Typography } from "@mui/joy";
 import { memo } from "react";
 import TokenToIcon from "../../utils/TokenToIcon";
-import { CheckCircle } from "@mui/icons-material";
 import { IconCheckOne } from "../../icons";
+import { Link } from "react-router-dom";
 
 export default memo<{
     symbol: string
@@ -10,12 +10,16 @@ export default memo<{
         id: number
         image: string
     }[]
+    openseaLink?: string,
+    blurLink?: string
     value: number[]
     onChange?: (value: number[]) => void
 }>(({
     symbol,
     nftIds,
     value,
+    openseaLink,
+    blurLink,
     onChange
 }) => {
 
@@ -24,13 +28,21 @@ export default memo<{
         <Box sx={{borderRadius: '12px', border: '1px solid #e0e0e0', padding: 1}}>
             <Stack direction={"row"} spacing={1} alignItems={"flex-start"} justifyContent={"space-between"}>
                 <img src={TokenToIcon[symbol]} width={40} />
-                <Box flex={1}>
+                {nftIds.length > 0 && <Box flex={1}>
                     <Typography level="title-sm" color="neutral">Deposit {symbol}</Typography>
                     <Typography level="title-lg">{symbol} {value.map(e => `#${e}`).join(' ')}</Typography>
                 </Box>
+                }
+                {!nftIds || nftIds.length == 0 && <Box flex={1}>
+                    <Typography level="title-sm" color="neutral">No {symbol} NFTs</Typography>
+                    <Typography level="title-lg">
+                        Buy from {openseaLink && <a href={openseaLink} target="_blank" style={{color: 'inherit'}}>Opensea</a>} {openseaLink && blurLink ? 'or': ''} {blurLink && <a href={blurLink} target="_blank" style={{color: 'inherit'}}>Blur</a>}
+                    </Typography>
+                </Box>
+                }
                 {/* <Stack flex={1} direction={"row"} spacing={1} alignItems={"center"}>
                 </Stack> */}
-                <Stack width={160} direction={"row"} alignItems={"center"} justifyContent={"flex-end"} flexWrap={"wrap"}>
+                {nftIds.length > 0 && <Stack width={160} direction={"row"} alignItems={"center"} justifyContent={"flex-end"} flexWrap={"wrap"}>
                     {nftIds.map(e => (
                         <Box
                             key={e.id}
@@ -54,7 +66,7 @@ export default memo<{
                                         onChange && onChange(value.filter(v => v != e.id))
                                     }
                                     else {
-                                        onChange && onChange([...value, e.id])
+                                        onChange && onChange([e.id])
                                     }
                                 }}
                             />
@@ -72,6 +84,7 @@ export default memo<{
                         </Box>
                     ))}
                 </Stack>
+                }
             </Stack>
         </Box>
     </Box>

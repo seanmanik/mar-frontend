@@ -84,6 +84,7 @@ export default memo<{
                         </Grid>
                     </Grid>
                     <Button sx={{width: '100%', marginTop: 5}} endDecorator={<Bolt fontSize="small"/>}
+                        disabled={amount == 0 || amount > balance}
                         onClick={() => onDeposit && onDeposit(amount)}>
                         Deposit
                     </Button>

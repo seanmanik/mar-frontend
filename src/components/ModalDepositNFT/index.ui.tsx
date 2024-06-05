@@ -23,6 +23,9 @@ export default memo<{
     stakeAmount: number
     pendingValue: number
     isSuccess: boolean
+
+    openseaLink?: string,
+    blurLink?: string,
     onClose: () => void
     onDeposit: (value: number[]) => void
 }>(({ 
@@ -35,6 +38,8 @@ export default memo<{
     stakeAmount,
     pendingValue,
     isSuccess,
+    openseaLink,
+    blurLink,
     onClose,
     onDeposit
  }) => {
@@ -57,6 +62,8 @@ export default memo<{
                             onChange={v => setValue(v)}
                             value={value}
                             nftIds={nftIds}
+                            blurLink={blurLink}
+                            openseaLink={openseaLink}
                         />
                     </Box>
                     <Grid marginTop={4} container spacing={2} sx={{flexGrow: 1}}>
@@ -88,6 +95,7 @@ export default memo<{
                         </Grid>
                     </Grid>
                     <Button sx={{width: '100%', marginTop: 5}} endDecorator={<Bolt fontSize="small"/>}
+                        disabled={value.length == 0}
                         onClick={() => onDeposit && onDeposit(value)}>
                         Deposit
                     </Button>
