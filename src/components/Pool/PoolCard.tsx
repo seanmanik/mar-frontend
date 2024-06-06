@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import ValueDisplay from "../ValueDisplay";
 import { IconDailyReward, IconDeposit, IconETH, IconMarPoint, IconPending, IconTotalValueStake, IconUSDT, IconWallet, IconWithdraw, IconYourDailyReward, IconYourDeposited } from "../../icons";
 import PoolTitle from "./PoolTitle";
-import { Paid, Redeem } from "@mui/icons-material";
+import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount } from "wagmi";
 
@@ -48,10 +48,10 @@ const PoolCard = () => {
                     Connect Wallet
                 </Button>
             </Stack> : <Stack gap={1} direction="row">
-                <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
+                <Button buttonType="primary" endDecorator={<Bolt />} fullWidth>
                     Deposit
                 </Button>
-                <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
+                <Button buttonType="secondary" endDecorator={<ArrowForward />} fullWidth>
                     Withdraw
                 </Button>
             </Stack>

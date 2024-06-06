@@ -13,7 +13,9 @@ const Button = ({ buttonType, children, endDecorator, ...props }: IButtonProps) 
             sx={{
                 paddingX: '20px',
                 paddingY: '12px',
-                borderRadius: '12px'
+                borderRadius: '12px',
+                border: '1px solid #dcdcdc',
+                color: '#000000'
             }}
         >
             <Stack direction='row' width="100%" alignItems="center" justifyContent="space-between" gap={1}>
