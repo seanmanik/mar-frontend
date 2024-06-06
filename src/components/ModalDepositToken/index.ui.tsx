@@ -1,12 +1,13 @@
 import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
-import { Avatar, AvatarGroup, Box, Button, Grid, Stack, Typography } from "@mui/joy";
+import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
 import { IconMarPoint, IconMyStake, IconPending, IconTotalValueStake } from "../../icons";
 import { Bolt } from "@mui/icons-material";
 import { ImageLogoBlueCircle, ImageLogoWhite } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
+import Button from "../Button";
 
 export default memo<{
     open: boolean
@@ -84,9 +85,9 @@ export default memo<{
                             <TokenAmountDisplay amount={pendingValue} symbol={symbol} name="in processing" icon={IconPending}/>
                         </Grid>
                     </Grid>
-                    <Button sx={{width: '100%', marginTop: 5}} endDecorator={<Bolt fontSize="small"/>}
-                        disabled={amount == 0 || amount > balance}
-                        onClick={() => onDeposit && onDeposit(amount)}>
+                    <Button sx={{
+                        marginTop: 5
+                    }} buttonType="primary" justifyContentChild="center" endDecorator={<Bolt />} fullWidth disabled={amount == 0 || amount > balance} onClick={() => onDeposit && onDeposit(amount)}>
                         Deposit
                     </Button>
                 </>)}
@@ -101,9 +102,9 @@ export default memo<{
                     </Stack>
                     <Typography level="title-sm" marginBottom={1}>Token Deposit</Typography>
                     <TokenAmountDisplay amount={amount} symbol={symbol} name={`$${parseFloat(amount.toFixed(2)).toLocaleString()}`} icon={TokenToIcon[symbol]}/>
-                    <Button variant="outlined" color="neutral" sx={{width: '100%', marginTop: 5}}
-                        onClick={() => window.open('https://etherscan.io')}
-                    >
+                    <Button sx={{
+                        marginTop: 5
+                    }} buttonType="secondary" justifyContentChild="center" fullWidth onClick={() => window.open('https://etherscan.io')}>
                         View on Explorer
                     </Button>
                 </>)}

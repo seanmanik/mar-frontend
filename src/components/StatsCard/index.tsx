@@ -41,7 +41,7 @@ const StatsCard = ({ icon, title, value }: {
                 width: 'calc(100% - 24px)'
             }}><Stack direction="column" sx={{
                 padding: '12px',
-                backgroundColor: 'skyblue',
+                backgroundColor: '#F5F5F5',
                 borderRadius: '10px',
             }}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{

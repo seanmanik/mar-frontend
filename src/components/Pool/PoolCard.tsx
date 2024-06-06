@@ -55,14 +55,6 @@ const PoolCard = () => {
                     Withdraw
                 </Button>
             </Stack>
-            // <Stack gap={1} direction="column">
-            //     <Button buttonType="primary" endDecorator={<img src={IconDeposit} width={16} height={16} />} fullWidth>
-            //         Deposit
-            //     </Button>
-            //     <Button buttonType="secondary" endDecorator={<img src={IconWithdraw} width={24} height={24} />} fullWidth>
-            //         Withdraw
-            //     </Button>
-            // </Stack>
         }
     </Card>
 }

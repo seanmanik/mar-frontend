@@ -9,17 +9,43 @@ import { config } from './wagmi.ts'
 
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
+import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 
 globalThis.Buffer = Buffer
 
 const queryClient = new QueryClient()
+
+
+const theme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          solidBg: '#000000',
+          solidBorder: '#000000',
+          solidHoverBg: 'rgba(0, 0, 0, 0.8)',
+          solidHoverBorder: 'rgba(0, 0, 0, 0.8)',
+          solidActiveBg: 'rgba(0, 0, 0, 1)',
+          solidActiveBorder: 'rgba(0, 0, 0, 1)',
+          solidDisabledBg: '#000000',
+          solidDisabledBorder: '#000000',
+
+          //outline
+          outlinedHoverBg: 'rgba(0, 0, 0, 0.05)',
+          outlinedActiveBg: 'rgba(0, 0, 0, 0.05)',
+        },
+      },
+    },
+  },
+});
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <CssVarsProvider theme={theme}><App /></CssVarsProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </WagmiProvider>

@@ -1,8 +1,9 @@
 import React, { memo } from "react";
 import ModalWhite from "../ModalWhite";
-import { Box, Button, Stack, Typography } from "@mui/joy";
+import { Box, Stack, Typography } from "@mui/joy";
 import imgInfo from './info.png'
 import { Bolt } from "@mui/icons-material";
+import Button from "../Button";
 export default memo<{
     open: boolean
     onClose: () => void
@@ -21,7 +22,7 @@ export default memo<{
                     <Typography color="neutral" level="body-sm"><b>Mint NFTs</b>: Mint NFTs to advance levels faster (up to 3 NFTs per wallet)</Typography>
 
                     <Stack marginTop={4} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
-                        <Button endDecorator={<Bolt fontSize="small" />}>Mint NFT Booster</Button>
+                        <Button buttonType="primary" endDecorator={<Bolt fontSize="small" />}>Mint NFT Booster</Button>
                         <Stack direction={"row"} alignItems={"center"} justifyContent={"flex-end"} flexWrap={"wrap"}>
                             {images.map((e, i) => (
                                 <img key={i} src={e} width={40} height={40} style={{objectFit: 'cover', margin: 2, borderRadius: 5}}/>
