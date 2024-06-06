@@ -1,10 +1,9 @@
-import { Route, Routes } from 'react-router-dom'
-import Layout from './layouts'
-import HomePage from './pages/HomePage'
-import "./fonts/PPNeueMachina-PlainRegular.otf"
+import { Route, Routes } from "react-router-dom";
+import Layout from "./layouts";
+import HomePage from "./pages/HomePage";
+import "./fonts/PPNeueMachina-PlainRegular.otf";
 
 function App() {
-
   return (
     <div>
       {/* Routes nest inside one another. Nested route paths build upon
@@ -23,9 +22,7 @@ function App() {
         </Route>
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
-
-
+export default App;
