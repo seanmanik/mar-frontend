@@ -52,13 +52,13 @@ const StatsCard = ({
       {hovering && (
         <Box
           sx={{
-            borderRadius: "10px",
+            borderRadius: "0px 0px 10px 10px",
             position: "absolute",
             zIndex: 10,
-            top: "58px",
+            top: "63px",
             left: 0,
             backgroundColor: "#ffffff",
-            padding: "12px",
+            padding: "0px 12px 12px 12px",
             width: "calc(100% - 24px)",
           }}
         >
