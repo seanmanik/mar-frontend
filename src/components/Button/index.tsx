@@ -54,6 +54,10 @@ const Button = ({
         paddingY: "12px",
         borderRadius: "12px",
         backgroundColor: "#000000",
+        ':disabled': {
+          background: '#c5c5c5',
+          border: '1px solid #9d9d9d'
+        }
       }}
     >
       <Stack
