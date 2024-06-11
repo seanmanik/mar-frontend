@@ -16,13 +16,17 @@ import {
   IconTrustWallet,
   IconWalletConnect,
 } from "../../icons";
-import { useConnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
 
 export default memo<{
   open: boolean;
   onClose: () => void;
 }>(({ ...modalProps }) => {
   const { connectors, connect, status } = useConnect();
+  const account = useAccount();
+  const { signMessageAsync } = useSignMessage()
+  const { disconnect } = useDisconnect();
+  
   const icons: any = {
     MetaMask: IconMetamaskWallet,
     "Coinbase Wallet": IconCoinbaseWallet,
@@ -31,10 +35,24 @@ export default memo<{
   };
 
   useEffect(() => {
-    console.log(status);
-    if (status == "success") {
-      modalProps.onClose && modalProps.onClose();
-    }
+    (async () => {
+      if (status == "success") {
+        if (!localStorage[`${account.address}_signature`]) {
+          try {
+            var value = await signMessageAsync({message: "marpoint.pro"})
+            localStorage[`${account.address}_signature`] = value
+            console.log(value)
+            modalProps.onClose && modalProps.onClose()
+          }
+          catch (ex) {
+            disconnect();
+          }
+        }
+        else {
+          modalProps.onClose && modalProps.onClose();
+        }
+      }
+    })()
   }, [status]);
 
   return (
