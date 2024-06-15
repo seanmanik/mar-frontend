@@ -1,16 +1,10 @@
-import { Box, Card, Stack } from "@mui/joy";
-import React, { ReactNode, useMemo } from "react";
+import { Card, Stack } from "@mui/joy";
+import { useMemo } from "react";
 import ValueDisplay from "../ValueDisplay";
 import {
   IconDailyReward,
-  IconDeposit,
-  IconETH,
-  IconMarPoint,
-  IconPending,
   IconTotalValueStake,
-  IconUSDT,
   IconWallet,
-  IconWithdraw,
   IconYourDailyReward,
   IconYourDeposited,
 } from "../../icons";

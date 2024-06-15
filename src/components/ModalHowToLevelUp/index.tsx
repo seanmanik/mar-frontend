@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import ModalWhite from "../ModalWhite";
 import { Box, Stack, Typography } from "@mui/joy";
 import imgInfo from "./info.png";

@@ -1,6 +1,5 @@
 import { Box, Button, Input, Stack, Typography } from "@mui/joy";
-import React, { memo, useRef } from "react";
-import { IconUSDT } from "../../icons";
+import React, { memo } from "react";
 import { NumericFormat, NumericFormatProps } from "react-number-format";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import TokenToIcon from "../../utils/TokenToIcon";

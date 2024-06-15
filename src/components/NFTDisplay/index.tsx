@@ -1,5 +1,4 @@
-import { Box, Stack, Typography } from "@mui/joy";
-import React, { memo } from "react";
+import { memo } from "react";
 import ValueDisplay from "../ValueDisplay";
 
 export default memo<{

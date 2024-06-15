@@ -10,7 +10,7 @@ import {
   IconTotalValueStake,
 } from "../../icons";
 import { Bolt } from "@mui/icons-material";
-import { ImageLogoBlueCircle, ImageLogoWhite } from "../../images";
+import { ImageLogoBlueCircle } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
 

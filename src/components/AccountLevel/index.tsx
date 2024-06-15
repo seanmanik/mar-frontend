@@ -1,6 +1,6 @@
 import { Bolt, EmojiObjects } from "@mui/icons-material";
 import { Box, Stack, Tooltip, Typography } from "@mui/joy";
-import React, { memo, useState } from "react";
+import { memo, useState } from "react";
 import ModalHowToLevelUp from "../ModalHowToLevelUp";
 import Button from "../Button";
 

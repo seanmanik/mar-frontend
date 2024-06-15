@@ -1,17 +1,14 @@
 import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
-import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
 import {
   IconMarPoint,
   IconMyStake,
-  IconPending,
-  IconPudgy,
   IconTotalValueStake,
 } from "../../icons";
 import { Bolt } from "@mui/icons-material";
-import { ImageLogoBlueCircle, ImageLogoWhite } from "../../images";
+import { ImageLogoBlueCircle } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import NFTDisplay from "../NFTDisplay";
 import InputNFT from "../InputNFT";
@@ -45,7 +42,6 @@ export default memo<{
     puppyPoint,
     totalValue,
     stakeAmount,
-    pendingValue,
     isSuccess,
     openseaLink,
     blurLink,

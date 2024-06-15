@@ -1,5 +1,5 @@
 import { Box, Stack, StackProps, Typography } from "@mui/joy";
-import React, { memo } from "react";
+import { memo } from "react";
 
 export default memo<
   {

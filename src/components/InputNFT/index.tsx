@@ -2,7 +2,6 @@ import { Box, Stack, Typography } from "@mui/joy";
 import { memo } from "react";
 import TokenToIcon from "../../utils/TokenToIcon";
 import { IconCheckOne } from "../../icons";
-import { Link } from "react-router-dom";
 
 export default memo<{
   title: string;

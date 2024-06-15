@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/joy";
 import { useHover } from "@uidotdev/usehooks";
-import React from "react";
 
 const StatsCard = ({
   icon,

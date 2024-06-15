@@ -1,6 +1,4 @@
 import { Stack, Typography } from "@mui/joy";
-import React from "react";
-import { ImageBTC, ImageETH } from "../../images";
 import BootsTag from "./BoostTag";
 import TokenToIcon from "../../utils/TokenToIcon";
 

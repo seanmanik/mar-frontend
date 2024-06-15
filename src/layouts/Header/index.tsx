@@ -7,7 +7,6 @@ import WalletButton from "../../components/WalletButton";
 import { GroupAdd } from "@mui/icons-material";
 import ModalInviteFriends from "../../components/ModalInviteFriends";
 import ModalAccountDetails from "../../components/ModalAccountDetails";
-import ModalHowToLevelUp from "../../components/ModalHowToLevelUp";
 
 export default memo(() => {
   const [openModalConnectWallet, setOpenModalConnectWallet] = useState(false);

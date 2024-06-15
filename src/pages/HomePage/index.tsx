@@ -7,7 +7,6 @@ import ModalDepositNFT from "../../components/ModalDepositNFT";
 import {
   IconMarPoint,
   IconMyStake,
-  IconPudgy,
   IconTotalValueStake,
 } from "../../icons";
 import AccountLevel from "../../components/AccountLevel";

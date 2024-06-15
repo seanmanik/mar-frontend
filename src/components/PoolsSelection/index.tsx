@@ -1,5 +1,4 @@
 import { Box, Stack, Typography } from "@mui/joy";
-import React from "react";
 
 const PoolsSelection = ({
   poolSelected,

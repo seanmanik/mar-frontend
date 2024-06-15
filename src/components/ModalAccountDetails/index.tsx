@@ -2,8 +2,6 @@ import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import {
   Box,
-  Chip,
-  IconButton,
   Stack,
   Tab,
   TabList,
@@ -52,7 +50,7 @@ export default memo<{
         <Tabs
           aria-label="Pipeline"
           value={index}
-          onChange={(event, value) => setIndex(value as number)}
+          onChange={(_, value) => setIndex(value as number)}
         >
           <TabList
             sx={{

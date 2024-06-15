@@ -1,5 +1,4 @@
 import { Stack, Typography } from "@mui/joy";
-import React from "react";
 import { IconCoin } from "../../icons";
 
 const BootsTag = () => {

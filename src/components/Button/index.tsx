@@ -1,6 +1,4 @@
 import { Button as JoyButton, ButtonProps, Stack, Typography } from "@mui/joy";
-import React from "react";
-
 export interface IButtonProps extends ButtonProps {
   buttonType: "primary" | "secondary";
   justifyContentChild?: "space-between" | "center";
@@ -54,10 +52,10 @@ const Button = ({
         paddingY: "12px",
         borderRadius: "12px",
         backgroundColor: "#000000",
-        ':disabled': {
-          background: '#c5c5c5',
-          border: '1px solid #9d9d9d'
-        }
+        ":disabled": {
+          background: "#c5c5c5",
+          border: "1px solid #9d9d9d",
+        },
       }}
     >
       <Stack

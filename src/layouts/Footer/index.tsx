@@ -1,5 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/joy";
-import React from "react";
+import { Box, Stack, Typography } from "@mui/joy";
 import { ImageLogoFullBlue } from "../../images";
 import {
   IconDiscord,

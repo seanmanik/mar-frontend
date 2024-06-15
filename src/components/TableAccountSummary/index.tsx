@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, Typography } from "@mui/joy";
-import React, { memo } from "react";
+import { memo } from "react";
 import TokenToIcon from "../../utils/TokenToIcon";
 
 export default memo(() => {
