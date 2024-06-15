@@ -18,6 +18,7 @@ export default memo(() => {
         direction={{
           md: "row",
           sm: "column",
+          xs: "column",
         }}
         alignItems={"center"}
         justifyContent={"space-between"}
@@ -64,7 +65,10 @@ export default memo(() => {
           </Tooltip>
         </Box>
         <Stack
-          direction={"row"}
+          direction={{
+            sm: "row",
+            xs: "column",
+          }}
           alignItems={"center"}
           justifyContent={"flex-end"}
           spacing={1}

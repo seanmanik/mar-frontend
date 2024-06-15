@@ -9,7 +9,10 @@ const PoolsSelection = ({
 }) => {
   return (
     <Stack
-      direction="row"
+      direction={{
+        sm: "row",
+        xs: "column",
+      }}
       gap={1}
       alignItems="center"
       justifyContent="space-between"
