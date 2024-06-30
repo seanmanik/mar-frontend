@@ -1,8 +1,9 @@
 import { Button, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { memo } from "react";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount } from "wagmi";
 import { IconETH } from "../../icons";
 import { ArrowDropDown, Wallet } from "@mui/icons-material";
+import { useHandleLogout } from "../../apis/interactWallet/useHandleLogout";
 
 export default memo<{
   onClick: () => void;
@@ -10,7 +11,7 @@ export default memo<{
   onAccountDetailsClick?: () => void;
 }>(({ onClick, onInviteFriendsClick, onAccountDetailsClick }) => {
   const account = useAccount();
-  const { disconnect } = useDisconnect();
+  const { onHandleLogout } = useHandleLogout();
 
   if (!account || !account.isConnected) {
     return (
@@ -35,7 +36,7 @@ export default memo<{
       <Menu sx={{ minWidth: 160, "--ListItemDecorator-size": "24px" }}>
         <MenuItem onClick={onAccountDetailsClick}>Account Details</MenuItem>
         <MenuItem onClick={onInviteFriendsClick}>Invite Friends</MenuItem>
-        <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
+        <MenuItem onClick={() => onHandleLogout()}>Disconnect</MenuItem>
       </Menu>
     </Dropdown>
   );

@@ -10,6 +10,8 @@ import { config } from "./wagmi.ts";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 globalThis.Buffer = Buffer;
 
@@ -44,7 +46,21 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <CssVarsProvider theme={theme}>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              // pauseOnFocusLoss
+              // draggable
+              // pauseOnHover
+              theme="light"
+            />
             <App />
+
+            <ToastContainer />
           </CssVarsProvider>
         </BrowserRouter>
       </QueryClientProvider>
