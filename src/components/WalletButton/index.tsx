@@ -3,7 +3,7 @@ import { memo } from "react";
 import { useAccount } from "wagmi";
 import { IconETH } from "../../icons";
 import { ArrowDropDown, Wallet } from "@mui/icons-material";
-import { useHandleLogout } from "../../apis/interactWallet/useHandleLogout";
+import { useHandleLogout } from "../../apis/interactWallet/EVM/useHandleLogout";
 
 export default memo<{
   onClick: () => void;

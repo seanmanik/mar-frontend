@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import { useAccount, useDisconnect } from "wagmi";
-import { deleteItem } from "../../utils/localStorage";
-import { AppContext } from "../../context/AppContext";
+import { deleteItem } from "../../../utils/localStorage";
+import { AppContext } from "../../../context/AppContext";
 
 export const useHandleLogout = () => {
   const { disconnect } = useDisconnect();

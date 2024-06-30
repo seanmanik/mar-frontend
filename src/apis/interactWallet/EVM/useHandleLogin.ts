@@ -1,11 +1,11 @@
 import { useCallback, useContext } from "react";
 import { useAccount, useSignMessage } from "wagmi";
-import { configurations } from "../../constants/configurations";
-import { getItem, setItem } from "../../utils/localStorage";
+import { configurations } from "../../../constants/configurations";
+import { getItem, setItem } from "../../../utils/localStorage";
 import { useHandleLogout } from "./useHandleLogout";
-import { loginRequest } from "../login";
+import { loginRequest } from "../../login";
 import { toast } from "react-toastify";
-import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../../context/AppContext";
 
 export const useHandleLogin = ({
   actionCallBack,

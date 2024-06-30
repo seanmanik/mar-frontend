@@ -17,7 +17,7 @@ import {
   IconWalletConnect,
 } from "../../icons";
 import { useConnect } from "wagmi";
-import { useHandleLogin } from "../../apis/interactWallet/useHandleLogin";
+import { useHandleLogin } from "../../apis/interactWallet/EVM/useHandleLogin";
 
 export default memo<{
   open: boolean;
