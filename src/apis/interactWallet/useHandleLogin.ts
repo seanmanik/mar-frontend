@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { configurations } from "../../constants/configurations";
 import { getItem, setItem } from "../../utils/localStorage";
 import { useHandleLogout } from "./useHandleLogout";
 import { loginRequest } from "../login";
 import { toast } from "react-toastify";
+import { AppContext } from "../../context/AppContext";
 
 export const useHandleLogin = ({
   actionCallBack,
@@ -14,8 +15,7 @@ export const useHandleLogin = ({
   const account = useAccount();
   const { signMessageAsync } = useSignMessage();
   const { onHandleLogout } = useHandleLogout();
-
-  const [userToken, setUserToken] = useState<string>("");
+  const { setUserToken } = useContext(AppContext);
 
   const onHandleLogin = useCallback(async () => {
     if (!getItem(`${account.address}_signature`) && account.address) {
@@ -34,6 +34,8 @@ export const useHandleLogin = ({
         });
 
         console.log(result, "result");
+
+        // setUserToken(result.token)
 
         actionCallBack && actionCallBack();
         toast.success("Login success");

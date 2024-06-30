@@ -2,10 +2,11 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./layouts";
 import HomePage from "./pages/HomePage";
 import "./fonts/PPNeueMachina-PlainRegular.otf";
+import AppContextProvider from "./context/AppContext";
 
 function App() {
   return (
-    <div>
+    <AppContextProvider>
       {/* Routes nest inside one another. Nested route paths build upon
           parent route paths, and nested route elements render inside
           parent route elements. See the note about <Outlet> below. */}
@@ -21,7 +22,7 @@ function App() {
           {/* <Route path="*" element={<NoMatch />} /> */}
         </Route>
       </Routes>
-    </div>
+    </AppContextProvider>
   );
 }
 
