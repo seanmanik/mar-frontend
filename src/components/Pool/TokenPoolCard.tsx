@@ -12,7 +12,9 @@ import PoolTitle from "./PoolTitle";
 import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount } from "wagmi";
-
+import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
+import { CONTRACT_ADDRESS } from "../../constants/contract";
+import USDCAbi from "../../constants/USDC_ABI.json";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -20,6 +22,10 @@ export interface ITokenPoolCardProps {
   pts: number;
   yourStaked: number;
   yourDailyReward: number;
+
+  assetName: string;
+  assetSymbol: string;
+  contractAddress: string;
 }
 
 const TokenPoolCard = ({
@@ -29,12 +35,22 @@ const TokenPoolCard = ({
   pts,
   yourStaked,
   yourDailyReward,
+  assetName,
+  assetSymbol,
+  contractAddress,
 }: ITokenPoolCardProps) => {
   const account = useAccount();
 
   const isConnectWallet = useMemo(() => {
     return !!account && !!account.isConnected;
   }, [account]);
+
+  const { data } = useGetAllowance({
+    contractAddress: CONTRACT_ADDRESS.USDC,
+    ownerAddress: account.address as string,
+    spenderAddress: contractAddress,
+    abi: USDCAbi,
+  });
 
   return (
     <Card
@@ -45,7 +61,7 @@ const TokenPoolCard = ({
         borderRadius: "12px",
       }}
     >
-      <PoolTitle />
+      <PoolTitle assetSymbol={assetSymbol} />
       <Stack
         direction="column"
         gap={1}
@@ -54,7 +70,7 @@ const TokenPoolCard = ({
       >
         {isConnectWallet && (
           <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
-            {tvl && (
+            {!!tvl && (
               <ValueDisplay
                 name="TVL"
                 text={`$${tvl}`}
@@ -67,7 +83,7 @@ const TokenPoolCard = ({
                 }
               />
             )}
-            {dailyReward && (
+            {!!dailyReward && (
               <ValueDisplay
                 name="DAILY REWARD"
                 text={`$${dailyReward}`}
@@ -84,7 +100,7 @@ const TokenPoolCard = ({
           </Stack>
         )}
         <Stack direction="column" gap={1.5}>
-          {tvs && (
+          {!!tvs && (
             <ValueDisplay
               variant="small"
               name="Total value Staked"
@@ -92,7 +108,7 @@ const TokenPoolCard = ({
               icon={IconTotalValueStake}
             />
           )}
-          {pts && (
+          {!!pts && (
             <ValueDisplay
               variant="small"
               name="Base Points Per Dollar"
@@ -101,7 +117,7 @@ const TokenPoolCard = ({
             />
           )}
 
-          {yourStaked && (
+          {!!yourStaked && (
             <ValueDisplay
               variant="small"
               name="Your Value Staked"
@@ -109,7 +125,7 @@ const TokenPoolCard = ({
               icon={IconYourDeposited}
             />
           )}
-          {yourDailyReward && (
+          {!!yourDailyReward && (
             <ValueDisplay
               variant="small"
               name="Your Daily Reward"

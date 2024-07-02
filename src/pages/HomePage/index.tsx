@@ -1,24 +1,27 @@
 import { Box, Grid, Stack } from "@mui/joy";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ModalWithdrawNFT from "../../components/ModalWithdrawNFT";
 import ModalWithdrawToken from "../../components/ModalWithdrawToken";
 import ModalDepositToken from "../../components/ModalDepositToken";
 import ModalDepositNFT from "../../components/ModalDepositNFT";
-import {
-  IconMarPoint,
-  IconMyStake,
-  IconTotalValueStake,
-} from "../../icons";
+import { IconMarPoint, IconMyStake, IconTotalValueStake } from "../../icons";
 import AccountLevel from "../../components/AccountLevel";
 import StatsCard from "../../components/StatsCard";
 import PoolsSelection from "../../components/PoolsSelection";
 import TokenPoolCard from "../../components/Pool/TokenPoolCard";
 import NftPoolCard from "../../components/Pool/NftPoolCard";
-import TestContract from "../../components/TestContract";
+import { AppContext } from "../../context/AppContext";
+import { useGetPools } from "../../apis/getPools";
+import { isArray } from "lodash";
 
 const HomePage = () => {
   const [openModalDeposit, setOpenModalDeposit] = useState(0);
   const [poolSelected, setPoolSelected] = useState("all");
+  const { userToken } = useContext(AppContext);
+
+  const { data } = useGetPools({ token: userToken });
+
+  console.log(data, "data");
 
   return (
     <Box
@@ -29,7 +32,6 @@ const HomePage = () => {
       paddingTop={"44px"}
       margin={"auto"}
     >
-      <TestContract />
       <Box marginBottom={2}>
         <AccountLevel />
       </Box>
@@ -82,7 +84,7 @@ const HomePage = () => {
           sx={{ flexGrow: 1 }}
           alignItems="stretch"
         >
-          {Array.from(Array(20)).map((_, index) => (
+          {/* {Array.from(Array(20)).map((_, index) => (
             <Grid xs={2} sm={4} md={4} lg={4} key={index}>
               <Box
                 onClick={() => setOpenModalDeposit(index)}
@@ -116,7 +118,33 @@ const HomePage = () => {
                 )}
               </Box>
             </Grid>
-          ))}
+          ))} */}
+
+          {isArray(data) &&
+            data.map((item, index) => {
+              return (
+                <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
+                  <Box
+                    onClick={() => setOpenModalDeposit(index)}
+                    sx={{
+                      height: "calc(100% - 32px)",
+                    }}
+                  >
+                    <TokenPoolCard
+                      tvl={item.tvl}
+                      tvs={0}
+                      pts={0}
+                      dailyReward={0}
+                      yourStaked={0}
+                      yourDailyReward={0}
+                      assetSymbol={item.assetSymbol}
+                      assetName={item.assetName}
+                      contractAddress={item.contractAddress}
+                    />
+                  </Box>
+                </Grid>
+              );
+            })}
         </Grid>
         <ModalWithdrawNFT
           open={openModalDeposit == 1}
