@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Buffer } from "buffer";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { WagmiProvider } from "wagmi";
+import { WagmiProvider, deserialize, serialize } from "wagmi";
 
 import App from "./App.tsx";
 import { config } from "./wagmi.ts";
@@ -12,10 +12,25 @@ import { BrowserRouter } from "react-router-dom";
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 globalThis.Buffer = Buffer;
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1_000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+})
+
+const persister = createSyncStoragePersister({
+  key: 'marpoint',
+  serialize: serialize,
+  storage: window.localStorage,
+  deserialize: deserialize,
+})
 
 const theme = extendTheme({
   colorSchemes: {
@@ -43,27 +58,33 @@ const theme = extendTheme({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <CssVarsProvider theme={theme}>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              // pauseOnFocusLoss
-              // draggable
-              // pauseOnHover
-              theme="light"
-            />
-            <App />
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister }}
+      >
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <CssVarsProvider theme={theme}>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                // pauseOnFocusLoss
+                // draggable
+                // pauseOnHover
+                theme="light"
+              />
+              <App />
 
-            <ToastContainer />
-          </CssVarsProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
+              <ToastContainer />
+            </CssVarsProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </PersistQueryClientProvider>
     </WagmiProvider>
+
   </React.StrictMode>
 );

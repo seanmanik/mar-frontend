@@ -14,6 +14,7 @@ import StatsCard from "../../components/StatsCard";
 import PoolsSelection from "../../components/PoolsSelection";
 import TokenPoolCard from "../../components/Pool/TokenPoolCard";
 import NftPoolCard from "../../components/Pool/NftPoolCard";
+import TestContract from "../../components/TestContract";
 
 const HomePage = () => {
   const [openModalDeposit, setOpenModalDeposit] = useState(0);
@@ -28,6 +29,7 @@ const HomePage = () => {
       paddingTop={"44px"}
       margin={"auto"}
     >
+      <TestContract />
       <Box marginBottom={2}>
         <AccountLevel />
       </Box>
