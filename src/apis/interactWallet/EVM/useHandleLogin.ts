@@ -26,14 +26,14 @@ export const useHandleLogin = ({
 
         setItem(`${account.address}_signature`, value);
 
-        const result = await loginRequest({
-          WalletAddress: account.address,
-          Signature: value,
-          BlockchainType: configurations.EVM_BLOCKCHAIN_TYPE,
-          Message: configurations.MESSAGE_LOGIN,
-        });
+        // const result = await loginRequest({
+        //   WalletAddress: account.address,
+        //   Signature: value,
+        //   BlockchainType: configurations.EVM_BLOCKCHAIN_TYPE,
+        //   Message: configurations.MESSAGE_LOGIN,
+        // });
 
-        console.log(result, "result");
+        // console.log(result, "result");
 
         // setUserToken(result.token)
 
