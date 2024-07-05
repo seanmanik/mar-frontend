@@ -33,6 +33,7 @@ export default memo<{
   value: number;
   balance: number;
   onChange?: (value: number) => void;
+
 }>(({ symbol, value, balance, title, onChange }) => {
   const btPercentStyle = {
     size: "sm",

@@ -1,5 +1,5 @@
 import { Card, Stack } from "@mui/joy";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ValueDisplay from "../ValueDisplay";
 import {
   IconDailyReward,
@@ -11,10 +11,15 @@ import {
 import PoolTitle from "./PoolTitle";
 import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
 import { CONTRACT_ADDRESS } from "../../constants/contract";
 import USDCAbi from "../../constants/USDC_ABI.json";
+import ModalWithdrawToken from "../ModalWithdrawToken";
+import ModalDepositToken from "../ModalDepositToken";
+import { Address } from "viem";
+import { get } from "lodash";
+import { getTokenAmount } from "../../utils/numbers";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -39,18 +44,40 @@ const TokenPoolCard = ({
   assetSymbol,
   contractAddress,
 }: ITokenPoolCardProps) => {
+  const [openModalDeposit, setOpenModalDeposit] = useState(false);
+
+  const [openModalWithraw, setOpenModalWithraw] = useState(false);
+
   const account = useAccount();
 
   const isConnectWallet = useMemo(() => {
     return !!account && !!account.isConnected;
   }, [account]);
 
-  const { data } = useGetAllowance({
+  const { data: allowance, refetch } = useGetAllowance({
     contractAddress: CONTRACT_ADDRESS.USDC,
     ownerAddress: account.address as string,
     spenderAddress: contractAddress,
     abi: USDCAbi,
   });
+
+
+
+  const tokenBalance = useBalance({
+    token: CONTRACT_ADDRESS.USDC as Address,
+    address: account.address
+  })
+
+  const decimals = Number(get(tokenBalance, 'data.decimals', 18))
+
+  const tokenBalanceValue = get(tokenBalance, 'data.value', 0)
+  const tokenSymbol = get(tokenBalance, 'data.symbol', '')
+
+  const tokenBalanceAmout = getTokenAmount(tokenBalanceValue, decimals)
+
+  const allowanceAmount = getTokenAmount(allowance, decimals)
+
+  console.log(allowanceAmount,'allowanceAmount')
 
   return (
     <Card
@@ -70,7 +97,7 @@ const TokenPoolCard = ({
       >
         {isConnectWallet && (
           <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
-            {!!tvl && (
+            {(
               <ValueDisplay
                 name="TVL"
                 text={`$${tvl}`}
@@ -83,7 +110,7 @@ const TokenPoolCard = ({
                 }
               />
             )}
-            {!!dailyReward && (
+            {(
               <ValueDisplay
                 name="DAILY REWARD"
                 text={`$${dailyReward}`}
@@ -100,7 +127,7 @@ const TokenPoolCard = ({
           </Stack>
         )}
         <Stack direction="column" gap={1.5}>
-          {!!tvs && (
+          {(
             <ValueDisplay
               variant="small"
               name="Total value Staked"
@@ -108,16 +135,16 @@ const TokenPoolCard = ({
               icon={IconTotalValueStake}
             />
           )}
-          {!!pts && (
+          {/* { (
             <ValueDisplay
               variant="small"
               name="Base Points Per Dollar"
               text={`${pts} PTS`}
               icon={IconDailyReward}
             />
-          )}
+          )} */}
 
-          {!!yourStaked && (
+          {(
             <ValueDisplay
               variant="small"
               name="Your Value Staked"
@@ -125,7 +152,7 @@ const TokenPoolCard = ({
               icon={IconYourDeposited}
             />
           )}
-          {!!yourDailyReward && (
+          {(
             <ValueDisplay
               variant="small"
               name="Your Daily Reward"
@@ -146,7 +173,7 @@ const TokenPoolCard = ({
           </Stack>
         ) : (
           <Stack gap={1} direction="row">
-            <Button buttonType="primary" endDecorator={<Bolt />} fullWidth>
+            <Button buttonType="primary" endDecorator={<Bolt />} fullWidth onClick={() => setOpenModalDeposit(true)}>
               Deposit
             </Button>
             <Button
@@ -154,12 +181,30 @@ const TokenPoolCard = ({
               endDecorator={<ArrowForward />}
               fullWidth
               disabled={!yourStaked}
+              onClick={() => setOpenModalWithraw(true)}
             >
               Withdraw
             </Button>
           </Stack>
         )}
       </Stack>
+
+      <ModalWithdrawToken
+        open={openModalWithraw}
+        onClose={() => setOpenModalWithraw(false)}
+      />
+      <ModalDepositToken
+        open={openModalDeposit}
+        onClose={() => setOpenModalDeposit(false)}
+        tokenBalanceAmout={tokenBalanceAmout}
+        symbol={tokenSymbol}
+        allowanceAmount={allowanceAmount}
+        contractAddress={CONTRACT_ADDRESS.USDC}
+        spenderAddress={contractAddress}
+        abi={USDCAbi}
+        decimals={decimals}
+        refetchAllowance={refetch}
+      />
     </Card>
   );
 };

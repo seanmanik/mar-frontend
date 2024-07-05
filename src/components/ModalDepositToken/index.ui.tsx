@@ -23,9 +23,15 @@ export default memo<{
   pendingValue: number;
   balance: number;
   symbol: string;
+  allowanceAmount: number;
   isSuccess: boolean;
   onClose: () => void;
   onDeposit: (amount: number) => void;
+  onApprove: (amount: number) => void;
+
+  amount: number
+  setAmount: (_: number) => void
+
 }>(
   ({
     open,
@@ -36,11 +42,15 @@ export default memo<{
     pendingValue,
     symbol,
     balance,
+    allowanceAmount,
     isSuccess,
     onClose,
     onDeposit,
+    onApprove,
+    amount,
+    setAmount
   }) => {
-    const [amount, setAmount] = useState(0);
+    
 
     return (
       <ModalBlue
@@ -119,19 +129,32 @@ export default memo<{
                   />
                 </Grid>
               </Grid>
-              <Button
-                sx={{
-                  marginTop: 5,
-                }}
-                buttonType="primary"
-                justifyContentChild="center"
-                endDecorator={<Bolt />}
-                fullWidth
-                disabled={amount == 0 || amount > balance}
-                onClick={() => onDeposit && onDeposit(amount)}
-              >
-                Deposit
-              </Button>
+              {
+                amount > allowanceAmount ? <Button
+                  sx={{
+                    marginTop: 5,
+                  }}
+                  buttonType="primary"
+                  justifyContentChild="center"
+                  endDecorator={<Bolt />}
+                  fullWidth
+                  onClick={() => onApprove && onApprove(amount)}
+                >
+                  Approve
+                </Button> : <Button
+                  sx={{
+                    marginTop: 5,
+                  }}
+                  buttonType="primary"
+                  justifyContentChild="center"
+                  endDecorator={<Bolt />}
+                  fullWidth
+                  disabled={amount == 0 || amount > balance}
+                  onClick={() => onDeposit && onDeposit(amount)}
+                >
+                  Deposit
+                </Button>
+              }
             </>
           )}
 

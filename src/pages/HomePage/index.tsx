@@ -138,6 +138,8 @@ const HomePage = () => {
                       assetSymbol={item.assetSymbol}
                       assetName={item.assetName}
                       contractAddress={item.contractAddress}
+
+
                     />
                   </Box>
                 </Grid>
@@ -148,14 +150,7 @@ const HomePage = () => {
           open={openModalDeposit == 1}
           onClose={() => setOpenModalDeposit(0)}
         />
-        <ModalWithdrawToken
-          open={openModalDeposit == 2}
-          onClose={() => setOpenModalDeposit(0)}
-        />
-        <ModalDepositToken
-          open={openModalDeposit == 3}
-          onClose={() => setOpenModalDeposit(0)}
-        />
+        
         <ModalDepositNFT
           open={openModalDeposit == 4}
           onClose={() => setOpenModalDeposit(0)}
