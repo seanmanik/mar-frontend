@@ -22,8 +22,6 @@ export const useGetAllowance = ({
     args: [ownerAddress, spenderAddress],
   });
 
-  console.log(data);
-
   return {
     data: (data as number) || 0,
     isLoading,

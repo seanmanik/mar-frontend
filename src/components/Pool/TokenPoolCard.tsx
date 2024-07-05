@@ -153,6 +153,7 @@ const TokenPoolCard = ({
               buttonType="secondary"
               endDecorator={<ArrowForward />}
               fullWidth
+              disabled={!yourStaked}
             >
               Withdraw
             </Button>

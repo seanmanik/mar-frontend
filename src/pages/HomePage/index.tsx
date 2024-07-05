@@ -21,8 +21,6 @@ const HomePage = () => {
 
   const { data } = useGetPools({ token: userToken });
 
-  console.log(data, "data");
-
   return (
     <Box
       maxWidth={1420}
@@ -125,7 +123,7 @@ const HomePage = () => {
               return (
                 <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
                   <Box
-                    onClick={() => setOpenModalDeposit(index)}
+                    // onClick={() => setOpenModalDeposit(index)}
                     sx={{
                       height: "calc(100% - 32px)",
                     }}
@@ -135,7 +133,7 @@ const HomePage = () => {
                       tvs={0}
                       pts={0}
                       dailyReward={0}
-                      yourStaked={0}
+                      yourStaked={item.depositedAmount}
                       yourDailyReward={0}
                       assetSymbol={item.assetSymbol}
                       assetName={item.assetName}
@@ -146,7 +144,7 @@ const HomePage = () => {
               );
             })}
         </Grid>
-        <ModalWithdrawNFT
+        {/* <ModalWithdrawNFT
           open={openModalDeposit == 1}
           onClose={() => setOpenModalDeposit(0)}
         />
@@ -161,7 +159,7 @@ const HomePage = () => {
         <ModalDepositNFT
           open={openModalDeposit == 4}
           onClose={() => setOpenModalDeposit(0)}
-        />
+        /> */}
       </Stack>
     </Box>
   );
