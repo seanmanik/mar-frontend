@@ -47,7 +47,7 @@ const NftPoolCard = ({
         borderRadius: "12px",
       }}
     >
-      <PoolTitle />
+      <PoolTitle assetSymbol=""/>
       <Stack
         direction="column"
         gap={1}

@@ -1,21 +1,15 @@
 import { Box, Grid, Stack } from "@mui/joy";
 import { useContext, useState } from "react";
-import ModalWithdrawNFT from "../../components/ModalWithdrawNFT";
-import ModalWithdrawToken from "../../components/ModalWithdrawToken";
-import ModalDepositToken from "../../components/ModalDepositToken";
-import ModalDepositNFT from "../../components/ModalDepositNFT";
 import { IconMarPoint, IconMyStake, IconTotalValueStake } from "../../icons";
 import AccountLevel from "../../components/AccountLevel";
 import StatsCard from "../../components/StatsCard";
 import PoolsSelection from "../../components/PoolsSelection";
 import TokenPoolCard from "../../components/Pool/TokenPoolCard";
-import NftPoolCard from "../../components/Pool/NftPoolCard";
 import { AppContext } from "../../context/AppContext";
 import { useGetPools } from "../../apis/getPools";
 import { isArray } from "lodash";
 
 const HomePage = () => {
-  const [openModalDeposit, setOpenModalDeposit] = useState(0);
   const [poolSelected, setPoolSelected] = useState("all");
   const { userToken } = useContext(AppContext);
 
@@ -119,7 +113,7 @@ const HomePage = () => {
           ))} */}
 
           {isArray(data) &&
-            data.map((item, index) => {
+            data.map((item) => {
               return (
                 <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
                   <Box

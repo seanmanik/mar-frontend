@@ -2,7 +2,6 @@ import { Card, Stack } from "@mui/joy";
 import { useMemo, useState } from "react";
 import ValueDisplay from "../ValueDisplay";
 import {
-  IconDailyReward,
   IconTotalValueStake,
   IconWallet,
   IconYourDailyReward,
@@ -37,10 +36,10 @@ const TokenPoolCard = ({
   tvl,
   dailyReward,
   tvs,
-  pts,
+  // pts,
   yourStaked,
   yourDailyReward,
-  assetName,
+  // assetName,
   assetSymbol,
   contractAddress,
 }: ITokenPoolCardProps) => {

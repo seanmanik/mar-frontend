@@ -1,6 +1,6 @@
-import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { Abi, Address } from "viem";
+import { Address } from "viem";
 import { useReadContract } from "wagmi";
 
 export const useGetAllowance = ({

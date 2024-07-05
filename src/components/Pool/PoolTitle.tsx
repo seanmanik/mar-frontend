@@ -1,5 +1,4 @@
 import { Stack, Typography } from "@mui/joy";
-import BootsTag from "./BoostTag";
 import TokenToIcon from "../../utils/TokenToIcon";
 
 const PoolTitle = ({assetSymbol} : {assetSymbol: string}) => {
