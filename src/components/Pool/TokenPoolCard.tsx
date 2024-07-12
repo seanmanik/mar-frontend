@@ -12,7 +12,7 @@ import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
-import { CONTRACT_ADDRESS, MAP_POOL_TO_TOKEN } from "../../constants/contract";
+import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../constants/contract";
 import USDCAbi from "../../constants/USDC_ABI.json";
 import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
@@ -29,7 +29,7 @@ export interface ITokenPoolCardProps {
 
   assetName: string;
   assetSymbol: string;
-  contractAddress: string;
+  poolAddress: string;
 }
 
 const TokenPoolCard = ({
@@ -41,7 +41,7 @@ const TokenPoolCard = ({
   yourDailyReward,
   // assetName,
   assetSymbol,
-  contractAddress,
+  poolAddress,
 }: ITokenPoolCardProps) => {
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
@@ -53,30 +53,34 @@ const TokenPoolCard = ({
     return !!account && !!account.isConnected;
   }, [account]);
 
+  const tokenAddress = useMemo(() => {
+    return MAP_POOL_TO_TOKEN[poolAddress] as Address;
+  }, [poolAddress]);
+
+  const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
+
   const { data: allowance, refetch } = useGetAllowance({
-    contractAddress: MAP_POOL_TO_TOKEN[contractAddress] as Address,
+    contractAddress: tokenAddress,
     ownerAddress: account.address as string,
-    spenderAddress: contractAddress,
-    abi: USDCAbi,
+    spenderAddress: poolAddress,
+    abi: tokenDefaultData.abi,
   });
 
-
-
   const tokenBalance = useBalance({
-    token: MAP_POOL_TO_TOKEN[contractAddress] as Address,
-    address: account.address
-  })
+    token: MAP_POOL_TO_TOKEN[poolAddress] as Address,
+    address: account.address,
+  });
 
-  const decimals = Number(get(tokenBalance, 'data.decimals', 18))
+  const decimals = Number(get(tokenBalance, "data.decimals", 18));
 
-  const tokenBalanceValue = get(tokenBalance, 'data.value', 0)
-  const tokenSymbol = get(tokenBalance, 'data.symbol', '')
+  const tokenBalanceValue = get(tokenBalance, "data.value", 0);
+  const tokenSymbol = get(tokenBalance, "data.symbol", "");
 
-  const tokenBalanceAmout = getTokenAmount(tokenBalanceValue, decimals)
+  const tokenBalanceAmout = getTokenAmount(tokenBalanceValue, decimals);
 
-  const allowanceAmount = getTokenAmount(allowance, decimals)
+  const allowanceAmount = getTokenAmount(allowance, decimals);
 
-  console.log(allowanceAmount,'allowanceAmount')
+  console.log(allowanceAmount, "allowanceAmount");
 
   return (
     <Card
@@ -96,7 +100,7 @@ const TokenPoolCard = ({
       >
         {isConnectWallet && (
           <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
-            {(
+            {
               <ValueDisplay
                 name="TVL"
                 text={`$${tvl}`}
@@ -108,8 +112,8 @@ const TokenPoolCard = ({
                   />
                 }
               />
-            )}
-            {(
+            }
+            {
               <ValueDisplay
                 name="DAILY REWARD"
                 text={`$${dailyReward}`}
@@ -122,18 +126,18 @@ const TokenPoolCard = ({
                   />
                 }
               />
-            )}
+            }
           </Stack>
         )}
         <Stack direction="column" gap={1.5}>
-          {(
+          {
             <ValueDisplay
               variant="small"
               name="Total value Staked"
               text={`$${tvs}`}
               icon={IconTotalValueStake}
             />
-          )}
+          }
           {/* { (
             <ValueDisplay
               variant="small"
@@ -143,22 +147,22 @@ const TokenPoolCard = ({
             />
           )} */}
 
-          {(
+          {
             <ValueDisplay
               variant="small"
               name="Your Value Staked"
               text={`$${yourStaked}`}
               icon={IconYourDeposited}
             />
-          )}
-          {(
+          }
+          {
             <ValueDisplay
               variant="small"
               name="Your Daily Reward"
               text={`${yourDailyReward} PTS`}
               icon={IconYourDailyReward}
             />
-          )}
+          }
         </Stack>
         {!isConnectWallet ? (
           <Stack gap={1} direction="column">
@@ -172,7 +176,12 @@ const TokenPoolCard = ({
           </Stack>
         ) : (
           <Stack gap={1} direction="row">
-            <Button buttonType="primary" endDecorator={<Bolt />} fullWidth onClick={() => setOpenModalDeposit(true)}>
+            <Button
+              buttonType="primary"
+              endDecorator={<Bolt />}
+              fullWidth
+              onClick={() => setOpenModalDeposit(true)}
+            >
               Deposit
             </Button>
             <Button
@@ -198,9 +207,8 @@ const TokenPoolCard = ({
         tokenBalanceAmout={tokenBalanceAmout}
         symbol={tokenSymbol}
         allowanceAmount={allowanceAmount}
-        contractAddress={MAP_POOL_TO_TOKEN[contractAddress] as Address}
-        spenderAddress={contractAddress}
-        abi={USDCAbi}
+        tokenAddress={tokenAddress}
+        poolAddress={poolAddress}
         decimals={decimals}
         refetchAllowance={refetch}
       />

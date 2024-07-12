@@ -131,9 +131,7 @@ const HomePage = () => {
                       yourDailyReward={0}
                       assetSymbol={item.assetSymbol}
                       assetName={item.assetName}
-                      contractAddress={item.contractAddress}
-
-
+                      poolAddress={item.contractAddress}
                     />
                   </Box>
                 </Grid>

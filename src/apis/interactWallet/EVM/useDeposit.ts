@@ -6,12 +6,10 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi"
 export const useDeposit = ({
     contractAddress,
     decimals,
-    spenderAddress,
     abi,
 }: {
     contractAddress: string;
     decimals: number;
-    spenderAddress: string;
     abi: any;
 }) => {
     const {
@@ -26,9 +24,9 @@ export const useDeposit = ({
             address: contractAddress as Address,
             abi,
             functionName: 'stake',
-            args: [spenderAddress, BigInt(new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toFixed())],
+            args: [BigInt(new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toFixed())],
         })
-    }, [contractAddress, writeContract, abi, spenderAddress, decimals])
+    }, [contractAddress, writeContract, abi, decimals])
 
     const { isLoading: isConfirming, isSuccess: isConfirmed } =
         useWaitForTransactionReceipt({
