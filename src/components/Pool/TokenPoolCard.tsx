@@ -12,7 +12,7 @@ import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
-import { CONTRACT_ADDRESS } from "../../constants/contract";
+import { CONTRACT_ADDRESS, MAP_POOL_TO_TOKEN } from "../../constants/contract";
 import USDCAbi from "../../constants/USDC_ABI.json";
 import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
@@ -54,7 +54,7 @@ const TokenPoolCard = ({
   }, [account]);
 
   const { data: allowance, refetch } = useGetAllowance({
-    contractAddress: CONTRACT_ADDRESS.USDC,
+    contractAddress: MAP_POOL_TO_TOKEN[contractAddress] as Address,
     ownerAddress: account.address as string,
     spenderAddress: contractAddress,
     abi: USDCAbi,
@@ -63,7 +63,7 @@ const TokenPoolCard = ({
 
 
   const tokenBalance = useBalance({
-    token: CONTRACT_ADDRESS.USDC as Address,
+    token: MAP_POOL_TO_TOKEN[contractAddress] as Address,
     address: account.address
   })
 
@@ -198,7 +198,7 @@ const TokenPoolCard = ({
         tokenBalanceAmout={tokenBalanceAmout}
         symbol={tokenSymbol}
         allowanceAmount={allowanceAmount}
-        contractAddress={CONTRACT_ADDRESS.USDC}
+        contractAddress={MAP_POOL_TO_TOKEN[contractAddress] as Address}
         spenderAddress={contractAddress}
         abi={USDCAbi}
         decimals={decimals}

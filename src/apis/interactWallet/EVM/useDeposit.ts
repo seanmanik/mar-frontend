@@ -25,7 +25,7 @@ export const useDeposit = ({
         writeContract({
             address: contractAddress as Address,
             abi,
-            functionName: 'approve',
+            functionName: 'stake',
             args: [spenderAddress, BigInt(new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toFixed())],
         })
     }, [contractAddress, writeContract, abi, spenderAddress, decimals])

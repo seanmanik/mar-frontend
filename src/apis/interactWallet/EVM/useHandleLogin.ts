@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { configurations } from "../../../constants/configurations";
 import { getItem, setItem } from "../../../utils/localStorage";
@@ -6,6 +6,7 @@ import { useHandleLogout } from "./useHandleLogout";
 import { loginRequest } from "../../login";
 import { toast } from "react-toastify";
 import { AppContext } from "../../../context/AppContext";
+import { Address } from "viem";
 
 export const useHandleLogin = ({
   actionCallBack,
@@ -33,7 +34,7 @@ export const useHandleLogin = ({
           Message: configurations.MESSAGE_LOGIN,
         });
 
-        setUserToken(result)
+        setUserToken(result);
 
         actionCallBack && actionCallBack();
         toast.success("Login success");
@@ -45,6 +46,23 @@ export const useHandleLogin = ({
       actionCallBack && actionCallBack();
     }
   }, [signMessageAsync, actionCallBack, account.address, onHandleLogout]);
+
+  useEffect(() => {
+    const onLogin = async () => {
+      const result = await loginRequest({
+        WalletAddress: account.address as Address,
+        Signature: getItem(`${account.address}_signature`) as string,
+        BlockchainType: configurations.EVM_BLOCKCHAIN_TYPE,
+        Message: configurations.MESSAGE_LOGIN,
+      });
+
+      setUserToken(result);
+    };
+
+    if (account.address && getItem(`${account.address}_signature`)) {
+      onLogin();
+    }
+  }, [account.address]);
 
   return { onHandleLogin };
 };

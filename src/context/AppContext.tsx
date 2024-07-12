@@ -1,6 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
-import { deleteItem } from "../utils/localStorage";
-import { useAccount, useDisconnect } from "wagmi";
+import { ReactNode, createContext, useState } from "react";
 
 interface AppContextType {
   userToken: string;
@@ -14,16 +12,6 @@ export const AppContext = createContext<AppContextType>({
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [userToken, setUserToken] = useState<string>("");
-
-  const { disconnect } = useDisconnect();
-  const account = useAccount();
-
-  useEffect(() => {
-    if (!userToken) {
-      disconnect();
-      deleteItem(`${account.address}_signature`);
-    }
-  }, []);
 
   return (
     <AppContext.Provider
