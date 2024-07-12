@@ -55,6 +55,7 @@ export default memo<{
     });
 
     console.log(isPendingDeposit, isConfirmingDeposit, isConfirmedDeposit);
+    console.log(isPending, isConfirming)
 
     const onHandleDeposit = async (val: number) => {
       try {

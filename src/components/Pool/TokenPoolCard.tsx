@@ -13,7 +13,6 @@ import Button from "../Button";
 import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
 import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../constants/contract";
-import USDCAbi from "../../constants/USDC_ABI.json";
 import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { Address } from "viem";

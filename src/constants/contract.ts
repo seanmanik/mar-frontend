@@ -1,6 +1,12 @@
 import USDCPoolABI from "./USDC_POOL_ABI.json";
 import USDCABI from "./USDC_ABI.json";
 
+import USDTABI from "./USDT_ABI.json"
+import USDTPoolABI from "./USDT_POOL_ABI.json"
+
+import WBTCABI from "./WBTC_ABI.json"
+import WBTCPoolABI from "./WBTC_POOL_ABI.json"
+
 export const CONTRACT_ADDRESS = {
   USDC: "0x634A9646f1ccEebc00B3052a32768A62021A15EF",
   USDT: "0x884678C01bA63DB6E776Ce38b8EE7119164E865c",
@@ -25,11 +31,11 @@ export const CONTRACT_DEFAUL_DATA = {
   },
   [CONTRACT_ADDRESS.USDT_STAKING]: {
     address: [CONTRACT_ADDRESS.USDT_STAKING],
-    abi: USDCPoolABI, // temp
+    abi: USDTPoolABI,
   },
   [CONTRACT_ADDRESS.WBTC_STAKING]: {
     address: [CONTRACT_ADDRESS.WBTC_STAKING],
-    abi: USDCPoolABI, // temp
+    abi: WBTCPoolABI,
   },
 
   // token
@@ -39,10 +45,10 @@ export const CONTRACT_DEFAUL_DATA = {
   },
   [CONTRACT_ADDRESS.USDT]: {
     address: [CONTRACT_ADDRESS.USDT],
-    abi: USDCABI, // temp
+    abi: USDTABI,
   },
   [CONTRACT_ADDRESS.WBTC]: {
     address: [CONTRACT_ADDRESS.WBTC],
-    abi: USDCABI, // temp
+    abi: WBTCABI,
   },
 };
