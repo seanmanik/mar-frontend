@@ -26,6 +26,10 @@ export default memo<{
   isSuccess: boolean;
   onClose: () => void;
   onWithdraw: (amount: number) => void;
+
+  amount: number
+  setAmount: (_: number) => void
+
 }>(
   ({
     open,
@@ -39,8 +43,9 @@ export default memo<{
     isSuccess,
     onClose,
     onWithdraw,
+    amount,
+    setAmount
   }) => {
-    const [amount, setAmount] = useState(0);
 
     return (
       <ModalBlue

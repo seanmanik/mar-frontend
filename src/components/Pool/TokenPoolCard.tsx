@@ -188,7 +188,7 @@ const TokenPoolCard = ({
               buttonType="secondary"
               endDecorator={<ArrowForward />}
               fullWidth
-              disabled={!yourStaked}
+              // disabled={!yourStaked}
               onClick={() => setOpenModalWithraw(true)}
             >
               Withdraw
@@ -200,6 +200,11 @@ const TokenPoolCard = ({
       <ModalWithdrawToken
         open={openModalWithraw}
         onClose={() => setOpenModalWithraw(false)}
+        symbol={tokenSymbol}
+        tokenAddress={tokenAddress}
+        poolAddress={poolAddress}
+        decimals={decimals}
+        tokenBalanceAmout={tokenBalanceAmout}
       />
       <ModalDepositToken
         open={openModalDeposit}
