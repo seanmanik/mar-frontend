@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import UI from "./index.ui";
 import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
@@ -25,8 +25,8 @@ export default memo<{
 
   const {
     isPending,
-    isConfirming,
     isConfirmed,
+    txHash,
     onWithdraw,
   } = useWithdraw({
     contractAddress: poolAddress,
@@ -34,17 +34,15 @@ export default memo<{
     abi: poolDefaultData.abi,
   });
 
-  const onHandleWithdraw = async (val: number) => {
-    try {
-      await onWithdraw(val);
+  useEffect(() => {
+    if (!isPending && isConfirmed) {
       setOnSuccess(true);
-      onClose && onClose();
-    } catch (error) {
-      console.log(error);
+      // onClose && onClose();
+    } else if (!isPending && !isConfirmed) {
       setOnSuccess(false);
-      onClose && onClose();
+      // onClose && onClose();
     }
-  };
+  }, [isPending, isConfirmed, setOnSuccess]);
 
   return (
     <UI
@@ -63,7 +61,9 @@ export default memo<{
       pendingValue={8000}
       amount={amount}
       setAmount={setAmount}
-      onWithdraw={onHandleWithdraw}
+      onWithdraw={onWithdraw}
+      isPendingWithdraw={isPending}
+      txHash={txHash as string}
     />
   );
 });

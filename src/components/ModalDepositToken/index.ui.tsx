@@ -31,6 +31,10 @@ export default memo<{
 
   amount: number
   setAmount: (_: number) => void
+  isPendingApprove: boolean
+  isPendingDeposit: boolean
+  
+  txHash: string
 
 }>(
   ({
@@ -48,7 +52,10 @@ export default memo<{
     onDeposit,
     onApprove,
     amount,
-    setAmount
+    setAmount,
+    isPendingApprove,
+    isPendingDeposit,
+    txHash
   }) => {
 
 
@@ -139,6 +146,8 @@ export default memo<{
                   endDecorator={<Bolt />}
                   fullWidth
                   onClick={() => onApprove && onApprove(amount)}
+                  loading={isPendingApprove}
+                  disabled={isPendingApprove}
                 >
                   Approve
                 </Button> : <Button
@@ -149,8 +158,9 @@ export default memo<{
                   justifyContentChild="center"
                   endDecorator={<Bolt />}
                   fullWidth
-                  disabled={amount == 0 || amount > balance}
+                  disabled={amount == 0 || amount > balance || isPendingDeposit}
                   onClick={() => onDeposit && onDeposit(amount)}
+                  loading={isPendingDeposit}
                 >
                   Deposit
                 </Button>
@@ -192,7 +202,7 @@ export default memo<{
                 buttonType="secondary"
                 justifyContentChild="center"
                 fullWidth
-                onClick={() => window.open("https://etherscan.io")}
+                onClick={() => window.open(`https://sepolia.etherscan.io//tx/${txHash}`)}
               >
                 View on Explorer
               </Button>

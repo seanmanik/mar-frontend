@@ -37,8 +37,7 @@ export const useApprove = ({
 
 
     return {
-        isPending,
-        isConfirming,
+        isPending: isPending || isConfirming,
         isConfirmed,
         onApprove
     }

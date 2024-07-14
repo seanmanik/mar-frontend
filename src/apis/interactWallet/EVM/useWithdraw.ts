@@ -35,9 +35,9 @@ export const useWithdraw = ({
 
 
     return {
-        isPending,
-        isConfirming,
+        isPending: isPending || isConfirming,
         isConfirmed,
+        txHash: hash,
         onWithdraw
     }
 }

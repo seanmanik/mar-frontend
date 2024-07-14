@@ -79,8 +79,6 @@ const TokenPoolCard = ({
 
   const allowanceAmount = getTokenAmount(allowance, decimals);
 
-  console.log(allowanceAmount, "allowanceAmount");
-
   return (
     <Card
       sx={{

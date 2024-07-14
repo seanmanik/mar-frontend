@@ -29,6 +29,8 @@ export default memo<{
 
   amount: number
   setAmount: (_: number) => void
+  isPendingWithdraw: boolean
+  txHash: string
 
 }>(
   ({
@@ -44,7 +46,9 @@ export default memo<{
     onClose,
     onWithdraw,
     amount,
-    setAmount
+    setAmount,
+    isPendingWithdraw,
+    txHash
   }) => {
 
     return (
@@ -132,8 +136,9 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                disabled={amount == 0 || amount > balance}
+                disabled={amount == 0 || amount > balance || isPendingWithdraw}
                 onClick={() => onWithdraw && onWithdraw(amount)}
+                loading={isPendingWithdraw}
               >
                 Withdraw
               </Button>
@@ -175,7 +180,7 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                onClick={() => window.open("https://etherscan.io")}
+                onClick={() => window.open(`https://sepolia.etherscan.io//tx/${txHash}`)}
               >
                 View on Explorer
               </Button>

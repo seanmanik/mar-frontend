@@ -36,7 +36,7 @@ export default memo<{
     const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
     const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
 
-    const { isPending, isConfirming, isConfirmed, onApprove } = useApprove({
+    const { isPending, isConfirmed, onApprove } = useApprove({
       contractAddress: tokenAddress,
       decimals,
       spenderAddress: poolAddress,
@@ -45,35 +45,32 @@ export default memo<{
 
     const {
       isPending: isPendingDeposit,
-      isConfirming: isConfirmingDeposit,
       isConfirmed: isConfirmedDeposit,
       onDeposit,
+      txHash,
     } = useDeposit({
       contractAddress: poolAddress,
       decimals,
       abi: poolDefaultData.abi,
     });
 
-    console.log(isPendingDeposit, isConfirmingDeposit, isConfirmedDeposit);
-    console.log(isPending, isConfirming)
-
-    const onHandleDeposit = async (val: number) => {
-      try {
-        await onDeposit(val);
-        setDepositedSuccess(true);
-        onClose && onClose();
-      } catch (error) {
-        console.log(error);
-        setDepositedSuccess(false);
-        onClose && onClose();
-      }
-    };
+    console.log(txHash, 'txHash')
 
     useEffect(() => {
       if (isConfirmed || isConfirmedDeposit) {
         refetchAllowance();
       }
-    }, [refetchAllowance, isConfirmed, isConfirmingDeposit]);
+    }, [refetchAllowance, isConfirmed, isConfirmedDeposit]);
+
+    useEffect(() => {
+      if (!isPendingDeposit && isConfirmedDeposit) {
+        setDepositedSuccess(true);
+        // onClose && onClose();
+      } else if (!isPendingDeposit && !isConfirmedDeposit) {
+        setDepositedSuccess(false);
+        // onClose && onClose();
+      }
+    }, [isPendingDeposit, isConfirmedDeposit, setDepositedSuccess]);
 
     return (
       <UI
@@ -91,10 +88,13 @@ export default memo<{
         totalValue={82938}
         stakeAmount={82312}
         pendingValue={8000}
-        onDeposit={onHandleDeposit}
+        onDeposit={onDeposit}
         onApprove={onApprove}
+        isPendingApprove={isPending}
+        isPendingDeposit={isPendingDeposit}
         amount={amount}
         setAmount={setAmount}
+        txHash={txHash as string}
       />
     );
   }
