@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { sepolia } from "viem/chains";
-import { useChainId, useSwitchChain } from "wagmi";
+import { useChainId } from "wagmi";
+import ModalSwitchNetwork from "../components/ModalSwitchNetwork";
 
 interface AppContextType {
   userToken: string;
@@ -15,17 +15,18 @@ export const AppContext = createContext<AppContextType>({
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [userToken, setUserToken] = useState<string>("");
-  const { chains, switchChain } = useSwitchChain();
   const chainId = useChainId();
+  const [openModalSwitchNetwork, setOpenModalSwitchNetwork] = useState(false);
+
 
   useEffect(() => {
     if (chainId !== sepolia.id) {
-      // switchChain({
-      //   chainId: sepolia.id,
-      // });
-      toast.error("Wrong network!");
+      console.log("wrong network!");
+      setOpenModalSwitchNetwork(true);
+    } else {
+      setOpenModalSwitchNetwork(false);
     }
-  }, [chainId, switchChain]);
+  }, [chainId]);
 
   return (
     <AppContext.Provider
@@ -35,6 +36,10 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
+      <ModalSwitchNetwork
+        open={openModalSwitchNetwork}
+        onClose={() => setOpenModalSwitchNetwork(false)}
+      />
     </AppContext.Provider>
   );
 };

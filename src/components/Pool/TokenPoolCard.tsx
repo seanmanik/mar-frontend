@@ -97,8 +97,6 @@ const TokenPoolCard = ({
 
   const totalStakedOfUserAmount = getTokenAmount(totalStakedOfUser, decimals);
 
-  console.log(totalStakedOfUserAmount, totalStakedOfPoolAmount);
-
   const tokenBalanceValue = get(tokenBalance, "data.value", 0);
   const tokenSymbol = get(tokenBalance, "data.symbol", "");
 

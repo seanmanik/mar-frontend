@@ -56,8 +56,6 @@ export default memo<{
       abi: poolDefaultData.abi,
     });
 
-    console.log(txHash, 'txHash')
-
     useEffect(() => {
       if (isConfirmed || isConfirmedDeposit) {
         refetchAllowance();
