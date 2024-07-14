@@ -15,6 +15,7 @@ export default memo<{
   tokenAddress: string;
   poolAddress: string;
   decimals: number;
+  userStaked: number;
 
   refetchAllowance: () => void;
 }>(
@@ -28,6 +29,7 @@ export default memo<{
     poolAddress,
     decimals,
     refetchAllowance,
+    userStaked,
   }) => {
     const [depositedSuccess, setDepositedSuccess] = useState(false);
 
@@ -85,8 +87,8 @@ export default memo<{
         allowanceAmount={allowanceAmount}
         marPoint={23872}
         puppyPoint={2938}
-        totalValue={82938}
-        stakeAmount={82312}
+        totalValue={userStaked * 1}
+        stakeAmount={userStaked}
         pendingValue={8000}
         onDeposit={onDeposit}
         onApprove={onApprove}

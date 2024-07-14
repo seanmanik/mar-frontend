@@ -69,6 +69,7 @@ export default memo<{
               <Box maxWidth={"100%"} overflow={"hidden"}>
                 <InputAmount
                   title={`Withdraw ${symbol}`}
+                  subTitle={"Your Staked"}
                   symbol={symbol}
                   balance={balance}
                   value={amount}

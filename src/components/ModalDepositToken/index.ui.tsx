@@ -1,3 +1,4 @@
+
 import { memo } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
@@ -77,6 +78,7 @@ export default memo<{
               <Box maxWidth={"100%"} overflow={"hidden"}>
                 <InputAmount
                   title={`Deposit ${symbol}`}
+                  subTitle={"Your Balance"}
                   symbol={symbol}
                   balance={balance}
                   value={amount}

@@ -33,8 +33,9 @@ export default memo<{
   value: number;
   balance: number;
   onChange?: (value: number) => void;
+  subTitle: string;
 
-}>(({ symbol, value, balance, title, onChange }) => {
+}>(({ symbol, value, balance, title, onChange, subTitle }) => {
   const btPercentStyle = {
     size: "sm",
     variant: "outlined",
@@ -74,7 +75,7 @@ export default memo<{
                 {title}
               </Typography>
               <Typography level="title-sm" color="neutral" textAlign={"right"}>
-                Your Balance: {parseFloat(balance.toFixed(2)).toLocaleString()}{" "}
+                {subTitle}: {parseFloat(balance.toFixed(2)).toLocaleString()}{" "}
                 {symbol}
               </Typography>
             </Stack>

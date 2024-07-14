@@ -1,9 +1,12 @@
-import { Card, Stack } from "@mui/joy";
+import { Card, Divider, Stack, Typography } from "@mui/joy";
 import { useMemo, useState } from "react";
 import ValueDisplay from "../ValueDisplay";
 import {
+  IconMarPoint,
+  IconPuppyPoint,
   IconTotalValueStake,
   IconWallet,
+  IconWalletYellow,
   IconYourDailyReward,
   IconYourDeposited,
 } from "../../icons";
@@ -12,12 +15,17 @@ import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
-import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../constants/contract";
+import {
+  CONTRACT_DEFAUL_DATA,
+  MAP_POOL_TO_TOKEN,
+} from "../../constants/contract";
 import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { Address } from "viem";
 import { get } from "lodash";
 import { getTokenAmount } from "../../utils/numbers";
+import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
+import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -72,6 +80,25 @@ const TokenPoolCard = ({
 
   const decimals = Number(get(tokenBalance, "data.decimals", 18));
 
+  const { data: totalStakedOfPool, refetch: refetchTotalStakedOfPool } =
+    useGetTotalStakedOfPool({
+      contractAddress: poolAddress,
+      abi: CONTRACT_DEFAUL_DATA[poolAddress].abi,
+    });
+
+  const totalStakedOfPoolAmount = getTokenAmount(totalStakedOfPool, decimals);
+
+  const { data: totalStakedOfUser, refetch: refetchTotalStakedOfUser } =
+    useGetUserStakedOfPool({
+      contractAddress: poolAddress,
+      userAddress: account.address as string,
+      abi: CONTRACT_DEFAUL_DATA[poolAddress].abi,
+    });
+
+  const totalStakedOfUserAmount = getTokenAmount(totalStakedOfUser, decimals);
+
+  console.log(totalStakedOfUserAmount, totalStakedOfPoolAmount);
+
   const tokenBalanceValue = get(tokenBalance, "data.value", 0);
   const tokenSymbol = get(tokenBalance, "data.symbol", "");
 
@@ -91,50 +118,61 @@ const TokenPoolCard = ({
       <PoolTitle assetSymbol={assetSymbol} />
       <Stack
         direction="column"
-        gap={1}
+        gap={3}
         justifyContent="space-between"
         height="100%"
       >
-        {isConnectWallet && (
-          <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
-            {
-              <ValueDisplay
-                name="TVL"
-                text={`$${tvl}`}
-                isNameAbove
-                flex={1}
-                nameIcon={
-                  <Paid
-                    sx={{ fontSize: 15, color: "gray", marginRight: 0.5 }}
-                  />
-                }
-              />
+        <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
+          <ValueDisplay
+            name="TVL"
+            text={`$${totalStakedOfPoolAmount * 1}`}
+            isNameAbove
+            flex={1}
+            nameIcon={
+              <Paid sx={{ fontSize: 15, color: "gray", marginRight: 0.5 }} />
             }
-            {
-              <ValueDisplay
-                name="DAILY REWARD"
-                text={`$${dailyReward}`}
-                align="right"
-                isNameAbove
-                flex={1}
-                nameIcon={
-                  <Redeem
-                    sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }}
-                  />
-                }
-              />
-            }
-          </Stack>
-        )}
-        <Stack direction="column" gap={1.5}>
-          {
+            type="primay"
+          />
+          {isConnectWallet && (
             <ValueDisplay
-              variant="small"
-              name="Total value Staked"
-              text={`$${tvs}`}
-              icon={IconTotalValueStake}
+              name="MY DEPOSIT"
+              text={`$${totalStakedOfUserAmount * 1}`}
+              align="right"
+              isNameAbove
+              flex={1}
+              nameIcon={
+                // <Redeem
+                //   sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }}
+                // />
+                <Paid sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }} />
+              }
+              type="primay"
             />
-          }
+          )}
+        </Stack>
+        <Stack direction="column" gap={1.5}>
+          <Typography
+            level="body-sm"
+            sx={{
+              fontSize: 12,
+              fontWeight: 700,
+              color: "rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            MY DAILY REWARDS
+          </Typography>
+          <Divider
+            sx={{
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+            }}
+          />
+          <ValueDisplay
+            variant="small"
+            name="Mar Points"
+            text={`${"467,000"}`}
+            icon={IconMarPoint}
+            iconWidth={32}
+          />
           {/* { (
             <ValueDisplay
               variant="small"
@@ -143,24 +181,28 @@ const TokenPoolCard = ({
               icon={IconDailyReward}
             />
           )} */}
-
-          {
-            <ValueDisplay
-              variant="small"
-              name="Your Value Staked"
-              text={`$${yourStaked}`}
-              icon={IconYourDeposited}
-            />
-          }
-          {
-            <ValueDisplay
-              variant="small"
-              name="Your Daily Reward"
-              text={`${yourDailyReward} PTS`}
-              icon={IconYourDailyReward}
-            />
-          }
+          <ValueDisplay
+            variant="small"
+            name="Puppy Points"
+            text={`${"467,000"}`}
+            icon={IconPuppyPoint}
+            iconWidth={32}
+          />
+          {/* <ValueDisplay
+            variant="small"
+            name="Your Daily Reward"
+            text={`${totalStakedOfUserAmount * 0.001} PTS`}
+            icon={IconYourDailyReward}
+          /> */}
         </Stack>
+        <ValueDisplay
+          variant="small"
+          name="Wallet Balance"
+          text={`${tokenBalanceAmout} ${tokenSymbol}`}
+          icon={IconWalletYellow}
+          iconWidth={20}
+          type="tertiary"
+        />
         {!isConnectWallet ? (
           <Stack gap={1} direction="column">
             <Button
@@ -173,6 +215,17 @@ const TokenPoolCard = ({
           </Stack>
         ) : (
           <Stack gap={1} direction="row">
+            {totalStakedOfUserAmount > 0 && (
+              <Button
+                buttonType="secondary"
+                endDecorator={<ArrowForward />}
+                fullWidth
+                // disabled={!yourStaked}
+                onClick={() => setOpenModalWithraw(true)}
+              >
+                Withdraw
+              </Button>
+            )}
             <Button
               buttonType="primary"
               endDecorator={<Bolt />}
@@ -180,15 +233,6 @@ const TokenPoolCard = ({
               onClick={() => setOpenModalDeposit(true)}
             >
               Deposit
-            </Button>
-            <Button
-              buttonType="secondary"
-              endDecorator={<ArrowForward />}
-              fullWidth
-              // disabled={!yourStaked}
-              onClick={() => setOpenModalWithraw(true)}
-            >
-              Withdraw
             </Button>
           </Stack>
         )}
@@ -201,7 +245,8 @@ const TokenPoolCard = ({
         tokenAddress={tokenAddress}
         poolAddress={poolAddress}
         decimals={decimals}
-        tokenBalanceAmout={tokenBalanceAmout}
+        tokenBalanceAmout={totalStakedOfUserAmount}
+        userStaked={totalStakedOfUserAmount}
       />
       <ModalDepositToken
         open={openModalDeposit}
@@ -213,6 +258,7 @@ const TokenPoolCard = ({
         poolAddress={poolAddress}
         decimals={decimals}
         refetchAllowance={refetch}
+        userStaked={totalStakedOfUserAmount}
       />
     </Card>
   );

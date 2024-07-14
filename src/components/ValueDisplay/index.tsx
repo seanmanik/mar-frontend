@@ -8,9 +8,11 @@ export default memo<
     icon?: string;
     images?: string[];
     variant?: "medium" | "small";
+    type?: "primay" | "secondary" | "tertiary";
     isNameAbove?: boolean;
     align?: "left" | "right";
     nameIcon?: any;
+    iconWidth?: number;
   } & StackProps
 >(
   ({
@@ -19,16 +21,23 @@ export default memo<
     name,
     images,
     variant = "medium",
+    type = "secondary",
     isNameAbove = false,
     align = "left",
     nameIcon,
+    iconWidth = 40,
     ...stackProps
   }) => {
     const sizeImage = variant == "medium" ? "40px" : "25px";
     return (
       <Stack
         sx={{
-          background: "#F5F5F5",
+          background:
+            type == "primay"
+              ? "linear-gradient(to right, #EAF1FF 20%, #D3CAFE 120%)"
+              : type === "tertiary"
+                ? "rgba(255, 247, 234, 1)"
+                : "#F5F5F5",
           padding: 1,
           borderRadius: 10,
         }}
@@ -43,9 +52,14 @@ export default memo<
           spacing={1}
         >
           {icon && (
-            <Box width={"40px"} height={"40px"}>
-              <img src={icon} width={40} />
-            </Box>
+            <Stack
+              width={"40px"}
+              height={"40px"}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <img src={icon} width={iconWidth} />
+            </Stack>
           )}
           <Stack
             direction={"column"}

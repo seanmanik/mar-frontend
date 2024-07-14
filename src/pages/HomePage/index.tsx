@@ -75,6 +75,7 @@ const HomePage = () => {
           columns={{ xs: 2, sm: 4, md: 8, lg: 12 }}
           sx={{ flexGrow: 1 }}
           alignItems="stretch"
+          width={"100%"}
         >
           {/* {Array.from(Array(20)).map((_, index) => (
             <Grid xs={2} sm={4} md={4} lg={4} key={index}>
