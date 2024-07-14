@@ -1,4 +1,10 @@
-import { Button as JoyButton, ButtonProps, Stack, Typography } from "@mui/joy";
+import {
+  Button as JoyButton,
+  ButtonProps,
+  Stack,
+  Typography,
+  Box,
+} from "@mui/joy";
 export interface IButtonProps extends ButtonProps {
   buttonType: "primary" | "secondary";
   justifyContentChild?: "space-between" | "center";
@@ -10,12 +16,14 @@ const Button = ({
   buttonType,
   children,
   endDecorator,
+  loading,
   ...props
 }: IButtonProps) => {
   if (buttonType === "secondary") {
     return (
       <JoyButton
         {...props}
+        loading={loading}
         variant="outlined"
         sx={{
           ...sx,
@@ -33,10 +41,16 @@ const Button = ({
           justifyContent={justifyContentChild}
           gap={1}
         >
-          <Typography fontWeight={500} fontSize={16} textColor="#000000">
-            {children}
-          </Typography>
-          {endDecorator}
+          {loading ? (
+            <Box height={"24px"}></Box>
+          ) : (
+            <>
+              <Typography fontWeight={500} fontSize={16} textColor="#000000">
+                {children}
+              </Typography>
+              {endDecorator}
+            </>
+          )}
         </Stack>
       </JoyButton>
     );
@@ -45,6 +59,7 @@ const Button = ({
   return (
     <JoyButton
       {...props}
+      loading={loading}
       variant="solid"
       sx={{
         ...sx,
@@ -65,10 +80,13 @@ const Button = ({
         justifyContent={justifyContentChild}
         gap={1}
       >
-        <Typography fontWeight={500} fontSize={16} textColor="#ffffff">
-          {children}
-        </Typography>
-        {endDecorator}
+        {loading ? (
+          <Box height={"24px"}></Box>
+        ) : (
+          <Typography fontWeight={500} fontSize={16} textColor="#ffffff">
+            {children}
+          </Typography>
+        )}
       </Stack>
     </JoyButton>
   );
