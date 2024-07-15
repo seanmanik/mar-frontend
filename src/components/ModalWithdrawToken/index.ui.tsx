@@ -181,7 +181,7 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                onClick={() => window.open(`https://sepolia.etherscan.io//tx/${txHash}`)}
+                onClick={() => window.open(`https://sepolia.etherscan.io/tx/${txHash}`)}
               >
                 View on Explorer
               </Button>

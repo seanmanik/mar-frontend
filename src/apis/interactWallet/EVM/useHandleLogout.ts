@@ -12,7 +12,7 @@ export const useHandleLogout = () => {
     try {
       if (account.address) {
         disconnect();
-        deleteItem(`${account.address}_signature`);
+        // deleteItem(`${account.address}_signature`);
         setUserToken("");
       }
     } catch (error) {

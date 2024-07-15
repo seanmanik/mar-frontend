@@ -204,7 +204,7 @@ export default memo<{
                 buttonType="secondary"
                 justifyContentChild="center"
                 fullWidth
-                onClick={() => window.open(`https://sepolia.etherscan.io//tx/${txHash}`)}
+                onClick={() => window.open(`https://sepolia.etherscan.io/tx/${txHash}`)}
               >
                 View on Explorer
               </Button>
