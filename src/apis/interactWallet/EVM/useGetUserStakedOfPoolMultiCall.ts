@@ -4,7 +4,7 @@ import { Address } from "viem";
 import { useReadContract } from "wagmi";
 import { config } from "../../../wagmi";
 import { multicall } from '@wagmi/core';
-import { CONTRACT_DEFAUL_DATA } from "../../../constants/contract";
+import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../../constants/contract";
 
 export const useGetUserStakedOfPoolMultiCall = ({
   listContractAddress = [],
@@ -34,18 +34,25 @@ export const useGetUserStakedOfPoolMultiCall = ({
         })
       })
 
-      setData(res as any)
+      setData(res.map((e, i) => {
+        const amount: BigInt = (e.status == 'success' ? e.result : BigInt(0)) as BigInt
+        return ({
+          amount: amount,
+          amount10: BigInt(amount.toString()) / BigInt(10 ** (CONTRACT_DEFAUL_DATA[MAP_POOL_TO_TOKEN[listContractAddress[i]]] as any).decimals),
+          contractAddress: listContractAddress[i]
+        })
+      }) as any)
     } catch (error) {
       setIsLoading(false)
       setData(undefined)
     }
-  }, [listContractAddress, userAddress])
+  }, [(listContractAddress || []).length, userAddress])
 
   useEffect(() => {
     if (listContractAddress.length > 0 && userAddress) {
       fetchUserStakedInPools()
     }
-  }, [listContractAddress, userAddress, fetchUserStakedInPools])
+  }, [(listContractAddress || []).length, userAddress, fetchUserStakedInPools])
 
   return {
     data: data,

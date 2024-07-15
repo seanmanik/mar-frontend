@@ -42,13 +42,16 @@ export const CONTRACT_DEFAUL_DATA = {
   [CONTRACT_ADDRESS.USDC]: {
     address: [CONTRACT_ADDRESS.USDC],
     abi: USDCABI,
+    decimals: 18
   },
   [CONTRACT_ADDRESS.USDT]: {
     address: [CONTRACT_ADDRESS.USDT],
     abi: USDTABI,
+    decimals: 18
   },
   [CONTRACT_ADDRESS.WBTC]: {
     address: [CONTRACT_ADDRESS.WBTC],
     abi: WBTCABI,
+    decimals: 18
   },
 };

@@ -8,7 +8,10 @@ const StatsCard = ({
 }: {
   icon: string;
   title: string;
-  value: string;
+  value: {
+    name: string
+    amount: number
+  }[];
 }) => {
   const [ref, hovering] = useHover();
 
@@ -44,7 +47,7 @@ const StatsCard = ({
               fontSize: "20px",
             }}
           >
-            {value}
+            ${value ? value.reduce((s, e) => s + e.amount, 0).toLocaleString() : '...'}
           </Typography>
         </Stack>
       </Stack>
@@ -70,7 +73,7 @@ const StatsCard = ({
               borderRadius: "10px",
             }}
           >
-            <Stack
+            {value && value.map(e => <Stack
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -87,7 +90,7 @@ const StatsCard = ({
                   fontSize: "14px",
                 }}
               >
-                Staking:
+                {e.name}:
               </Typography>
               <Typography
                 sx={{
@@ -96,93 +99,9 @@ const StatsCard = ({
                   fontSize: "14px",
                 }}
               >
-                300,000
+                ${e.amount.toLocaleString()}
               </Typography>
-            </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{
-                borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
-                paddingY: "6px",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "rgba(0, 0, 0, 0.5)",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                Staking:
-              </Typography>
-              <Typography
-                sx={{
-                  color: "rgba(0, 0, 0, 0.5)",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                300,000
-              </Typography>
-            </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{
-                borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
-                paddingY: "6px",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "rgba(0, 0, 0, 0.5)",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                Staking:
-              </Typography>
-              <Typography
-                sx={{
-                  color: "rgba(0, 0, 0, 0.5)",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                300,000
-              </Typography>
-            </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{
-                borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
-                paddingY: "6px",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "rgba(0, 0, 0, 0.5)",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                Staking:
-              </Typography>
-              <Typography
-                sx={{
-                  color: "rgba(0, 0, 0, 0.5)",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                300,000
-              </Typography>
-            </Stack>
+            </Stack>)}
             <Stack
               direction="row"
               alignItems="center"
@@ -207,7 +126,7 @@ const StatsCard = ({
                   fontSize: "16px",
                 }}
               >
-                300,000
+                ${value ? value.reduce((s, e) => s + e.amount, 0).toLocaleString() : '...'}
               </Typography>
             </Stack>
           </Stack>

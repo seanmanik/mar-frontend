@@ -18,12 +18,17 @@ const HomePage = () => {
 
   const { data } = useGetPools({ token: userToken });
 
-  // const {data: userStakedOfPoolMultiCall} = useGetUserStakedOfPoolMultiCall({
-  //   listContractAddress: data ? data?.map(i => i.contractAddress) : [],
-  //   userAddress: account.address as string
-  // })
+  const {data: userStakedOfPoolMultiCall} = useGetUserStakedOfPoolMultiCall({
+    listContractAddress: data ? data?.map(i => i.contractAddress) : [],
+    userAddress: account.address as string
+  })
 
-  // console.log(userStakedOfPoolMultiCall, 'userStakedOfPoolMultiCall')
+  const addressToTokenName: { [key: string]: string } = data ? data?.reduce((s, e) => {
+    s = {...s, [e.contractAddress]: e.assetName}
+    return s
+  }, {}) : {}
+
+  console.log(userStakedOfPoolMultiCall, 'userStakedOfPoolMultiCall')
 
   return (
     <Box
@@ -46,24 +51,31 @@ const HomePage = () => {
         <Grid xs={12} sm={6} md={3} lg={3}>
           <StatsCard
             title="TVL"
-            value="$500,000,000"
+            value={[{name: 'TVL', amount: 500000000}]}
             icon={IconTotalValueStake}
           />
         </Grid>
         <Grid xs={12} sm={6} md={3} lg={3}>
-          <StatsCard title="MY STAKE" value="$12,000" icon={IconMyStake} />
+          <StatsCard title="MY STAKE" 
+          // value={!userStakedOfPoolMultiCall ? [] : userStakedOfPoolMultiCall.map(e => ({
+          //   name: addressToTokenName[e.contractAddress] as string,
+          //   amount: e.amount10 as number
+          // }))} 
+          value={[{name: 'USDC', amount: 500000000}, {name: 'USDT', amount: 500000000}]} 
+          
+          icon={IconMyStake} />
         </Grid>
         <Grid xs={12} sm={6} md={3} lg={3}>
           <StatsCard
             title="MAR POINTS"
-            value="$500,000,000"
+            value={[{name: 'MAR', amount: 500000000}]}
             icon={IconMarPoint}
           />
         </Grid>
         <Grid xs={12} sm={6} md={3} lg={3}>
           <StatsCard
             title="PUPPY POINTS"
-            value="$500,000,000"
+            value={[{name: 'PUPPY', amount: 500000000}]}
             icon={IconMarPoint}
           />
         </Grid>
