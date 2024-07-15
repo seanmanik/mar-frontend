@@ -8,12 +8,22 @@ import TokenPoolCard from "../../components/Pool/TokenPoolCard";
 import { AppContext } from "../../context/AppContext";
 import { useGetPools } from "../../apis/getPools";
 import { isArray } from "lodash";
+import { useGetUserStakedOfPoolMultiCall } from "../../apis/interactWallet/EVM/useGetUserStakedOfPoolMultiCall";
+import { useAccount } from "wagmi";
 
 const HomePage = () => {
   const [poolSelected, setPoolSelected] = useState("all");
   const { userToken } = useContext(AppContext);
+  const account = useAccount();
 
   const { data } = useGetPools({ token: userToken });
+
+  // const {data: userStakedOfPoolMultiCall} = useGetUserStakedOfPoolMultiCall({
+  //   listContractAddress: data ? data?.map(i => i.contractAddress) : [],
+  //   userAddress: account.address as string
+  // })
+
+  // console.log(userStakedOfPoolMultiCall, 'userStakedOfPoolMultiCall')
 
   return (
     <Box
