@@ -10,6 +10,7 @@ import { useGetPools } from "../../apis/getPools";
 import { isArray } from "lodash";
 import { useGetUserStakedOfPoolMultiCall } from "../../apis/interactWallet/EVM/useGetUserStakedOfPoolMultiCall";
 import { useAccount } from "wagmi";
+import { useGetTotalStakedOfPoolMultiCall } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPoolMultiCall";
 
 const HomePage = () => {
   const [poolSelected, setPoolSelected] = useState("all");
@@ -21,6 +22,10 @@ const HomePage = () => {
   const {data: userStakedOfPoolMultiCall} = useGetUserStakedOfPoolMultiCall({
     listContractAddress: data ? data?.map(i => i.contractAddress) : [],
     userAddress: account.address as string
+  })
+
+  const {data: totalStakedOfPoolMultiCall} = useGetTotalStakedOfPoolMultiCall({
+    listContractAddress: data ? data?.map(i => i.contractAddress) : [],
   })
 
   const addressToTokenName: { [key: string]: string } = data ? data?.reduce((s, e) => {
@@ -51,7 +56,11 @@ const HomePage = () => {
         <Grid xs={12} sm={6} md={3} lg={3}>
           <StatsCard
             title="TVL"
-            value={[{name: 'TVL', amount: 500000000}]}
+            // value={!totalStakedOfPoolMultiCall ? [] : totalStakedOfPoolMultiCall.map(e => ({
+            //   name: addressToTokenName[e.contractAddress] as string,
+            //   amount: e.amount10
+            // }))} 
+            value={[{name: 'USDC', amount: 500000000}, {name: 'USDT', amount: 500000000}]} 
             icon={IconTotalValueStake}
           />
         </Grid>
@@ -99,42 +108,6 @@ const HomePage = () => {
           alignItems="stretch"
           width={"100%"}
         >
-          {/* {Array.from(Array(20)).map((_, index) => (
-            <Grid xs={2} sm={4} md={4} lg={4} key={index}>
-              <Box
-                onClick={() => setOpenModalDeposit(index)}
-                sx={{
-                  height: "calc(100% - 32px)",
-                }}
-              >
-                {index % 2 === 0 ? (
-                  <TokenPoolCard
-                    tvl={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    tvs={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    pts={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    dailyReward={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    yourStaked={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    yourDailyReward={Math.ceil(
-                      Math.random() * 10000 * (index + 1)
-                    )}
-                  />
-                ) : (
-                  <NftPoolCard
-                    tvl={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    tvs={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    pts={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    dailyReward={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    yourStaked={Math.ceil(Math.random() * 10000 * (index + 1))}
-                    yourDailyReward={Math.ceil(
-                      Math.random() * 10000 * (index + 1)
-                    )}
-                    yourDeposit={Math.ceil(Math.random() * 10000 * (index + 1))}
-                  />
-                )}
-              </Box>
-            </Grid>
-          ))} */}
-
           {isArray(data) &&
             data.map((item) => {
               return (
@@ -161,15 +134,6 @@ const HomePage = () => {
               );
             })}
         </Grid>
-        {/* <ModalWithdrawNFT
-          open={openModalDeposit == 1}
-          onClose={() => setOpenModalDeposit(0)}
-        />
-        
-        <ModalDepositNFT
-          open={openModalDeposit == 4}
-          onClose={() => setOpenModalDeposit(0)}
-        /> */}
       </Stack>
     </Box>
   );

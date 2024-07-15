@@ -1,21 +1,17 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Address } from "viem";
-import { useReadContract } from "wagmi";
 import { config } from "../../../wagmi";
 import { multicall } from '@wagmi/core';
 import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../../constants/contract";
 
-export const useGetUserStakedOfPoolMultiCall = ({
-  listContractAddress = [],
-  userAddress,
+export const useGetTotalStakedOfPoolMultiCall = ({
+  listContractAddress = []
 }: {
   listContractAddress: string[];
-  userAddress: string;
 }): {
   data: {
     amount: BigInt,
-    amount10: BigInt,
+    amount10: number,
     contractAddress: string
   }[] | undefined;
   isLoading: boolean;
@@ -23,12 +19,12 @@ export const useGetUserStakedOfPoolMultiCall = ({
 } => {
   const [data, setData] = useState<{
     amount: BigInt,
-    amount10: BigInt,
+    amount10: number,
     contractAddress: string
   }[] | undefined>()
   const [isLoading, setIsLoading] = useState(false)
 
-  const fetchUserStakedInPools = useCallback(async () => {
+  const fetchTotalStakedInPools = useCallback(async () => {
     try {
       setIsLoading(true)
       const res = await multicall(config, {
@@ -36,8 +32,7 @@ export const useGetUserStakedOfPoolMultiCall = ({
           return {
             abi: CONTRACT_DEFAUL_DATA[contractAddress].abi,
             address: contractAddress as Address,
-            functionName: "userStaked",
-            args: [userAddress],
+            functionName: "totalStaked"
           } as any
         })
       })
@@ -54,17 +49,17 @@ export const useGetUserStakedOfPoolMultiCall = ({
       setIsLoading(false)
       setData(undefined)
     }
-  }, [(listContractAddress || []).length, userAddress])
+  }, [(listContractAddress || []).length])
 
   useEffect(() => {
-    if (listContractAddress.length > 0 && userAddress) {
-      fetchUserStakedInPools()
+    if (listContractAddress.length > 0) {
+      fetchTotalStakedInPools()
     }
-  }, [(listContractAddress || []).length, userAddress, fetchUserStakedInPools])
+  }, [(listContractAddress || []).length, fetchTotalStakedInPools])
 
   return {
     data: data,
     isLoading,
-    refetch: fetchUserStakedInPools,
+    refetch: fetchTotalStakedInPools,
   };
 };
