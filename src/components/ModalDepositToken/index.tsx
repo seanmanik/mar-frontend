@@ -1,38 +1,34 @@
-import { memo } from "react";
+import { memo, useContext } from "react";
 
 import UI from "./index.ui";
+import { PoolDetailContext } from "../Pool/PoolDetailContext";
 
 export default memo<{
   open: boolean;
   onClose: () => void;
   tokenBalanceAmout: number;
-  symbol: string;
   allowanceAmount: number;
-
-  tokenAddress: string;
-  poolAddress: string;
-  decimals: number;
-  userStaked: number;
-
-  refetch: () => void;
   refetchAllowance: () => void;
 
-  isLoadingBalance: boolean
+  isLoadingBalance: boolean;
 }>(
   ({
     open,
     onClose,
     tokenBalanceAmout,
-    symbol,
     allowanceAmount,
-    tokenAddress,
-    poolAddress,
-    decimals,
-    refetch,
     refetchAllowance,
-    userStaked,
-    isLoadingBalance
+    isLoadingBalance,
   }) => {
+    const {
+      userStaked,
+      tokenAddress,
+      poolAddress,
+      decimals,
+      onHandleRefetchData,
+      symbol,
+      poolId,
+    } = useContext(PoolDetailContext);
 
     return (
       <>
@@ -51,9 +47,10 @@ export default memo<{
             tokenAddress={tokenAddress}
             poolAddress={poolAddress}
             decimals={decimals}
-            refetch={refetch}
+            refetch={onHandleRefetchData}
             refetchAllowance={refetchAllowance}
             isLoadingBalance={isLoadingBalance}
+            poolId={poolId}
           />
         )}
       </>

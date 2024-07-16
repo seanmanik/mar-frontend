@@ -25,13 +25,13 @@ import { Address } from "viem";
 import { get } from "lodash";
 import {
   formatNumber,
-  formatNumberNotation,
   getTokenAmount,
 } from "../../utils/numbers";
 import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
 import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
 import { PoolsContext } from "../../context/PoolsContext";
 import { AppContext } from "../../context/AppContext";
+import PoolDetailContextProvider from "./PoolDetailContext";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -43,6 +43,7 @@ export interface ITokenPoolCardProps {
   assetName: string;
   assetSymbol: string;
   poolAddress: string;
+  poolId: number | string;
 }
 
 const TokenPoolCard = ({
@@ -55,6 +56,7 @@ const TokenPoolCard = ({
   // assetName,
   assetSymbol,
   poolAddress,
+  poolId,
 }: ITokenPoolCardProps) => {
   const { userToken } = useContext(AppContext);
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
@@ -136,73 +138,82 @@ const TokenPoolCard = ({
   ]);
 
   return (
-    <Card
-      sx={{
-        height: "100%",
-        padding: 2,
-        backgroundColor: "white",
-        borderRadius: "12px",
-      }}
+    <PoolDetailContextProvider
+      symbol={tokenSymbol}
+      tokenAddress={tokenAddress}
+      poolAddress={poolAddress}
+      decimals={decimals}
+      userStaked={totalStakedOfUserAmount}
+      onHandleRefetchData={onHandleRefetchData}
+      poolId={poolId}
     >
-      <PoolTitle assetSymbol={assetSymbol} />
-      <Stack
-        direction="column"
-        gap={3}
-        justifyContent="space-between"
-        height="100%"
+      <Card
+        sx={{
+          height: "100%",
+          padding: 2,
+          backgroundColor: "white",
+          borderRadius: "12px",
+        }}
       >
-        <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
-          <ValueDisplay
-            name="TVL"
-            text={`$${formatNumber(totalStakedOfPoolAmount * 1)}`}
-            isNameAbove
-            flex={1}
-            nameIcon={
-              <Paid sx={{ fontSize: 15, color: "gray", marginRight: 0.5 }} />
-            }
-            type="primay"
-          />
-          {isConnectWallet && (
+        <PoolTitle assetSymbol={assetSymbol} />
+        <Stack
+          direction="column"
+          gap={3}
+          justifyContent="space-between"
+          height="100%"
+        >
+          <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
             <ValueDisplay
-              name="MY DEPOSIT"
-              text={`$${formatNumber(totalStakedOfUserAmount * 1)}`}
-              align="right"
+              name="TVL"
+              text={`$${formatNumber(totalStakedOfPoolAmount * 1)}`}
               isNameAbove
               flex={1}
               nameIcon={
-                // <Redeem
-                //   sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }}
-                // />
-                <Paid sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }} />
+                <Paid sx={{ fontSize: 15, color: "gray", marginRight: 0.5 }} />
               }
               type="primay"
             />
-          )}
-        </Stack>
-        <Stack direction="column" gap={1.5}>
-          <Typography
-            level="body-sm"
-            sx={{
-              fontSize: 12,
-              fontWeight: 700,
-              color: "rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            MY DAILY REWARDS
-          </Typography>
-          <Divider
-            sx={{
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-            }}
-          />
-          <ValueDisplay
-            variant="small"
-            name="Mar Points"
-            text={`${"467,000"}`}
-            icon={IconMarPoint}
-            iconWidth={32}
-          />
-          {/* { (
+            {isConnectWallet && (
+              <ValueDisplay
+                name="MY DEPOSIT"
+                text={`$${formatNumber(totalStakedOfUserAmount * 1)}`}
+                align="right"
+                isNameAbove
+                flex={1}
+                nameIcon={
+                  // <Redeem
+                  //   sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }}
+                  // />
+                  <Paid sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }} />
+                }
+                type="primay"
+              />
+            )}
+          </Stack>
+          <Stack direction="column" gap={1.5}>
+            <Typography
+              level="body-sm"
+              sx={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              MY DAILY REWARDS
+            </Typography>
+            <Divider
+              sx={{
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+              }}
+            />
+            <ValueDisplay
+              variant="small"
+              name="Mar Points"
+              text={`${"467,000"}`}
+              icon={IconMarPoint}
+              iconWidth={32}
+            />
+            {/* { (
             <ValueDisplay
               variant="small"
               name="Base Points Per Dollar"
@@ -210,93 +221,82 @@ const TokenPoolCard = ({
               icon={IconDailyReward}
             />
           )} */}
-          <ValueDisplay
-            variant="small"
-            name="Puppy Points"
-            text={`${"467,000"}`}
-            icon={IconPuppyPoint}
-            iconWidth={32}
-          />
-          {/* <ValueDisplay
+            <ValueDisplay
+              variant="small"
+              name="Puppy Points"
+              text={`${"467,000"}`}
+              icon={IconPuppyPoint}
+              iconWidth={32}
+            />
+            {/* <ValueDisplay
             variant="small"
             name="Your Daily Reward"
             text={`${totalStakedOfUserAmount * 0.001} PTS`}
             icon={IconYourDailyReward}
           /> */}
-        </Stack>
-        {isConnectWallet && (
-          <ValueDisplay
-            variant="small"
-            name="Wallet Balance"
-            text={`${formatNumber(tokenBalanceAmout)} ${tokenSymbol}`}
-            icon={IconWalletYellow}
-            iconWidth={20}
-            type="tertiary"
-          />
-        )}
-
-        {!isConnectWallet ? (
-          <Stack gap={1} direction="column">
-            <Button
-              buttonType="primary"
-              endDecorator={<img src={IconWallet} width={24} height={24} />}
-              fullWidth
-              onClick={() => setOpenModalUserAgreement(true)}
-            >
-              Connect Wallet
-            </Button>
           </Stack>
-        ) : (
-          <Stack gap={1} direction="row">
-            {totalStakedOfUserAmount > 0 && (
+          {isConnectWallet && (
+            <ValueDisplay
+              variant="small"
+              name="Wallet Balance"
+              text={`${formatNumber(tokenBalanceAmout)} ${tokenSymbol}`}
+              icon={IconWalletYellow}
+              iconWidth={20}
+              type="tertiary"
+            />
+          )}
+
+          {!isConnectWallet ? (
+            <Stack gap={1} direction="column">
               <Button
-                buttonType="secondary"
-                endDecorator={<ArrowForward />}
+                buttonType="primary"
+                endDecorator={<img src={IconWallet} width={24} height={24} />}
                 fullWidth
-                // disabled={!yourStaked}
-                onClick={() => setOpenModalWithraw(true)}
+                onClick={() => setOpenModalUserAgreement(true)}
               >
-                Withdraw
+                Connect Wallet
               </Button>
-            )}
-            <Button
-              buttonType="primary"
-              endDecorator={<Bolt />}
-              fullWidth
-              onClick={() => setOpenModalDeposit(true)}
-            >
-              Deposit
-            </Button>
-          </Stack>
-        )}
-      </Stack>
+            </Stack>
+          ) : (
+            <Stack gap={1} direction="row">
+              {totalStakedOfUserAmount > 0 && (
+                <Button
+                  buttonType="secondary"
+                  endDecorator={<ArrowForward />}
+                  fullWidth
+                  // disabled={!yourStaked}
+                  onClick={() => setOpenModalWithraw(true)}
+                >
+                  Withdraw
+                </Button>
+              )}
+              <Button
+                buttonType="primary"
+                endDecorator={<Bolt />}
+                fullWidth
+                onClick={() => setOpenModalDeposit(true)}
+              >
+                Deposit
+              </Button>
+            </Stack>
+          )}
+        </Stack>
 
-      <ModalWithdrawToken
-        open={openModalWithraw}
-        onClose={() => setOpenModalWithraw(false)}
-        symbol={tokenSymbol}
-        tokenAddress={tokenAddress}
-        poolAddress={poolAddress}
-        decimals={decimals}
-        tokenBalanceAmout={totalStakedOfUserAmount}
-        userStaked={totalStakedOfUserAmount}
-        refetch={onHandleRefetchData}
-      />
-      <ModalDepositToken
-        open={openModalDeposit}
-        onClose={() => setOpenModalDeposit(false)}
-        tokenBalanceAmout={tokenBalanceAmout}
-        symbol={tokenSymbol}
-        allowanceAmount={allowanceAmount}
-        tokenAddress={tokenAddress}
-        poolAddress={poolAddress}
-        decimals={decimals}
-        refetch={onHandleRefetchData}
-        refetchAllowance={refetch}
-        userStaked={totalStakedOfUserAmount}
-        isLoadingBalance={isFetchBalance || isLoadingBalance}
-      />
-    </Card>
+        <ModalWithdrawToken
+          open={openModalWithraw}
+          onClose={() => setOpenModalWithraw(false)}
+          tokenBalanceAmout={totalStakedOfUserAmount}
+        />
+        <ModalDepositToken
+          open={openModalDeposit}
+          onClose={() => setOpenModalDeposit(false)}
+          tokenBalanceAmout={tokenBalanceAmout}
+          allowanceAmount={allowanceAmount}
+          refetchAllowance={refetch}
+          isLoadingBalance={isFetchBalance || isLoadingBalance}
+        />
+      </Card>
+    </PoolDetailContextProvider>
   );
 };
 

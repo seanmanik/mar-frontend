@@ -5,6 +5,7 @@ import WalletButton from "../../components/WalletButton";
 import { GroupAdd } from "@mui/icons-material";
 import { AlignJustify } from "lucide-react";
 import { AppContext } from "../../context/AppContext";
+import SelectNetwork from "../../components/SelectNetwork";
 
 export default memo(() => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -46,15 +47,16 @@ export default memo(() => {
             xs: "none",
             sm: "flex",
           }}
+          gap={2}
         >
           <Button
             variant="outlined"
             color="neutral"
-            sx={{ marginRight: 2 }}
             endDecorator={<GroupAdd fontSize="small" />}
           >
             Get 123 Points
           </Button>
+          <SelectNetwork/>
           <WalletButton
             onClick={() => setOpenModalUserAgreement(true)}
             onInviteFriendsClick={() => setOpenModalInviteFriends(true)}
@@ -68,6 +70,7 @@ export default memo(() => {
             sm: "none",
           }}
         >
+          <SelectNetwork />
           <Button variant="plain" color="neutral" onClick={toggleDrawer(true)}>
             <AlignJustify />
           </Button>
@@ -87,7 +90,6 @@ export default memo(() => {
                 <Button
                   variant="outlined"
                   color="neutral"
-                  sx={{ marginRight: 2 }}
                   endDecorator={<GroupAdd fontSize="small" />}
                   fullWidth
                 >

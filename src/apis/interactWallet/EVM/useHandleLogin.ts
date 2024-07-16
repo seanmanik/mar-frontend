@@ -49,14 +49,18 @@ export const useHandleLogin = ({
 
   useEffect(() => {
     const onLogin = async () => {
-      const result = await loginRequest({
-        WalletAddress: account.address as Address,
-        Signature: getItem(`${account.address}_signature`) as string,
-        BlockchainType: configurations.EVM_BLOCKCHAIN_TYPE,
-        Message: configurations.MESSAGE_LOGIN,
-      });
-
-      setUserToken(result);
+      try {
+        const result = await loginRequest({
+          WalletAddress: account.address as Address,
+          Signature: getItem(`${account.address}_signature`) as string,
+          BlockchainType: configurations.EVM_BLOCKCHAIN_TYPE,
+          Message: configurations.MESSAGE_LOGIN,
+        });
+  
+        setUserToken(result);
+      } catch (error) {
+        setUserToken("")
+      }
     };
 
     if (account.address && getItem(`${account.address}_signature`)) {

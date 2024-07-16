@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -17,6 +17,8 @@ import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 import { useApprove } from "../../apis/interactWallet/EVM/useApprove";
 import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
 import { formatNumber } from "../../utils/numbers";
+import { onHandlePostDepositRequest } from "../../apis/deposit";
+import { useAccount } from "wagmi";
 
 export default memo<{
   open: boolean;
@@ -30,13 +32,15 @@ export default memo<{
   allowanceAmount: number;
   onClose: () => void;
 
-  tokenAddress: string
-  poolAddress: string
-  decimals: number
+  tokenAddress: string;
+  poolAddress: string;
+  decimals: number;
 
   refetch: () => void;
   refetchAllowance: () => void;
-  isLoadingBalance: boolean
+  isLoadingBalance: boolean;
+
+  poolId: number | string;
 }>(
   ({
     open,
@@ -54,10 +58,11 @@ export default memo<{
     decimals,
     refetch,
     refetchAllowance,
-    isLoadingBalance
+    isLoadingBalance,
+    poolId,
   }) => {
     const [depositedSuccess, setDepositedSuccess] = useState(false);
-
+    const account = useAccount();
     const [amount, setAmount] = useState(0);
 
     const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
@@ -81,11 +86,21 @@ export default memo<{
       abi: poolDefaultData.abi,
     });
 
+    const onPostDepositAPI = useCallback(() => {
+      onHandlePostDepositRequest({
+        TokenPoolID: poolId,
+        WalletAddress: account.address as string,
+        TransactionHash: txHash as string,
+        Quantity: amount,
+      });
+    }, [account.address, txHash, amount, poolId]);
+
     useEffect(() => {
       if (isConfirmedDeposit) {
         refetch && refetch();
+        // onPostDepositAPI()
       }
-    }, [refetch, isConfirmedDeposit]);
+    }, [refetch, isConfirmedDeposit, onPostDepositAPI]);
 
     useEffect(() => {
       if (isConfirmed) {

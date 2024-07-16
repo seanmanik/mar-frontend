@@ -219,6 +219,7 @@ const HomePage = () => {
                             assetSymbol={item.assetSymbol}
                             assetName={item.assetName}
                             poolAddress={item.contractAddress}
+                            poolId={item.tokenPoolID}
                           />
                         </Box>
                       </Grid>
@@ -273,6 +274,7 @@ const HomePage = () => {
                             assetSymbol={item.assetSymbol}
                             assetName={item.assetName}
                             poolAddress={item.contractAddress}
+                            poolId={item.tokenPoolID}
                           />
                         </Box>
                       </Grid>
@@ -336,6 +338,7 @@ const HomePage = () => {
                             assetSymbol={item.assetSymbol}
                             assetName={item.assetName}
                             poolAddress={item.contractAddress}
+                            poolId={item.tokenPoolID}
                           />
                         </Box>
                       </Grid>

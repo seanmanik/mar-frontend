@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -16,6 +16,8 @@ import Button from "../Button";
 import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
 import { formatNumber } from "../../utils/numbers";
+import { onHandlePostWithdrawRequest } from "../../apis/withdraw";
+import { useAccount } from "wagmi";
 
 export default memo<{
   open: boolean;
@@ -26,19 +28,13 @@ export default memo<{
   pendingValue: number;
   balance: number;
   symbol: string;
-  // isSuccess: boolean;
   onClose: () => void;
-  // onWithdraw: (amount: number) => void;
-
-  // amount: number
-  // setAmount: (_: number) => void
-  // isPendingWithdraw: boolean
-  // txHash: string
 
   tokenAddress: string
   poolAddress: string
   decimals: number
   refetch: () => void;
+  poolId: number | string;
 }>(
   ({
     open,
@@ -49,19 +45,15 @@ export default memo<{
     pendingValue,
     symbol,
     balance,
-    // isSuccess,
     onClose,
-    // onWithdraw,
-    // amount,
-    // setAmount,
-    // isPendingWithdraw,
-    // txHash
 
     tokenAddress,
     poolAddress,
     decimals,
     refetch,
+    poolId,
   }) => {
+    const account = useAccount();
 
     const [onSuccess, setOnSuccess] = useState(false);
     const [amount, setAmount] = useState(0);
@@ -75,11 +67,21 @@ export default memo<{
       abi: poolDefaultData.abi,
     });
 
+    const onPostWithdrawAPI = useCallback(() => {
+      onHandlePostWithdrawRequest({
+        TokenPoolID: poolId,
+        WalletAddress: account.address as string,
+        TransactionHash: txHash as string,
+        Quantity: amount,
+      });
+    }, [account.address, txHash, amount, poolId]);
+
     useEffect(() => {
       if (isConfirmed) {
         refetch && refetch();
+        // onPostWithdrawAPI()
       }
-    }, [refetch, isConfirmed]);
+    }, [refetch, isConfirmed, onPostWithdrawAPI]);
 
     useEffect(() => {
       if (!isPending && isConfirmed) {

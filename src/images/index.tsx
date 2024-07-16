@@ -5,3 +5,6 @@ export { default as ImageLogoBlack } from './resource/LogoBlack.png';
 export { default as ImageLogoBlueCircle } from './resource/LogoBlueCircle.png';
 export { default as ImageETH } from './resource/eth.png';
 export { default as ImageBTC } from './resource/btc.png';
+export { default as ImageSolanaCircle } from './resource/SolanaCircle.png';
+export { default as ImageLogoBlueSquare } from './resource/LogoBlueSquare.png';
+export { default as ImageEthBlue } from './resource/EthBlue.png';
