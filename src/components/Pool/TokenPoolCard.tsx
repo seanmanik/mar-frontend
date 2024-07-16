@@ -23,10 +23,15 @@ import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { Address } from "viem";
 import { get } from "lodash";
-import { formatNumber, formatNumberNotation, getTokenAmount } from "../../utils/numbers";
+import {
+  formatNumber,
+  formatNumberNotation,
+  getTokenAmount,
+} from "../../utils/numbers";
 import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
 import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
 import { PoolsContext } from "../../context/PoolsContext";
+import { AppContext } from "../../context/AppContext";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -51,10 +56,16 @@ const TokenPoolCard = ({
   assetSymbol,
   poolAddress,
 }: ITokenPoolCardProps) => {
+  const { userToken } = useContext(AppContext);
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
   const [openModalWithraw, setOpenModalWithraw] = useState(false);
-  const { refecthGetUserStakedOfPoolMultiCall, refecthGetTotalStakedOfPoolMultiCall } = useContext(PoolsContext);
+  const {
+    refecthGetUserStakedOfPoolMultiCall,
+    refecthGetTotalStakedOfPoolMultiCall,
+  } = useContext(PoolsContext);
+
+  const { setOpenModalUserAgreement } = useContext(AppContext);
 
   const account = useAccount();
 
@@ -121,7 +132,7 @@ const TokenPoolCard = ({
     refetchTotalStakedOfPool,
     refetchTotalStakedOfUser,
     refecthGetUserStakedOfPoolMultiCall,
-    refecthGetTotalStakedOfPoolMultiCall
+    refecthGetTotalStakedOfPoolMultiCall,
   ]);
 
   return (
@@ -213,20 +224,24 @@ const TokenPoolCard = ({
             icon={IconYourDailyReward}
           /> */}
         </Stack>
-        <ValueDisplay
-          variant="small"
-          name="Wallet Balance"
-          text={`${formatNumber(tokenBalanceAmout)} ${tokenSymbol}`}
-          icon={IconWalletYellow}
-          iconWidth={20}
-          type="tertiary"
-        />
+        {isConnectWallet && (
+          <ValueDisplay
+            variant="small"
+            name="Wallet Balance"
+            text={`${formatNumber(tokenBalanceAmout)} ${tokenSymbol}`}
+            icon={IconWalletYellow}
+            iconWidth={20}
+            type="tertiary"
+          />
+        )}
+
         {!isConnectWallet ? (
           <Stack gap={1} direction="column">
             <Button
               buttonType="primary"
               endDecorator={<img src={IconWallet} width={24} height={24} />}
               fullWidth
+              onClick={() => setOpenModalUserAgreement(true)}
             >
               Connect Wallet
             </Button>

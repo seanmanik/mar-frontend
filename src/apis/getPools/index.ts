@@ -8,7 +8,7 @@ export const getPoolsRequest = async ({
 }: {
   token: string;
 }): Promise<IPoolDetail[]> => {
-  const response = await api.get("/Pool/GetPools", {
+  const response = await api.get(token ? "/Pool/GetPools" : "/Pool/GetDefaultPools", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -23,7 +23,7 @@ export const useGetPools = ({ token }: { token: string }) => {
   >({
     queryKey: ["Pools", token],
     queryFn: () => getPoolsRequest({ token }),
-    enabled: !!token,
+    enabled: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: DEFAULT_CLIENT_STALE_TIME["30sec"],
