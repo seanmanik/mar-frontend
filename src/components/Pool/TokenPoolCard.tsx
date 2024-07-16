@@ -54,7 +54,7 @@ const TokenPoolCard = ({
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
   const [openModalWithraw, setOpenModalWithraw] = useState(false);
-  const { refecthGetUserStakedOfPoolMultiCall } = useContext(PoolsContext);
+  const { refecthGetUserStakedOfPoolMultiCall, refecthGetTotalStakedOfPoolMultiCall } = useContext(PoolsContext);
 
   const account = useAccount();
 
@@ -115,11 +115,13 @@ const TokenPoolCard = ({
     refetchTotalStakedOfPool();
     refetchTotalStakedOfUser();
     refecthGetUserStakedOfPoolMultiCall();
+    refecthGetTotalStakedOfPoolMultiCall();
   }, [
     refetch,
     refetchTotalStakedOfPool,
     refetchTotalStakedOfUser,
     refecthGetUserStakedOfPoolMultiCall,
+    refecthGetTotalStakedOfPoolMultiCall
   ]);
 
   return (

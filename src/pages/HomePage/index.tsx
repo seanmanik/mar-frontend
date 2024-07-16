@@ -28,7 +28,7 @@ const HomePage = () => {
     userAddress: account.address as string,
   });
 
-  const { data: totalStakedOfPoolMultiCall } = useGetTotalStakedOfPoolMultiCall(
+  const { data: totalStakedOfPoolMultiCall, refetch: refecthGetTotalStakedOfPoolMultiCall } = useGetTotalStakedOfPoolMultiCall(
     {
       listContractAddress: data ? data?.map((i) => i.contractAddress) : [],
     }
@@ -96,28 +96,28 @@ const HomePage = () => {
         <Grid xs={12} sm={6} md={3} lg={3}>
           <StatsCard
             title="TVL"
-            // value={!totalStakedOfPoolMultiCall ? [] : totalStakedOfPoolMultiCall.map(e => ({
-            //   name: addressToTokenName[e.contractAddress] as string,
-            //   amount: e.amount10
-            // }))}
-            value={[
-              { name: "USDC", amount: 500000000 },
-              { name: "USDT", amount: 500000000 },
-            ]}
+            value={!totalStakedOfPoolMultiCall ? [] : totalStakedOfPoolMultiCall.map(e => ({
+              name: addressToTokenName[e.contractAddress] as string,
+              amount: parseInt(e.amount10.toString())
+            }))}
+            // value={[
+            //   { name: "USDC", amount: 500000000 },
+            //   { name: "USDT", amount: 500000000 },
+            // ]}
             icon={IconTotalValueStake}
           />
         </Grid>
         <Grid xs={12} sm={6} md={3} lg={3}>
           <StatsCard
             title="MY STAKE"
-            // value={!userStakedOfPoolMultiCall ? [] : userStakedOfPoolMultiCall.map(e => ({
-            //   name: addressToTokenName[e.contractAddress] as string,
-            //   amount: e.amount10 as number
-            // }))}
-            value={[
-              { name: "USDC", amount: 500000000 },
-              { name: "USDT", amount: 500000000 },
-            ]}
+            value={!userStakedOfPoolMultiCall ? [] : userStakedOfPoolMultiCall.map(e => ({
+              name: addressToTokenName[e.contractAddress] as string,
+              amount: parseInt(e.amount10.toString())
+            }))}
+            // value={[
+            //   { name: "USDC", amount: 500000000 },
+            //   { name: "USDT", amount: 500000000 },
+            // ]}
             icon={IconMyStake}
           />
         </Grid>
@@ -140,6 +140,9 @@ const HomePage = () => {
       <PoolsContextProvider
         refecthGetUserStakedOfPoolMultiCall={
           refecthGetUserStakedOfPoolMultiCall
+        }
+        refecthGetTotalStakedOfPoolMultiCall={
+          refecthGetTotalStakedOfPoolMultiCall
         }
       >
         <PoolsSelection
