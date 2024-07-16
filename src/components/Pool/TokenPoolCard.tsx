@@ -1,5 +1,5 @@
 import { Card, Divider, Stack, Typography } from "@mui/joy";
-import { useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import ValueDisplay from "../ValueDisplay";
 import {
   IconMarPoint,
@@ -26,6 +26,7 @@ import { get } from "lodash";
 import { getTokenAmount } from "../../utils/numbers";
 import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
 import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
+import { PoolsContext } from "../../context/PoolsContext";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -53,6 +54,7 @@ const TokenPoolCard = ({
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
   const [openModalWithraw, setOpenModalWithraw] = useState(false);
+  const {refecthGetUserStakedOfPoolMultiCall} = useContext(PoolsContext)
 
   const account = useAccount();
 
@@ -103,6 +105,12 @@ const TokenPoolCard = ({
   const tokenBalanceAmout = getTokenAmount(tokenBalanceValue, decimals);
 
   const allowanceAmount = getTokenAmount(allowance, decimals);
+
+  const onHandleRefetchData = useCallback(() => {
+    refetchTotalStakedOfPool()
+    refetchTotalStakedOfUser()
+    refecthGetUserStakedOfPoolMultiCall()
+  }, [refetch, refetchTotalStakedOfPool, refetchTotalStakedOfUser, refecthGetUserStakedOfPoolMultiCall])
 
   return (
     <Card
@@ -236,7 +244,7 @@ const TokenPoolCard = ({
         )}
       </Stack>
 
-      <ModalWithdrawToken
+      <ModalWithdrawToken  
         open={openModalWithraw}
         onClose={() => setOpenModalWithraw(false)}
         symbol={tokenSymbol}
@@ -245,6 +253,7 @@ const TokenPoolCard = ({
         decimals={decimals}
         tokenBalanceAmout={totalStakedOfUserAmount}
         userStaked={totalStakedOfUserAmount}
+        refetch={onHandleRefetchData}
       />
       <ModalDepositToken
         open={openModalDeposit}
@@ -255,6 +264,7 @@ const TokenPoolCard = ({
         tokenAddress={tokenAddress}
         poolAddress={poolAddress}
         decimals={decimals}
+        refetch={onHandleRefetchData}
         refetchAllowance={refetch}
         userStaked={totalStakedOfUserAmount}
       />

@@ -17,6 +17,7 @@ export default memo<{
   decimals: number;
   userStaked: number;
 
+  refetch: () => void;
   refetchAllowance: () => void;
 }>(
   ({
@@ -28,6 +29,7 @@ export default memo<{
     tokenAddress,
     poolAddress,
     decimals,
+    refetch,
     refetchAllowance,
     userStaked,
   }) => {
@@ -56,11 +58,25 @@ export default memo<{
       abi: poolDefaultData.abi,
     });
 
+    console.log(
+      isPendingDeposit,
+      isConfirmedDeposit,
+      "isPendingDeposit, isConfirmedDeposit"
+    );
+
     useEffect(() => {
-      if (isConfirmed || isConfirmedDeposit) {
-        refetchAllowance();
+      if (isConfirmedDeposit) {
+        console.log("======");
+        // refetch && refetch();
       }
-    }, [refetchAllowance, isConfirmed, isConfirmedDeposit]);
+    }, [refetch, isConfirmedDeposit]);
+
+    useEffect(() => {
+      if (isConfirmed) {
+        // console.log('hihihihihihi')
+        // refetchAllowance && refetchAllowance();
+      }
+    }, [refetchAllowance, isConfirmed]);
 
     useEffect(() => {
       if (!isPendingDeposit && isConfirmedDeposit) {
@@ -73,29 +89,33 @@ export default memo<{
     }, [isPendingDeposit, isConfirmedDeposit, setDepositedSuccess]);
 
     return (
-      <UI
-        open={open}
-        onClose={() => {
-          setDepositedSuccess(false);
-          onClose && onClose();
-        }}
-        isSuccess={depositedSuccess}
-        balance={tokenBalanceAmout}
-        symbol={symbol}
-        allowanceAmount={allowanceAmount}
-        marPoint={23872}
-        puppyPoint={2938}
-        totalValue={userStaked * 1}
-        stakeAmount={userStaked}
-        pendingValue={8000}
-        onDeposit={onDeposit}
-        onApprove={onApprove}
-        isPendingApprove={isPending}
-        isPendingDeposit={isPendingDeposit}
-        amount={amount}
-        setAmount={setAmount}
-        txHash={txHash as string}
-      />
+      <>
+        {open && (
+          <UI
+            open={open}
+            onClose={() => {
+              setDepositedSuccess(false);
+              onClose && onClose();
+            }}
+            isSuccess={depositedSuccess}
+            balance={tokenBalanceAmout}
+            symbol={symbol}
+            allowanceAmount={allowanceAmount}
+            marPoint={23872}
+            puppyPoint={2938}
+            totalValue={userStaked * 1}
+            stakeAmount={userStaked}
+            pendingValue={8000}
+            onDeposit={onDeposit}
+            onApprove={onApprove}
+            isPendingApprove={isPending}
+            isPendingDeposit={isPendingDeposit}
+            amount={amount}
+            setAmount={setAmount}
+            txHash={txHash as string}
+          />
+        )}
+      </>
     );
   }
 );

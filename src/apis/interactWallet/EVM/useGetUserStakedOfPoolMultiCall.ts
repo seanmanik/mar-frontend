@@ -5,6 +5,14 @@ import { useReadContract } from "wagmi";
 import { config } from "../../../wagmi";
 import { multicall } from '@wagmi/core';
 import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../../constants/contract";
+import BigNumber from "bignumber.js";
+
+interface UserStakedOfPoolResultType {
+  amount: BigInt,
+  amount10: BigInt,
+  amountBalance: number,
+  contractAddress: string
+}
 
 export const useGetUserStakedOfPoolMultiCall = ({
   listContractAddress = [],
@@ -13,19 +21,11 @@ export const useGetUserStakedOfPoolMultiCall = ({
   listContractAddress: string[];
   userAddress: string;
 }): {
-  data: {
-    amount: BigInt,
-    amount10: BigInt,
-    contractAddress: string
-  }[] | undefined;
+  data: UserStakedOfPoolResultType[] | undefined;
   isLoading: boolean;
   refetch: () => void
 } => {
-  const [data, setData] = useState<{
-    amount: BigInt,
-    amount10: BigInt,
-    contractAddress: string
-  }[] | undefined>()
+  const [data, setData] = useState<UserStakedOfPoolResultType[] | undefined>()
   const [isLoading, setIsLoading] = useState(false)
 
   const fetchUserStakedInPools = useCallback(async () => {
@@ -44,9 +44,11 @@ export const useGetUserStakedOfPoolMultiCall = ({
 
       setData(res.map((e, i) => {
         const amount: BigInt = (e.status == 'success' ? e.result : BigInt(0)) as BigInt
+        const amount10 = BigInt(amount.toString()) / BigInt(10 ** (CONTRACT_DEFAUL_DATA[MAP_POOL_TO_TOKEN[listContractAddress[i]]] as any).decimals)
         return ({
           amount: amount,
-          amount10: BigInt(amount.toString()) / BigInt(10 ** (CONTRACT_DEFAUL_DATA[MAP_POOL_TO_TOKEN[listContractAddress[i]]] as any).decimals),
+          amount10: amount10,
+          amountBalance: new BigNumber(amount10 as any).toNumber(),
           contractAddress: listContractAddress[i]
         })
       }) as any)

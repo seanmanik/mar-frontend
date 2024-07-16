@@ -1,5 +1,4 @@
-
-import { memo } from "react";
+import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -30,13 +29,12 @@ export default memo<{
   onDeposit: (amount: number) => void;
   onApprove: (amount: number) => void;
 
-  amount: number
-  setAmount: (_: number) => void
-  isPendingApprove: boolean
-  isPendingDeposit: boolean
-  
-  txHash: string
+  amount: number;
+  setAmount: (_: number) => void;
+  isPendingApprove: boolean;
+  isPendingDeposit: boolean;
 
+  txHash: string;
 }>(
   ({
     open,
@@ -56,9 +54,9 @@ export default memo<{
     setAmount,
     isPendingApprove,
     isPendingDeposit,
-    txHash
+    txHash,
   }) => {
-
+    const [test, setTest] = useState(0);
 
     return (
       <ModalBlue
@@ -83,6 +81,15 @@ export default memo<{
                   balance={balance}
                   value={amount}
                   onChange={(v) => setAmount(v)}
+                />
+
+                <InputAmount
+                  title={`Test ${symbol}`}
+                  subTitle={"Your Test"}
+                  symbol={symbol}
+                  balance={balance}
+                  value={test}
+                  onChange={(v) => setTest(v)}
                 />
               </Box>
               <Grid marginTop={4} container spacing={2} sx={{ flexGrow: 1 }}>
@@ -126,7 +133,7 @@ export default memo<{
                   />
                 </Grid>
 
-                <Grid xs={12} paddingBottom={-2}>
+                {/* <Grid xs={12} paddingBottom={-2}>
                   <Typography level="title-sm">Pending Deposits</Typography>
                 </Grid>
                 <Grid xs={12} sm={12}>
@@ -136,10 +143,10 @@ export default memo<{
                     name="in processing"
                     icon={IconPending}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
-              {
-                amount > allowanceAmount ? <Button
+              {amount > allowanceAmount ? (
+                <Button
                   sx={{
                     marginTop: 5,
                   }}
@@ -152,7 +159,9 @@ export default memo<{
                   disabled={isPendingApprove}
                 >
                   Approve
-                </Button> : <Button
+                </Button>
+              ) : (
+                <Button
                   sx={{
                     marginTop: 5,
                   }}
@@ -166,7 +175,7 @@ export default memo<{
                 >
                   Deposit
                 </Button>
-              }
+              )}
             </>
           )}
 
@@ -204,7 +213,9 @@ export default memo<{
                 buttonType="secondary"
                 justifyContentChild="center"
                 fullWidth
-                onClick={() => window.open(`https://sepolia.etherscan.io/tx/${txHash}`)}
+                onClick={() =>
+                  window.open(`https://sepolia.etherscan.io/tx/${txHash}`)
+                }
               >
                 View on Explorer
               </Button>

@@ -116,11 +116,11 @@ export default memo<{
                   />
                 </Grid>
 
-                <Grid xs={12} paddingBottom={-2}>
+                {/* <Grid xs={12} paddingBottom={-2}>
                   <Typography level="title-sm">Pending Deposits</Typography>
                 </Grid>
                 <Grid xs={12} sm={12}>
-                  {/* <TokenAmountDisplay amount={pendingValue} symbol={symbol} name="in processing" icon={IconPending}/> */}
+                  <TokenAmountDisplay amount={pendingValue} symbol={symbol} name="in processing" icon={IconPending}/>
                   <ValueDisplay
                     icon={TokenToIcon[symbol]}
                     text={`${symbol} #123`}
@@ -129,7 +129,7 @@ export default memo<{
                       "https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk?auto=format&dpr=1&w=1000",
                     ]}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
               <Button
                 sx={{

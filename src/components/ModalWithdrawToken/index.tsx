@@ -13,6 +13,7 @@ export default memo<{
   tokenBalanceAmout: number;
   userStaked: number;
   decimals: number;
+  refetch: () => void;
 }>(
   ({
     open,
@@ -23,6 +24,7 @@ export default memo<{
     userStaked,
     decimals,
     tokenBalanceAmout,
+    refetch,
   }) => {
     const [onSuccess, setOnSuccess] = useState(false);
     const [amount, setAmount] = useState(0);
@@ -37,6 +39,12 @@ export default memo<{
     });
 
     useEffect(() => {
+      if (isConfirmed) {
+        refetch && refetch();
+      }
+    }, [refetch, isConfirmed]);
+
+    useEffect(() => {
       if (!isPending && isConfirmed) {
         setOnSuccess(true);
         // onClose && onClose();
@@ -47,26 +55,30 @@ export default memo<{
     }, [isPending, isConfirmed, setOnSuccess]);
 
     return (
-      <UI
-        open={open}
-        onClose={() => {
-          setOnSuccess(false);
-          onClose && onClose();
-        }}
-        isSuccess={onSuccess}
-        balance={tokenBalanceAmout}
-        symbol={symbol}
-        marPoint={23872}
-        puppyPoint={2938}
-        totalValue={userStaked * 1}
-        stakeAmount={userStaked}
-        pendingValue={8000}
-        amount={amount}
-        setAmount={setAmount}
-        onWithdraw={onWithdraw}
-        isPendingWithdraw={isPending}
-        txHash={txHash as string}
-      />
+      <>
+        {open && (
+          <UI
+            open={open}
+            onClose={() => {
+              setOnSuccess(false);
+              onClose && onClose();
+            }}
+            isSuccess={onSuccess}
+            balance={tokenBalanceAmout}
+            symbol={symbol}
+            marPoint={23872}
+            puppyPoint={2938}
+            totalValue={userStaked * 1}
+            stakeAmount={userStaked}
+            pendingValue={8000}
+            amount={amount}
+            setAmount={setAmount}
+            onWithdraw={onWithdraw}
+            isPendingWithdraw={isPending}
+            txHash={txHash as string}
+          />
+        )}
+      </>
     );
   }
 );
