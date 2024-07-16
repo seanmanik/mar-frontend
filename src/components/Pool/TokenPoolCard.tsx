@@ -23,7 +23,7 @@ import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { Address } from "viem";
 import { get } from "lodash";
-import { getTokenAmount } from "../../utils/numbers";
+import { formatNumber, formatNumberNotation, getTokenAmount } from "../../utils/numbers";
 import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
 import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
 import { PoolsContext } from "../../context/PoolsContext";
@@ -141,7 +141,7 @@ const TokenPoolCard = ({
         <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
           <ValueDisplay
             name="TVL"
-            text={`$${totalStakedOfPoolAmount * 1}`}
+            text={`$${formatNumber(totalStakedOfPoolAmount * 1)}`}
             isNameAbove
             flex={1}
             nameIcon={
@@ -152,7 +152,7 @@ const TokenPoolCard = ({
           {isConnectWallet && (
             <ValueDisplay
               name="MY DEPOSIT"
-              text={`$${totalStakedOfUserAmount * 1}`}
+              text={`$${formatNumber(totalStakedOfUserAmount * 1)}`}
               align="right"
               isNameAbove
               flex={1}
@@ -214,7 +214,7 @@ const TokenPoolCard = ({
         <ValueDisplay
           variant="small"
           name="Wallet Balance"
-          text={`${tokenBalanceAmout} ${tokenSymbol}`}
+          text={`${formatNumber(tokenBalanceAmout)} ${tokenSymbol}`}
           icon={IconWalletYellow}
           iconWidth={20}
           type="tertiary"

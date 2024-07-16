@@ -15,6 +15,7 @@ import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
 import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
+import { formatNumber } from "../../utils/numbers";
 
 export default memo<{
   open: boolean;
@@ -208,7 +209,7 @@ export default memo<{
               <TokenAmountDisplay
                 amount={amount}
                 symbol={symbol}
-                name={`$${parseFloat(amount.toFixed(2)).toLocaleString()}`}
+                name={`$${formatNumber(amount)}`}
                 icon={TokenToIcon[symbol]}
               />
 

@@ -3,6 +3,7 @@ import React, { memo } from "react";
 import { NumericFormat, NumericFormatProps } from "react-number-format";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import TokenToIcon from "../../utils/TokenToIcon";
+import { formatNumber } from "../../utils/numbers";
 
 const NumericFormatAdapter = React.forwardRef<NumericFormatProps, any>(
   function NumericFormatAdapter(props, ref) {
@@ -75,7 +76,7 @@ export default memo<{
                 {title}
               </Typography>
               <Typography level="title-sm" color="neutral" textAlign={"right"}>
-                {subTitle}: {parseFloat(balance.toFixed(2)).toLocaleString()}{" "}
+                {subTitle}: {formatNumber(balance)}{" "}
                 {symbol}
               </Typography>
             </Stack>

@@ -16,6 +16,7 @@ import Button from "../Button";
 import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 import { useApprove } from "../../apis/interactWallet/EVM/useApprove";
 import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
+import { formatNumber } from "../../utils/numbers";
 
 export default memo<{
   open: boolean;
@@ -236,7 +237,7 @@ export default memo<{
               <TokenAmountDisplay
                 amount={amount}
                 symbol={symbol}
-                name={`$${parseFloat(amount.toFixed(2)).toLocaleString()}`}
+                name={`$${formatNumber(amount)}`}
                 icon={TokenToIcon[symbol]}
               />
               <Button

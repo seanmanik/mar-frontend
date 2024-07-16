@@ -1,5 +1,6 @@
 import { memo } from "react";
 import ValueDisplay from "../ValueDisplay";
+import { formatNumber } from "../../utils/numbers";
 
 export default memo<{
   amount: number;
@@ -9,7 +10,7 @@ export default memo<{
 }>(({ amount, name, icon, symbol }) => {
   return (
     <ValueDisplay
-      text={`${parseFloat(amount.toFixed(2)).toLocaleString()} ${symbol ? ` ${symbol}` : ""}`}
+      text={`${formatNumber(amount)} ${symbol ? ` ${symbol}` : ""}`}
       name={name}
       icon={icon}
     />
