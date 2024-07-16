@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -13,6 +13,9 @@ import { Bolt } from "@mui/icons-material";
 import { ImageLogoBlueCircle } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
+import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
+import { useApprove } from "../../apis/interactWallet/EVM/useApprove";
+import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
 
 export default memo<{
   open: boolean;
@@ -24,17 +27,15 @@ export default memo<{
   balance: number;
   symbol: string;
   allowanceAmount: number;
-  isSuccess: boolean;
   onClose: () => void;
-  onDeposit: (amount: number) => void;
-  onApprove: (amount: number) => void;
 
-  amount: number;
-  setAmount: (_: number) => void;
-  isPendingApprove: boolean;
-  isPendingDeposit: boolean;
+  tokenAddress: string
+  poolAddress: string
+  decimals: number
 
-  txHash: string;
+  refetch: () => void;
+  refetchAllowance: () => void;
+  isLoadingBalance: boolean
 }>(
   ({
     open,
@@ -46,24 +47,65 @@ export default memo<{
     symbol,
     balance,
     allowanceAmount,
-    isSuccess,
     onClose,
-    onDeposit,
-    onApprove,
-    amount,
-    setAmount,
-    isPendingApprove,
-    isPendingDeposit,
-    txHash,
+    tokenAddress,
+    poolAddress,
+    decimals,
+    refetch,
+    refetchAllowance,
+    isLoadingBalance
   }) => {
-    const [test, setTest] = useState(0);
+    const [depositedSuccess, setDepositedSuccess] = useState(false);
+
+    const [amount, setAmount] = useState(0);
+
+    const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
+    const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
+
+    const { isPending, isConfirmed, onApprove } = useApprove({
+      contractAddress: tokenAddress,
+      decimals,
+      spenderAddress: poolAddress,
+      abi: tokenDefaultData.abi,
+    });
+
+    const {
+      isPending: isPendingDeposit,
+      isConfirmed: isConfirmedDeposit,
+      onDeposit,
+      txHash,
+    } = useDeposit({
+      contractAddress: poolAddress,
+      decimals,
+      abi: poolDefaultData.abi,
+    });
+
+    useEffect(() => {
+      if (isConfirmedDeposit) {
+        refetch && refetch();
+      }
+    }, [refetch, isConfirmedDeposit]);
+
+    useEffect(() => {
+      if (isConfirmed) {
+        refetchAllowance && refetchAllowance();
+      }
+    }, [refetchAllowance, isConfirmed]);
+
+    useEffect(() => {
+      if (!isPendingDeposit && isConfirmedDeposit) {
+        setDepositedSuccess(true);
+      } else if (!isPendingDeposit && !isConfirmedDeposit) {
+        setDepositedSuccess(false);
+      }
+    }, [isPendingDeposit, isConfirmedDeposit, setDepositedSuccess]);
 
     return (
       <ModalBlue
         open={open}
         onClose={onClose}
         title={
-          isSuccess
+          depositedSuccess
             ? `${symbol}
             Deposited Successfully`
             : `Deposit your USDT
@@ -71,7 +113,7 @@ export default memo<{
         }
       >
         <Box maxWidth={550}>
-          {!isSuccess && (
+          {!depositedSuccess && (
             <>
               <Box maxWidth={"100%"} overflow={"hidden"}>
                 <InputAmount
@@ -81,15 +123,6 @@ export default memo<{
                   balance={balance}
                   value={amount}
                   onChange={(v) => setAmount(v)}
-                />
-
-                <InputAmount
-                  title={`Test ${symbol}`}
-                  subTitle={"Your Test"}
-                  symbol={symbol}
-                  balance={balance}
-                  value={test}
-                  onChange={(v) => setTest(v)}
                 />
               </Box>
               <Grid marginTop={4} container spacing={2} sx={{ flexGrow: 1 }}>
@@ -155,8 +188,8 @@ export default memo<{
                   endDecorator={<Bolt />}
                   fullWidth
                   onClick={() => onApprove && onApprove(amount)}
-                  loading={isPendingApprove}
-                  disabled={isPendingApprove}
+                  loading={isPending || isLoadingBalance}
+                  disabled={isPending || isLoadingBalance}
                 >
                   Approve
                 </Button>
@@ -179,7 +212,7 @@ export default memo<{
             </>
           )}
 
-          {isSuccess && (
+          {depositedSuccess && (
             <>
               <Stack alignItems={"center"} paddingTop={5} paddingBottom={5}>
                 <AvatarGroup>

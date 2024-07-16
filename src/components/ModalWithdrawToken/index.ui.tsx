@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -13,6 +13,8 @@ import { ArrowForward } from "@mui/icons-material";
 import { ImageLogoBlueCircle } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
+import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
+import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
 
 export default memo<{
   open: boolean;
@@ -23,15 +25,19 @@ export default memo<{
   pendingValue: number;
   balance: number;
   symbol: string;
-  isSuccess: boolean;
+  // isSuccess: boolean;
   onClose: () => void;
-  onWithdraw: (amount: number) => void;
+  // onWithdraw: (amount: number) => void;
 
-  amount: number
-  setAmount: (_: number) => void
-  isPendingWithdraw: boolean
-  txHash: string
+  // amount: number
+  // setAmount: (_: number) => void
+  // isPendingWithdraw: boolean
+  // txHash: string
 
+  tokenAddress: string
+  poolAddress: string
+  decimals: number
+  refetch: () => void;
 }>(
   ({
     open,
@@ -42,21 +48,54 @@ export default memo<{
     pendingValue,
     symbol,
     balance,
-    isSuccess,
+    // isSuccess,
     onClose,
-    onWithdraw,
-    amount,
-    setAmount,
-    isPendingWithdraw,
-    txHash
+    // onWithdraw,
+    // amount,
+    // setAmount,
+    // isPendingWithdraw,
+    // txHash
+
+    tokenAddress,
+    poolAddress,
+    decimals,
+    refetch,
   }) => {
+
+    const [onSuccess, setOnSuccess] = useState(false);
+    const [amount, setAmount] = useState(0);
+
+    const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
+    const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
+
+    const { isPending, isConfirmed, txHash, onWithdraw } = useWithdraw({
+      contractAddress: poolAddress,
+      decimals,
+      abi: poolDefaultData.abi,
+    });
+
+    useEffect(() => {
+      if (isConfirmed) {
+        refetch && refetch();
+      }
+    }, [refetch, isConfirmed]);
+
+    useEffect(() => {
+      if (!isPending && isConfirmed) {
+        setOnSuccess(true);
+        // onClose && onClose();
+      } else if (!isPending && !isConfirmed) {
+        setOnSuccess(false);
+        // onClose && onClose();
+      }
+    }, [isPending, isConfirmed, setOnSuccess]);
 
     return (
       <ModalBlue
         open={open}
         onClose={onClose}
         title={
-          isSuccess
+          onSuccess
             ? `${symbol}
             Withdrawn Successfully`
             : `Withdraw your USDT
@@ -64,7 +103,7 @@ export default memo<{
         }
       >
         <Box maxWidth={550}>
-          {!isSuccess && (
+          {!onSuccess && (
             <>
               <Box maxWidth={"100%"} overflow={"hidden"}>
                 <InputAmount
@@ -117,7 +156,7 @@ export default memo<{
                   />
                 </Grid>
 
-                <Grid xs={12} paddingBottom={-2}>
+                {/* <Grid xs={12} paddingBottom={-2}>
                   <Typography level="title-sm">Pending Withdrawals</Typography>
                 </Grid>
                 <Grid xs={12} sm={12}>
@@ -127,7 +166,7 @@ export default memo<{
                     name="in processing"
                     icon={IconPending}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
               <Button
                 sx={{
@@ -137,16 +176,16 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                disabled={amount == 0 || amount > balance || isPendingWithdraw}
+                disabled={amount == 0 || amount > balance || isPending}
                 onClick={() => onWithdraw && onWithdraw(amount)}
-                loading={isPendingWithdraw}
+                loading={isPending}
               >
                 Withdraw
               </Button>
             </>
           )}
 
-          {isSuccess && (
+          {onSuccess && (
             <>
               <Stack alignItems={"center"} paddingTop={5} paddingBottom={5}>
                 <AvatarGroup>

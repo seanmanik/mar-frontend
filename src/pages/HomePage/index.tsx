@@ -20,7 +20,10 @@ const HomePage = () => {
 
   const { data } = useGetPools({ token: userToken });
 
-  const { data: userStakedOfPoolMultiCall, refetch: refecthGetUserStakedOfPoolMultiCall } = useGetUserStakedOfPoolMultiCall({
+  const {
+    data: userStakedOfPoolMultiCall,
+    refetch: refecthGetUserStakedOfPoolMultiCall,
+  } = useGetUserStakedOfPoolMultiCall({
     listContractAddress: data ? data?.map((i) => i.contractAddress) : [],
     userAddress: account.address as string,
   });
@@ -134,7 +137,11 @@ const HomePage = () => {
         </Grid>
       </Grid>
 
-      <PoolsContextProvider refecthGetUserStakedOfPoolMultiCall={refecthGetUserStakedOfPoolMultiCall}>
+      <PoolsContextProvider
+        refecthGetUserStakedOfPoolMultiCall={
+          refecthGetUserStakedOfPoolMultiCall
+        }
+      >
         <PoolsSelection
           poolSelected={poolSelected}
           setPoolSelected={setPoolSelected}
@@ -147,23 +154,24 @@ const HomePage = () => {
           marginTop={3}
           width={"100%"}
         >
-          <Stack
-            gap={1}
-            direction="column"
-            alignItems="flex-start"
-            justifyContent="flex-start"
-            width={"100%"}
-          >
-            <Typography
-              sx={{
-                fontSize: "24px",
-                fontWeight: 600,
-                color: "#ffffff",
-              }}
+          {isArray(myPools) && myPools.length > 0 && (
+            <Stack
+              gap={1}
+              direction="column"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              width={"100%"}
             >
-              My Pools
-            </Typography>
-            {isArray(myPools) && myPools.length > 0 && (
+              <Typography
+                sx={{
+                  fontSize: "24px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                }}
+              >
+                My Pools
+              </Typography>
+
               <Grid
                 container
                 spacing={{ xs: 2 }}
@@ -197,26 +205,27 @@ const HomePage = () => {
                   );
                 })}
               </Grid>
-            )}
-          </Stack>
+            </Stack>
+          )}
 
-          <Stack
-            gap={1}
-            direction="column"
-            alignItems="flex-start"
-            justifyContent="flex-start"
-            width={"100%"}
-          >
-            <Typography
-              sx={{
-                fontSize: "24px",
-                fontWeight: 600,
-                color: "#ffffff",
-              }}
+          {isArray(otherPools) && otherPools.length > 0 && (
+            <Stack
+              gap={1}
+              direction="column"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              width={"100%"}
             >
-              All Pools
-            </Typography>
-            {isArray(otherPools) && otherPools.length > 0 && (
+              <Typography
+                sx={{
+                  fontSize: "24px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                }}
+              >
+                All Pools
+              </Typography>
+
               <Grid
                 container
                 spacing={{ xs: 2 }}
@@ -250,8 +259,8 @@ const HomePage = () => {
                   );
                 })}
               </Grid>
-            )}
-          </Stack>
+            </Stack>
+          )}
         </Stack>
       </PoolsContextProvider>
     </Box>

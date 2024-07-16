@@ -1,9 +1,6 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo } from "react";
 
 import UI from "./index.ui";
-import { useApprove } from "../../apis/interactWallet/EVM/useApprove";
-import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
-import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 
 export default memo<{
   open: boolean;
@@ -19,6 +16,8 @@ export default memo<{
 
   refetch: () => void;
   refetchAllowance: () => void;
+
+  isLoadingBalance: boolean
 }>(
   ({
     open,
@@ -32,72 +31,15 @@ export default memo<{
     refetch,
     refetchAllowance,
     userStaked,
+    isLoadingBalance
   }) => {
-    const [depositedSuccess, setDepositedSuccess] = useState(false);
-
-    const [amount, setAmount] = useState(0);
-
-    const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
-    const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
-
-    const { isPending, isConfirmed, onApprove } = useApprove({
-      contractAddress: tokenAddress,
-      decimals,
-      spenderAddress: poolAddress,
-      abi: tokenDefaultData.abi,
-    });
-
-    const {
-      isPending: isPendingDeposit,
-      isConfirmed: isConfirmedDeposit,
-      onDeposit,
-      txHash,
-    } = useDeposit({
-      contractAddress: poolAddress,
-      decimals,
-      abi: poolDefaultData.abi,
-    });
-
-    console.log(
-      isPendingDeposit,
-      isConfirmedDeposit,
-      "isPendingDeposit, isConfirmedDeposit"
-    );
-
-    useEffect(() => {
-      if (isConfirmedDeposit) {
-        console.log("======");
-        // refetch && refetch();
-      }
-    }, [refetch, isConfirmedDeposit]);
-
-    useEffect(() => {
-      if (isConfirmed) {
-        // console.log('hihihihihihi')
-        // refetchAllowance && refetchAllowance();
-      }
-    }, [refetchAllowance, isConfirmed]);
-
-    useEffect(() => {
-      if (!isPendingDeposit && isConfirmedDeposit) {
-        setDepositedSuccess(true);
-        // onClose && onClose();
-      } else if (!isPendingDeposit && !isConfirmedDeposit) {
-        setDepositedSuccess(false);
-        // onClose && onClose();
-      }
-    }, [isPendingDeposit, isConfirmedDeposit, setDepositedSuccess]);
 
     return (
       <>
         {open && (
           <UI
             open={open}
-            onClose={() => {
-              setDepositedSuccess(false);
-              onClose && onClose();
-            }}
-            isSuccess={depositedSuccess}
+            onClose={onClose}
             balance={tokenBalanceAmout}
             symbol={symbol}
             allowanceAmount={allowanceAmount}
@@ -106,13 +48,12 @@ export default memo<{
             totalValue={userStaked * 1}
             stakeAmount={userStaked}
             pendingValue={8000}
-            onDeposit={onDeposit}
-            onApprove={onApprove}
-            isPendingApprove={isPending}
-            isPendingDeposit={isPendingDeposit}
-            amount={amount}
-            setAmount={setAmount}
-            txHash={txHash as string}
+            tokenAddress={tokenAddress}
+            poolAddress={poolAddress}
+            decimals={decimals}
+            refetch={refetch}
+            refetchAllowance={refetchAllowance}
+            isLoadingBalance={isLoadingBalance}
           />
         )}
       </>

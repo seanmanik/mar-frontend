@@ -54,7 +54,7 @@ const TokenPoolCard = ({
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
   const [openModalWithraw, setOpenModalWithraw] = useState(false);
-  const {refecthGetUserStakedOfPoolMultiCall} = useContext(PoolsContext)
+  const { refecthGetUserStakedOfPoolMultiCall } = useContext(PoolsContext);
 
   const account = useAccount();
 
@@ -75,12 +75,19 @@ const TokenPoolCard = ({
     abi: tokenDefaultData.abi,
   });
 
-  const tokenBalance = useBalance({
+  const {
+    data: dataBalance,
+    refetch: refetchBalance,
+    isFetching: isFetchBalance,
+    isLoading: isLoadingBalance,
+  } = useBalance({
     token: MAP_POOL_TO_TOKEN[poolAddress] as Address,
     address: account.address,
   });
 
-  const decimals = Number(get(tokenBalance, "data.decimals", 18));
+  const decimals = Number(get(dataBalance, "decimals", 18));
+  const tokenBalanceValue = get(dataBalance, "value", 0);
+  const tokenSymbol = get(dataBalance, "symbol", "");
 
   const { data: totalStakedOfPool, refetch: refetchTotalStakedOfPool } =
     useGetTotalStakedOfPool({
@@ -99,18 +106,21 @@ const TokenPoolCard = ({
 
   const totalStakedOfUserAmount = getTokenAmount(totalStakedOfUser, decimals);
 
-  const tokenBalanceValue = get(tokenBalance, "data.value", 0);
-  const tokenSymbol = get(tokenBalance, "data.symbol", "");
-
   const tokenBalanceAmout = getTokenAmount(tokenBalanceValue, decimals);
 
   const allowanceAmount = getTokenAmount(allowance, decimals);
 
   const onHandleRefetchData = useCallback(() => {
-    refetchTotalStakedOfPool()
-    refetchTotalStakedOfUser()
-    refecthGetUserStakedOfPoolMultiCall()
-  }, [refetch, refetchTotalStakedOfPool, refetchTotalStakedOfUser, refecthGetUserStakedOfPoolMultiCall])
+    refetchBalance();
+    refetchTotalStakedOfPool();
+    refetchTotalStakedOfUser();
+    refecthGetUserStakedOfPoolMultiCall();
+  }, [
+    refetch,
+    refetchTotalStakedOfPool,
+    refetchTotalStakedOfUser,
+    refecthGetUserStakedOfPoolMultiCall,
+  ]);
 
   return (
     <Card
@@ -244,7 +254,7 @@ const TokenPoolCard = ({
         )}
       </Stack>
 
-      <ModalWithdrawToken  
+      <ModalWithdrawToken
         open={openModalWithraw}
         onClose={() => setOpenModalWithraw(false)}
         symbol={tokenSymbol}
@@ -267,6 +277,7 @@ const TokenPoolCard = ({
         refetch={onHandleRefetchData}
         refetchAllowance={refetch}
         userStaked={totalStakedOfUserAmount}
+        isLoadingBalance={isFetchBalance || isLoadingBalance}
       />
     </Card>
   );
