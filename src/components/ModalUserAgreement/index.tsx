@@ -3,6 +3,7 @@ import ModalBlue from "../ModalBlue";
 import { Checkbox, Link, Stack, Typography } from "@mui/joy";
 import Button from "../Button";
 import { IconWallet } from "../../icons";
+import { Wallet } from "@mui/icons-material";
 
 export default memo<{
   open: boolean;
@@ -30,7 +31,7 @@ export default memo<{
           buttonType="primary"
           disabled={!agree}
           onClick={onAgreed}
-          endDecorator={<img src={IconWallet} width={24} height={24} />}
+          endDecorator={<Wallet fontSize="small" />}
           fullWidth
         >
           Connect Wallet

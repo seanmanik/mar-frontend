@@ -87,6 +87,7 @@ const Button = ({
             {children}
           </Typography>
         )}
+        {endDecorator}
       </Stack>
     </JoyButton>
   );

@@ -10,6 +10,7 @@ export { default as IconETH } from "./resource/eth.png";
 export { default as IconBTC } from "./resource/btc.png";
 export { default as IconUSDT } from "./resource/usdt.png";
 export { default as IconPudgy } from "./resource/pudgy.png";
+export { default as IconUSDC } from "./resource/usdc.png";
 
 export { default as IconMarPoint } from "./resource/icon-mar-point.png";
 export { default as IconMyStake } from "./resource/icon-mystake.png";

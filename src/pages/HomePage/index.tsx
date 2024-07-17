@@ -103,7 +103,7 @@ const HomePage = () => {
                 : totalStakedOfPoolMultiCall.map((e) => ({
                     name: addressToTokenName[e.contractAddress] as string,
                     amount: parseInt(e.amount10.toString()),
-                  }))
+                  })).filter(e => e.amount > 0)
             }
             // value={[
             //   { name: "USDC", amount: 500000000 },
@@ -122,7 +122,7 @@ const HomePage = () => {
                   : userStakedOfPoolMultiCall.map((e) => ({
                       name: addressToTokenName[e.contractAddress] as string,
                       amount: parseInt(e.amount10.toString()),
-                    }))
+                    })).filter((e) => e.amount > 0)
               }
               // value={[
               //   { name: "USDC", amount: 500000000 },
@@ -136,7 +136,7 @@ const HomePage = () => {
           <Grid xs={12} sm={6} md={3} lg={3}>
             <StatsCard
               title="MAR POINTS"
-              value={[{ name: "MAR", amount: 500000000 }]}
+              value={[{ name: "MAR", amount: 0 }]}
               icon={IconMarPoint}
             />
           </Grid>
@@ -145,7 +145,7 @@ const HomePage = () => {
           <Grid xs={12} sm={6} md={3} lg={3}>
             <StatsCard
               title="PUPPY POINTS"
-              value={[{ name: "PUPPY", amount: 500000000 }]}
+              value={[{ name: "PUPPY", amount: 0 }]}
               icon={IconMarPoint}
             />
           </Grid>
@@ -213,9 +213,9 @@ const HomePage = () => {
                             tvl={item.tvl}
                             tvs={0}
                             pts={0}
-                            dailyReward={0}
+                            dailyReward={1}
                             yourStaked={item.depositedAmount}
-                            yourDailyReward={0}
+                            yourDailyReward={1}
                             assetSymbol={item.assetSymbol}
                             assetName={item.assetName}
                             poolAddress={item.contractAddress}

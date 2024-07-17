@@ -11,7 +11,7 @@ import {
   IconYourDeposited,
 } from "../../icons";
 import PoolTitle from "./PoolTitle";
-import { ArrowForward, Bolt, Paid, Redeem } from "@mui/icons-material";
+import { ArrowForward, Bolt, Paid, Redeem, Wallet } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
@@ -190,51 +190,53 @@ const TokenPoolCard = ({
               />
             )}
           </Stack>
-          <Stack direction="column" gap={1.5}>
-            <Typography
-              level="body-sm"
-              sx={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: "rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              MY DAILY REWARDS
-            </Typography>
-            <Divider
-              sx={{
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-              }}
-            />
-            <ValueDisplay
+          {isConnectWallet && yourDailyReward > 0 && (
+            <Stack direction="column" gap={1.5}>
+              <Typography
+                level="body-sm"
+                sx={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                MY DAILY REWARDS
+              </Typography>
+              <Divider
+                sx={{
+                  backgroundColor: "rgba(0, 0, 0, 0.1)",
+                }}
+              />
+              <ValueDisplay
+                variant="small"
+                name="Mar Points"
+                text={(totalStakedOfUserAmount / 3).toLocaleString()}
+                icon={IconMarPoint}
+                iconWidth={32}
+              />
+              {/* { (
+              <ValueDisplay
+                variant="small"
+                name="Base Points Per Dollar"
+                text={`${pts} PTS`}
+                icon={IconDailyReward}
+              />
+            )} */}
+              <ValueDisplay
+                variant="small"
+                name="Puppy Points"
+                text={(totalStakedOfUserAmount / 9).toLocaleString()}
+                icon={IconPuppyPoint}
+                iconWidth={32}
+              />
+              {/* <ValueDisplay
               variant="small"
-              name="Mar Points"
-              text={`${"467,000"}`}
-              icon={IconMarPoint}
-              iconWidth={32}
-            />
-            {/* { (
-            <ValueDisplay
-              variant="small"
-              name="Base Points Per Dollar"
-              text={`${pts} PTS`}
-              icon={IconDailyReward}
-            />
-          )} */}
-            <ValueDisplay
-              variant="small"
-              name="Puppy Points"
-              text={`${"467,000"}`}
-              icon={IconPuppyPoint}
-              iconWidth={32}
-            />
-            {/* <ValueDisplay
-            variant="small"
-            name="Your Daily Reward"
-            text={`${totalStakedOfUserAmount * 0.001} PTS`}
-            icon={IconYourDailyReward}
-          /> */}
-          </Stack>
+              name="Your Daily Reward"
+              text={`${totalStakedOfUserAmount * 0.001} PTS`}
+              icon={IconYourDailyReward}
+            /> */}
+            </Stack>
+          )}
           {isConnectWallet && (
             <ValueDisplay
               variant="small"
@@ -250,7 +252,7 @@ const TokenPoolCard = ({
             <Stack gap={1} direction="column">
               <Button
                 buttonType="primary"
-                endDecorator={<img src={IconWallet} width={24} height={24} />}
+                endDecorator={<Wallet fontSize="small" />}
                 fullWidth
                 onClick={() => setOpenModalUserAgreement(true)}
               >

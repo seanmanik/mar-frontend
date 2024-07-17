@@ -1,4 +1,4 @@
-import { IconBTC, IconETH, IconPudgy, IconUSDT } from "../icons";
+import { IconBTC, IconETH, IconPudgy, IconUSDC, IconUSDT } from "../icons";
 const mapping: any = {
   WETH: IconETH,
   WBTC: IconBTC,
@@ -6,5 +6,6 @@ const mapping: any = {
   BTC: IconBTC,
   USDT: IconUSDT,
   Pudgy: IconPudgy,
+  USDC: IconUSDC,
 };
 export default mapping;
