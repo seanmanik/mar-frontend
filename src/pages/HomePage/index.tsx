@@ -18,6 +18,10 @@ const HomePage = () => {
   const { userToken } = useContext(AppContext);
   const account = useAccount();
 
+  const isConnectWallet = useMemo(() => {
+    return !!account && !!account.isConnected;
+  }, [account]);
+
   const { data } = useGetPools({ token: userToken });
 
   const {
@@ -85,9 +89,9 @@ const HomePage = () => {
       paddingTop={"44px"}
       margin={"auto"}
     >
-      <Box marginBottom={2}>
+      {isConnectWallet && <Box marginBottom={2}>
         <AccountLevel />
-      </Box>
+      </Box>}
 
       <Grid
         container
