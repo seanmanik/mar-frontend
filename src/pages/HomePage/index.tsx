@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/joy";
+import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/joy";
 import { useContext, useMemo, useState } from "react";
 import { IconMarPoint, IconMyStake, IconTotalValueStake } from "../../icons";
 import AccountLevel from "../../components/AccountLevel";
@@ -22,11 +22,12 @@ const HomePage = () => {
     return !!account && !!account.isConnected;
   }, [account]);
 
-  const { data } = useGetPools({ token: userToken });
+  const { data, isFetching, isLoading } = useGetPools({ token: userToken });
 
   const {
     data: userStakedOfPoolMultiCall,
     refetch: refecthGetUserStakedOfPoolMultiCall,
+    isLoading: isLoadingUserStakedOfPoolMultiCall,
   } = useGetUserStakedOfPoolMultiCall({
     listContractAddress: data ? data?.map((i) => i.contractAddress) : [],
     userAddress: account.address as string,
@@ -35,6 +36,7 @@ const HomePage = () => {
   const {
     data: totalStakedOfPoolMultiCall,
     refetch: refecthGetTotalStakedOfPoolMultiCall,
+    isLoading: isLoadingTotalStakedOfPoolMultiCall,
   } = useGetTotalStakedOfPoolMultiCall({
     listContractAddress: data ? data?.map((i) => i.contractAddress) : [],
   });
@@ -67,6 +69,11 @@ const HomePage = () => {
     if (!data) {
       return [];
     }
+
+    if (!userStakedOfPoolMultiCall) {
+      return data;
+    }
+
     return data.filter((pool) => {
       const mappedPool = (userStakedOfPoolMultiCall || []).find(
         (p) => p.contractAddress === pool.contractAddress
@@ -89,9 +96,11 @@ const HomePage = () => {
       paddingTop={"44px"}
       margin={"auto"}
     >
-      {isConnectWallet && <Box marginBottom={2}>
-        <AccountLevel />
-      </Box>}
+      {isConnectWallet && (
+        <Box marginBottom={2}>
+          <AccountLevel />
+        </Box>
+      )}
 
       <Grid
         container
@@ -104,10 +113,12 @@ const HomePage = () => {
             value={
               !totalStakedOfPoolMultiCall
                 ? []
-                : totalStakedOfPoolMultiCall.map((e) => ({
-                    name: addressToTokenName[e.contractAddress] as string,
-                    amount: parseInt(e.amount10.toString()),
-                  })).filter(e => e.amount > 0)
+                : totalStakedOfPoolMultiCall
+                    .map((e) => ({
+                      name: addressToTokenName[e.contractAddress] as string,
+                      amount: parseInt(e.amount10.toString()),
+                    }))
+                    .filter((e) => e.amount > 0)
             }
             // value={[
             //   { name: "USDC", amount: 500000000 },
@@ -123,10 +134,12 @@ const HomePage = () => {
               value={
                 !userStakedOfPoolMultiCall
                   ? []
-                  : userStakedOfPoolMultiCall.map((e) => ({
-                      name: addressToTokenName[e.contractAddress] as string,
-                      amount: parseInt(e.amount10.toString()),
-                    })).filter((e) => e.amount > 0)
+                  : userStakedOfPoolMultiCall
+                      .map((e) => ({
+                        name: addressToTokenName[e.contractAddress] as string,
+                        amount: parseInt(e.amount10.toString()),
+                      }))
+                      .filter((e) => e.amount > 0)
               }
               // value={[
               //   { name: "USDC", amount: 500000000 },
@@ -169,7 +182,19 @@ const HomePage = () => {
           setPoolSelected={setPoolSelected}
         />
 
-        {userToken ? (
+        {isLoading ||
+        isFetching ||
+        isLoadingUserStakedOfPoolMultiCall ||
+        isLoadingTotalStakedOfPoolMultiCall ? (
+          <Stack
+            width={"100%"}
+            height={"400px"}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <CircularProgress variant="soft" size="lg" />
+          </Stack>
+        ) : (
           <Stack
             gap={3}
             direction="column"
@@ -260,70 +285,6 @@ const HomePage = () => {
                   width={"100%"}
                 >
                   {otherPools.map((item) => {
-                    return (
-                      <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
-                        <Box
-                          // onClick={() => setOpenModalDeposit(index)}
-                          sx={{
-                            height: "calc(100% - 32px)",
-                          }}
-                        >
-                          <TokenPoolCard
-                            tvl={item.tvl}
-                            tvs={0}
-                            pts={0}
-                            dailyReward={0}
-                            yourStaked={item.depositedAmount}
-                            yourDailyReward={0}
-                            assetSymbol={item.assetSymbol}
-                            assetName={item.assetName}
-                            poolAddress={item.contractAddress}
-                            poolId={item.tokenPoolID}
-                          />
-                        </Box>
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </Stack>
-            )}
-          </Stack>
-        ) : (
-          <Stack
-            gap={3}
-            direction="column"
-            alignItems="flex-start"
-            justifyContent="flex-start"
-            marginTop={3}
-            width={"100%"}
-          >
-            {isArray(data) && data.length > 0 && (
-              <Stack
-                gap={1}
-                direction="column"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                width={"100%"}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "24px",
-                    fontWeight: 600,
-                    color: "#ffffff",
-                  }}
-                >
-                  All Pools
-                </Typography>
-
-                <Grid
-                  container
-                  spacing={{ xs: 2 }}
-                  columns={{ xs: 2, sm: 4, md: 8, lg: 12 }}
-                  sx={{ flexGrow: 1 }}
-                  alignItems="stretch"
-                  width={"100%"}
-                >
-                  {data.map((item) => {
                     return (
                       <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
                         <Box

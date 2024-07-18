@@ -1,61 +1,84 @@
 import { useCallback, useEffect, useState } from "react";
 import { Address } from "viem";
 import { config } from "../../../wagmi";
-import { multicall } from '@wagmi/core';
-import { CONTRACT_DEFAUL_DATA, MAP_POOL_TO_TOKEN } from "../../../constants/contract";
+import { multicall } from "@wagmi/core";
+import {
+  CONTRACT_DEFAUL_DATA,
+  MAP_POOL_TO_TOKEN,
+} from "../../../constants/contract";
 
 export const useGetTotalStakedOfPoolMultiCall = ({
-  listContractAddress = []
+  listContractAddress = [],
 }: {
   listContractAddress: string[];
 }): {
-  data: {
-    amount: BigInt,
-    amount10: number,
-    contractAddress: string
-  }[] | undefined;
+  data:
+    | {
+        amount: BigInt;
+        amount10: number;
+        contractAddress: string;
+      }[]
+    | undefined;
   isLoading: boolean;
-  refetch: () => void
+  refetch: () => void;
 } => {
-  const [data, setData] = useState<{
-    amount: BigInt,
-    amount10: number,
-    contractAddress: string
-  }[] | undefined>()
-  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState<
+    | {
+        amount: BigInt;
+        amount10: number;
+        contractAddress: string;
+      }[]
+    | undefined
+  >();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchTotalStakedInPools = useCallback(async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const res = await multicall(config, {
-        contracts: listContractAddress.map(contractAddress => {
+        contracts: listContractAddress.map((contractAddress) => {
           return {
             abi: CONTRACT_DEFAUL_DATA[contractAddress].abi,
             address: contractAddress as Address,
-            functionName: "totalStaked"
-          } as any
-        })
-      })
+            functionName: "totalStaked",
+          } as any;
+        }),
+      });
 
-      setData(res.map((e, i) => {
-        const amount: BigInt = (e.status == 'success' ? e.result : BigInt(0)) as BigInt
-        return ({
-          amount: amount,
-          amount10: BigInt(amount.toString()) / BigInt(10 ** (CONTRACT_DEFAUL_DATA[MAP_POOL_TO_TOKEN[listContractAddress[i]]] as any).decimals),
-          contractAddress: listContractAddress[i]
-        })
-      }) as any)
+      setData(
+        res.map((e, i) => {
+          const amount: BigInt = (
+            e.status == "success" ? e.result : BigInt(0)
+          ) as BigInt;
+          return {
+            amount: amount,
+            amount10:
+              BigInt(amount.toString()) /
+              BigInt(
+                10 **
+                  (
+                    CONTRACT_DEFAUL_DATA[
+                      MAP_POOL_TO_TOKEN[listContractAddress[i]]
+                    ] as any
+                  ).decimals
+              ),
+            contractAddress: listContractAddress[i],
+          };
+        }) as any
+      );
     } catch (error) {
-      setIsLoading(false)
-      setData(undefined)
+      setIsLoading(false);
+      setData(undefined);
+    } finally {
+      setIsLoading(false);
     }
-  }, [(listContractAddress || []).length])
+  }, [(listContractAddress || []).length]);
 
   useEffect(() => {
     if (listContractAddress.length > 0) {
-      fetchTotalStakedInPools()
+      fetchTotalStakedInPools();
     }
-  }, [(listContractAddress || []).length, fetchTotalStakedInPools])
+  }, [(listContractAddress || []).length, fetchTotalStakedInPools]);
 
   return {
     data: data,
