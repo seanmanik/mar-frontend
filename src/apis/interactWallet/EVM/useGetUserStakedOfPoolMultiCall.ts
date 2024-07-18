@@ -20,9 +20,11 @@ interface UserStakedOfPoolResultType {
 export const useGetUserStakedOfPoolMultiCall = ({
   listContractAddress = [],
   userAddress,
+  userToken,
 }: {
   listContractAddress: string[];
   userAddress: string;
+  userToken: string;
 }): {
   data: UserStakedOfPoolResultType[] | undefined;
   isLoading: boolean;
@@ -77,10 +79,18 @@ export const useGetUserStakedOfPoolMultiCall = ({
   }, [(listContractAddress || []).length, userAddress]);
 
   useEffect(() => {
+    if (!userToken) {
+      setData(undefined);
+    }
     if (listContractAddress.length > 0 && userAddress) {
       fetchUserStakedInPools();
     }
-  }, [(listContractAddress || []).length, userAddress, fetchUserStakedInPools]);
+  }, [
+    (listContractAddress || []).length,
+    userAddress,
+    fetchUserStakedInPools,
+    userToken,
+  ]);
 
   return {
     data: data,

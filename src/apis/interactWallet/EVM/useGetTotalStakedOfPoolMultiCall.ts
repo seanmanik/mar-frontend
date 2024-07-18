@@ -9,8 +9,10 @@ import {
 
 export const useGetTotalStakedOfPoolMultiCall = ({
   listContractAddress = [],
+  userToken,
 }: {
   listContractAddress: string[];
+  userToken: string;
 }): {
   data:
     | {
@@ -75,10 +77,13 @@ export const useGetTotalStakedOfPoolMultiCall = ({
   }, [(listContractAddress || []).length]);
 
   useEffect(() => {
+    if (!userToken) {
+      setData(undefined);
+    }
     if (listContractAddress.length > 0) {
       fetchTotalStakedInPools();
     }
-  }, [(listContractAddress || []).length, fetchTotalStakedInPools]);
+  }, [(listContractAddress || []).length, fetchTotalStakedInPools, userToken]);
 
   return {
     data: data,

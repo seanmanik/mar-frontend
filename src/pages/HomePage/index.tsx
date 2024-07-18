@@ -31,6 +31,7 @@ const HomePage = () => {
   } = useGetUserStakedOfPoolMultiCall({
     listContractAddress: data ? data?.map((i) => i.contractAddress) : [],
     userAddress: account.address as string,
+    userToken: userToken,
   });
 
   const {
@@ -39,6 +40,7 @@ const HomePage = () => {
     isLoading: isLoadingTotalStakedOfPoolMultiCall,
   } = useGetTotalStakedOfPoolMultiCall({
     listContractAddress: data ? data?.map((i) => i.contractAddress) : [],
+    userToken: userToken,
   });
 
   const addressToTokenName: { [key: string]: string } = data
@@ -49,7 +51,7 @@ const HomePage = () => {
     : {};
 
   const myPools = useMemo(() => {
-    if (!data) {
+    if (!data || !userToken) {
       return [];
     }
     return data.filter((pool) => {
@@ -63,14 +65,14 @@ const HomePage = () => {
 
       return false;
     });
-  }, [data, userStakedOfPoolMultiCall]);
+  }, [data, userStakedOfPoolMultiCall, userToken]);
 
   const otherPools = useMemo(() => {
     if (!data) {
       return [];
     }
 
-    if (!userStakedOfPoolMultiCall) {
+    if (!userStakedOfPoolMultiCall || !userToken) {
       return data;
     }
 
@@ -85,7 +87,7 @@ const HomePage = () => {
 
       return false;
     });
-  }, [data, userStakedOfPoolMultiCall]);
+  }, [data, userStakedOfPoolMultiCall, userToken]);
 
   return (
     <Box
@@ -314,6 +316,8 @@ const HomePage = () => {
             )}
           </Stack>
         )}
+
+        
       </PoolsContextProvider>
     </Box>
   );
