@@ -38,12 +38,22 @@ export interface ITokenPoolCardProps {
   tvs: number;
   pts: number;
   yourStaked: number;
-  yourDailyReward: number;
+  // yourDailyReward: number;
 
   assetName: string;
   assetSymbol: string;
   poolAddress: string;
   poolId: number | string;
+
+  usdRate: number
+
+  points: {
+    name: string
+    symbol: string
+    points: number
+    pointsPerDay: number
+    calculatedAt: Date
+  }[]
 }
 
 const TokenPoolCard = ({
@@ -51,12 +61,14 @@ const TokenPoolCard = ({
   dailyReward,
   tvs,
   // pts,
-  yourStaked,
-  yourDailyReward,
+  // yourStaked,
+  // yourDailyReward,
   // assetName,
+  usdRate = 1,
   assetSymbol,
   poolAddress,
   poolId,
+  points
 }: ITokenPoolCardProps) => {
   const { userToken } = useContext(AppContext);
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
@@ -165,7 +177,8 @@ const TokenPoolCard = ({
           <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
             <ValueDisplay
               name="TVL"
-              text={`$${formatNumber(totalStakedOfPoolAmount * 1)}`}
+              text={`$${formatNumber(totalStakedOfPoolAmount * usdRate * 1)}`}
+              // smallText={assetSymbol}
               isNameAbove
               flex={1}
               nameIcon={
@@ -176,7 +189,8 @@ const TokenPoolCard = ({
             {isConnectWallet && (
               <ValueDisplay
                 name="MY DEPOSIT"
-                text={`$${formatNumber(totalStakedOfUserAmount * 1)}`}
+                text={`$${formatNumber(totalStakedOfUserAmount * usdRate * 1)}`}
+                // smallText={assetSymbol}
                 align="right"
                 isNameAbove
                 flex={1}
@@ -190,7 +204,7 @@ const TokenPoolCard = ({
               />
             )}
           </Stack>
-          {isConnectWallet && yourDailyReward > 0 && (
+          {isConnectWallet && totalStakedOfUserAmount > 0 && (
             <Stack direction="column" gap={1.5}>
               <Typography
                 level="body-sm"
@@ -207,34 +221,19 @@ const TokenPoolCard = ({
                   backgroundColor: "rgba(0, 0, 0, 0.1)",
                 }}
               />
-              <ValueDisplay
-                variant="small"
-                name="Mar Points"
-                text={(totalStakedOfUserAmount / 3).toLocaleString()}
-                icon={IconMarPoint}
-                iconWidth={32}
-              />
-              {/* { (
-              <ValueDisplay
-                variant="small"
-                name="Base Points Per Dollar"
-                text={`${pts} PTS`}
-                icon={IconDailyReward}
-              />
-            )} */}
-              <ValueDisplay
-                variant="small"
-                name="Puppy Points"
-                text={(totalStakedOfUserAmount / 9).toLocaleString()}
-                icon={IconPuppyPoint}
-                iconWidth={32}
-              />
-              {/* <ValueDisplay
-              variant="small"
-              name="Your Daily Reward"
-              text={`${totalStakedOfUserAmount * 0.001} PTS`}
-              icon={IconYourDailyReward}
-            /> */}
+              {points.map(e => (
+                <ValueDisplay
+                  key={e.symbol}
+                  variant="small"
+                  name={e.name}
+                  text={(e.pointsPerDay).toLocaleString()}
+                  icon={{
+                    MAR: IconMarPoint,
+                    PUPPY: IconPuppyPoint
+                  }[e.symbol]}
+                  iconWidth={32}
+                />
+              ))}
             </Stack>
           )}
           {isConnectWallet && (

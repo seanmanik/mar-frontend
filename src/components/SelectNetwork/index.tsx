@@ -54,6 +54,7 @@ const SelectNetwork = () => {
         {LIST_NETWORKS.map((network, index) => {
           return (
             <MenuItem
+              key={index}
               onClick={createHandleClose(index)}
               sx={{
                 padding: "16px 12px",

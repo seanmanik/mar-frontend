@@ -4,6 +4,7 @@ import { memo } from "react";
 export default memo<
   {
     text?: string;
+    smallText?: string;
     name?: string;
     icon?: string;
     images?: string[];
@@ -18,6 +19,7 @@ export default memo<
   ({
     icon,
     text,
+    smallText,
     name,
     images,
     variant = "medium",
@@ -92,7 +94,7 @@ export default memo<
               </Typography>
             )}
             {variant == "medium" && (
-              <Typography level="title-lg">{text}</Typography>
+              <Typography level="title-lg">{text} <Typography level="body-xs">{smallText}</Typography></Typography>
             )}
             {variant == "medium" && !isNameAbove && name && (
               <Typography level="title-sm" color="neutral">
@@ -110,7 +112,7 @@ export default memo<
         >
           {variant == "small" && text && (
             <Typography level="title-lg" textAlign={"left"}>
-              {text}
+              {text} <Typography level="body-xs">{smallText}</Typography>
             </Typography>
           )}
           {images && images.length > 0 && (

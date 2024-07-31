@@ -5,11 +5,14 @@ const StatsCard = ({
   icon,
   title,
   value,
+  isUsdValue = true
 }: {
   icon: string;
   title: string;
+  isUsdValue?: boolean
   value: {
     name: string
+    symbol: string
     amount: number
   }[];
 }) => {
@@ -47,7 +50,7 @@ const StatsCard = ({
               fontSize: "20px",
             }}
           >
-            ${value ? value.reduce((s, e) => s + e.amount, 0).toLocaleString() : '...'}
+            {isUsdValue && '$'}{value ? value.reduce((s, e) => s + e.amount, 0).toLocaleString() : '...'}
           </Typography>
         </Stack>
       </Stack>
@@ -74,6 +77,7 @@ const StatsCard = ({
             }}
           >
             {value && value.map(e => <Stack
+              key={e.name}
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -99,7 +103,7 @@ const StatsCard = ({
                   fontSize: "14px",
                 }}
               >
-                ${e.amount.toLocaleString()}
+                {isUsdValue && '$'}{e.amount.toLocaleString()}
               </Typography>
             </Stack>)}
             <Stack
@@ -126,7 +130,7 @@ const StatsCard = ({
                   fontSize: "16px",
                 }}
               >
-                ${value ? value.reduce((s, e) => s + e.amount, 0).toLocaleString() : '...'}
+                {isUsdValue && '$'}{value ? value.reduce((s, e) => s + e.amount, 0).toLocaleString() : '...'}
               </Typography>
             </Stack>
           </Stack>

@@ -11,7 +11,7 @@ interface PoolsContextProviderProps extends PoolsContextType {
 
 export const PoolsContext = createContext<PoolsContextType>({
   refecthGetUserStakedOfPoolMultiCall: () => {},
-  refecthGetTotalStakedOfPoolMultiCall: () => {},
+  refecthGetTotalStakedOfPoolMultiCall: () => {}
 });
 
 const PoolsContextProvider = ({

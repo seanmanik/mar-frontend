@@ -22,7 +22,11 @@ const HomePage = () => {
     return !!account && !!account.isConnected;
   }, [account]);
 
-  const { data, isFetching, isLoading } = useGetPools({ token: userToken });
+  const { 
+    data, 
+    refetch: refecthDataPools,
+    isFetching, 
+    isLoading } = useGetPools({ token: userToken });
 
   const {
     data: userStakedOfPoolMultiCall,
@@ -50,11 +54,19 @@ const HomePage = () => {
       }, {})
     : {};
 
+    const addressToTokenSymbol: { [key: string]: string } = data
+    ? data?.reduce((s, e) => {
+        s = { ...s, [e.contractAddress]: e.assetSymbol };
+        return s;
+      }, {})
+    : {};
+
   const myPools = useMemo(() => {
     if (!data || !userToken) {
       return [];
     }
     return data.filter((pool) => {
+      if (pool.depositedAmount > 0) return true
       const mappedPool = (userStakedOfPoolMultiCall || []).find(
         (p) => p.contractAddress === pool.contractAddress
       );
@@ -72,22 +84,32 @@ const HomePage = () => {
       return [];
     }
 
-    if (!userStakedOfPoolMultiCall || !userToken) {
-      return data;
-    }
-
     return data.filter((pool) => {
-      const mappedPool = (userStakedOfPoolMultiCall || []).find(
-        (p) => p.contractAddress === pool.contractAddress
-      );
-
-      if (mappedPool && mappedPool.amountBalance === 0) {
-        return true;
-      }
-
-      return false;
+      return !myPools.find(e => e.tokenPoolID == pool.tokenPoolID)
     });
-  }, [data, userStakedOfPoolMultiCall, userToken]);
+  }, [data, myPools, userToken]);
+
+  // const otherPools = useMemo(() => {
+  //   if (!data) {
+  //     return [];
+  //   }
+
+  //   if (!userStakedOfPoolMultiCall || !userToken) {
+  //     return data;
+  //   }
+
+  //   return data.filter((pool) => {
+  //     const mappedPool = (userStakedOfPoolMultiCall || []).find(
+  //       (p) => p.contractAddress === pool.contractAddress
+  //     );
+
+  //     if (mappedPool && mappedPool.amountBalance === 0) {
+  //       return true;
+  //     }
+
+  //     return false;
+  //   });
+  // }, [data, userStakedOfPoolMultiCall, userToken]);
 
   return (
     <Box
@@ -118,14 +140,15 @@ const HomePage = () => {
                 : totalStakedOfPoolMultiCall
                     .map((e) => ({
                       name: addressToTokenName[e.contractAddress] as string,
-                      amount: parseInt(e.amount10.toString()),
+                      symbol: addressToTokenSymbol[e.contractAddress] as string,
+                      amount: parseInt(e.amount10.toString()) * ({
+                        WBTC: 63217, 
+                        USDT: 1.1,
+                        USDC: 1.02
+                      }[addressToTokenSymbol[e.contractAddress] as string] || 1)
                     }))
                     .filter((e) => e.amount > 0)
             }
-            // value={[
-            //   { name: "USDC", amount: 500000000 },
-            //   { name: "USDT", amount: 500000000 },
-            // ]}
             icon={IconTotalValueStake}
           />
         </Grid>
@@ -139,7 +162,12 @@ const HomePage = () => {
                   : userStakedOfPoolMultiCall
                       .map((e) => ({
                         name: addressToTokenName[e.contractAddress] as string,
-                        amount: parseInt(e.amount10.toString()),
+                        symbol: addressToTokenSymbol[e.contractAddress] as string,
+                        amount: parseInt(e.amount10.toString()) * ({
+                          WBTC: 63217, 
+                          USDT: 1.1,
+                          USDC: 1.02
+                        }[addressToTokenSymbol[e.contractAddress] as string] || 1),
                       }))
                       .filter((e) => e.amount > 0)
               }
@@ -155,7 +183,12 @@ const HomePage = () => {
           <Grid xs={12} sm={6} md={3} lg={3}>
             <StatsCard
               title="MAR POINTS"
-              value={[{ name: "MAR", amount: 0 }]}
+              isUsdValue={false}
+              value={!data ? [] : data.map(e => ({
+                name: e.assetName,
+                symbol: 'MAR',
+                amount: (e.points.find(p => p.symbol == 'MAR') || {}).points || 0
+              })).filter(e => e.amount > 0)}
               icon={IconMarPoint}
             />
           </Grid>
@@ -164,7 +197,12 @@ const HomePage = () => {
           <Grid xs={12} sm={6} md={3} lg={3}>
             <StatsCard
               title="PUPPY POINTS"
-              value={[{ name: "PUPPY", amount: 0 }]}
+              isUsdValue={false}
+              value={!data ? [] : data.map(e => ({
+                name: e.assetName,
+                symbol: 'PUPPY',
+                amount: (e.points.find(p => p.symbol == 'PUPPY') || {}).points || 0
+              })).filter(e => e.amount > 0)}
               icon={IconMarPoint}
             />
           </Grid>
@@ -184,10 +222,9 @@ const HomePage = () => {
           setPoolSelected={setPoolSelected}
         />
 
-        {isLoading ||
-        isFetching ||
-        isLoadingUserStakedOfPoolMultiCall ||
-        isLoadingTotalStakedOfPoolMultiCall ? (
+        {isLoading 
+        || isFetching 
+        ? (
           <Stack
             width={"100%"}
             height={"400px"}
@@ -235,7 +272,6 @@ const HomePage = () => {
                     return (
                       <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
                         <Box
-                          // onClick={() => setOpenModalDeposit(index)}
                           sx={{
                             height: "calc(100% - 32px)",
                           }}
@@ -246,11 +282,17 @@ const HomePage = () => {
                             pts={0}
                             dailyReward={1}
                             yourStaked={item.depositedAmount}
-                            yourDailyReward={1}
                             assetSymbol={item.assetSymbol}
                             assetName={item.assetName}
                             poolAddress={item.contractAddress}
                             poolId={item.tokenPoolID}
+                            points={item.points}
+
+                            usdRate={{
+                              WBTC: 63217, 
+                              USDT: 1.1,
+                              USDC: 1.02
+                            }[item.assetSymbol] || 1}
                           />
                         </Box>
                       </Grid>
@@ -290,7 +332,6 @@ const HomePage = () => {
                     return (
                       <Grid xs={2} sm={4} md={4} lg={4} key={item.tokenPoolID}>
                         <Box
-                          // onClick={() => setOpenModalDeposit(index)}
                           sx={{
                             height: "calc(100% - 32px)",
                           }}
@@ -299,13 +340,18 @@ const HomePage = () => {
                             tvl={item.tvl}
                             tvs={0}
                             pts={0}
+                            usdRate={{
+                              WBTC: 63217, 
+                              USDT: 1.1,
+                              USDC: 1.02
+                            }[item.assetSymbol] || 1}
                             dailyReward={0}
                             yourStaked={item.depositedAmount}
-                            yourDailyReward={0}
                             assetSymbol={item.assetSymbol}
                             assetName={item.assetName}
                             poolAddress={item.contractAddress}
                             poolId={item.tokenPoolID}
+                            points={item.points}
                           />
                         </Box>
                       </Grid>

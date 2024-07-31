@@ -1,16 +1,25 @@
 import { http, createConfig } from 'wagmi'
-import { mainnet, sepolia } from 'wagmi/chains'
+import { sepolia, mainnet } from 'wagmi/chains'
 import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors'
 
+// console.log(sepolia)
+// sepolia.rpcUrls = {
+//   default: {
+//     http: ['https://sepolia.infura.io/v3/' as any],
+//   },
+// };
+
 export const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [sepolia],
   connectors: [
     injected(),
     coinbaseWallet({ appName: 'Create Wagmi' }),
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
   ],
   transports: {
-    [mainnet.id]: http(),
+    // [mainnet.id]: http(),
     [sepolia.id]: http(),
   },
 })
+
+// https://sepolia.infura.io/v3/

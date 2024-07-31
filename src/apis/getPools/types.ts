@@ -9,4 +9,11 @@ export interface IPoolDetail {
   apy: number
   depositedAmount: number
   depositedValue: number
+  points: {
+    name: string
+    symbol: string
+    points: number
+    pointsPerDay: number
+    calculatedAt: Date
+  }[]
 }
