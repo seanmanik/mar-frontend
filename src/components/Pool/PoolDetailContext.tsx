@@ -8,6 +8,13 @@ interface PoolDetailContextType {
     tokenAddress: string;
     symbol: string;
     poolId: number | string;
+    points: {
+      name: string
+      symbol: string
+      points: number
+      pointsPerDay: number
+      calculatedAt: Date
+    }[]
 }
 
 interface PoolDetailContextProviderProps extends PoolDetailContextType {
@@ -22,6 +29,7 @@ export const PoolDetailContext = createContext<PoolDetailContextType>({
   tokenAddress: "",
   symbol: "",
   poolId: 0,
+  points: [],
 });
 
 const PoolDetailContextProvider = ({
@@ -33,6 +41,7 @@ const PoolDetailContextProvider = ({
   tokenAddress,
   symbol,
   poolId,
+  points,
 }: PoolDetailContextProviderProps) => {
   return (
     <PoolDetailContext.Provider
@@ -44,6 +53,7 @@ const PoolDetailContextProvider = ({
         tokenAddress,
         symbol,
         poolId,
+        points
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -18,6 +18,9 @@ import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
 import { formatNumber } from "../../utils/numbers";
 import { onHandlePostWithdrawRequest } from "../../apis/withdraw";
 import { useAccount } from "wagmi";
+import { AppContext } from "../../context/AppContext";
+import { IEstimateOutput } from "../../apis/estimateRewardByInput/types";
+import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
 
 export default memo<{
   open: boolean;
@@ -53,6 +56,11 @@ export default memo<{
     refetch,
     poolId,
   }) => {
+
+    const { userToken } = useContext(AppContext);
+
+    const [estimateData, setEstimateData] = useState<IEstimateOutput>();
+
     const account = useAccount();
 
     const [onSuccess, setOnSuccess] = useState(false);
@@ -93,6 +101,21 @@ export default memo<{
       }
     }, [isPending, isConfirmed, setOnSuccess]);
 
+    useEffect(() => {
+      (async () => {
+        if (amount == 0) return
+
+        var response = await onHandlePostEstimateRewardRequest(userToken, {
+          quantity: -amount,
+          tokenPoolID: parseInt(poolId.toString())
+        })
+
+        if (-amount == response?.quantity) {
+          setEstimateData(response)
+        }
+      })()
+    }, [amount, poolId])
+
     return (
       <ModalBlue
         open={open}
@@ -120,11 +143,12 @@ export default memo<{
               </Box>
               <Grid marginTop={4} container spacing={2} sx={{ flexGrow: 1 }}>
                 <Grid xs={12} paddingBottom={-2}>
-                  <Typography level="title-sm">My Rewards</Typography>
+                  <Typography level="title-sm">Daily Rewards</Typography>
                 </Grid>
                 <Grid xs={12} sm={6}>
                   <TokenAmountDisplay
                     amount={marPoint}
+                    amountChange={estimateData?.pointsInfo.find(e => e.symbol == 'MAR')?.changeInPointsPerDay}
                     name="Mar points"
                     icon={IconMarPoint}
                   />
@@ -133,6 +157,7 @@ export default memo<{
                   {/* <Typography level="title-sm">&nbsp;</Typography> */}
                   <TokenAmountDisplay
                     amount={puppyPoint}
+                    amountChange={estimateData?.pointsInfo.find(e => e.symbol == 'PUPPY')?.changeInPointsPerDay}
                     name="Puppy points"
                     icon={IconMarPoint}
                   />

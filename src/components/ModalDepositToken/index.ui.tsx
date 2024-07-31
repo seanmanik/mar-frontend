@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -19,6 +19,9 @@ import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
 import { formatNumber } from "../../utils/numbers";
 import { onHandlePostDepositRequest } from "../../apis/deposit";
 import { useAccount } from "wagmi";
+import { IEstimateInput, IEstimateOutput } from "../../apis/estimateRewardByInput/types";
+import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
+import { AppContext } from "../../context/AppContext";
 
 export default memo<{
   open: boolean;
@@ -61,9 +64,11 @@ export default memo<{
     isLoadingBalance,
     poolId,
   }) => {
+    const { userToken } = useContext(AppContext);
     const [depositedSuccess, setDepositedSuccess] = useState(false);
     const account = useAccount();
     const [amount, setAmount] = useState(0);
+    const [estimateData, setEstimateData] = useState<IEstimateOutput>();
 
     const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
     const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
@@ -86,21 +91,21 @@ export default memo<{
       abi: poolDefaultData.abi,
     });
 
-    const onPostDepositAPI = useCallback(() => {
-      onHandlePostDepositRequest({
-        TokenPoolID: poolId,
-        WalletAddress: account.address as string,
-        TransactionHash: txHash as string,
-        Quantity: amount,
-      });
-    }, [account.address, txHash, amount, poolId]);
+    // const onPostDepositAPI = useCallback(() => {
+    //   onHandlePostDepositRequest({
+    //     TokenPoolID: poolId,
+    //     WalletAddress: account.address as string,
+    //     TransactionHash: txHash as string,
+    //     Quantity: amount,
+    //   });
+    // }, [account.address, txHash, amount, poolId]);
 
     useEffect(() => {
       if (isConfirmedDeposit) {
         refetch && refetch();
         // onPostDepositAPI()
       }
-    }, [refetch, isConfirmedDeposit, onPostDepositAPI]);
+    }, [refetch, isConfirmedDeposit]);
 
     useEffect(() => {
       if (isConfirmed) {
@@ -115,6 +120,21 @@ export default memo<{
         setDepositedSuccess(false);
       }
     }, [isPendingDeposit, isConfirmedDeposit, setDepositedSuccess]);
+
+    useEffect(() => {
+      (async () => {
+        if (amount == 0) return
+
+        var response = await onHandlePostEstimateRewardRequest(userToken, {
+          quantity: amount,
+          tokenPoolID: parseInt(poolId.toString())
+        })
+
+        if (amount == response?.quantity) {
+          setEstimateData(response)
+        }
+      })()
+    }, [amount, poolId])
 
     return (
       <ModalBlue
@@ -143,11 +163,12 @@ export default memo<{
               </Box>
               <Grid marginTop={4} container spacing={2} sx={{ flexGrow: 1 }}>
                 <Grid xs={12} paddingBottom={-2}>
-                  <Typography level="title-sm">My Rewards</Typography>
+                  <Typography level="title-sm">Daily Rewards</Typography>
                 </Grid>
                 <Grid xs={12} sm={6}>
                   <TokenAmountDisplay
                     amount={marPoint}
+                    amountChange={estimateData?.pointsInfo.find(e => e.symbol == 'MAR')?.changeInPointsPerDay}
                     name="Mar points"
                     icon={IconMarPoint}
                   />
@@ -156,6 +177,7 @@ export default memo<{
                   {/* <Typography level="title-sm">&nbsp;</Typography> */}
                   <TokenAmountDisplay
                     amount={puppyPoint}
+                    amountChange={estimateData?.pointsInfo.find(e => e.symbol == 'PUPPY')?.changeInPointsPerDay}
                     name="Puppy points"
                     icon={IconMarPoint}
                   />

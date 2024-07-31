@@ -158,6 +158,7 @@ const TokenPoolCard = ({
       userStaked={totalStakedOfUserAmount}
       onHandleRefetchData={onHandleRefetchData}
       poolId={poolId}
+      points={points}
     >
       <Card
         sx={{
@@ -184,7 +185,7 @@ const TokenPoolCard = ({
               nameIcon={
                 <Paid sx={{ fontSize: 15, color: "gray", marginRight: 0.5 }} />
               }
-              type="primay"
+              type="primary"
             />
             {isConnectWallet && (
               <ValueDisplay
@@ -200,7 +201,7 @@ const TokenPoolCard = ({
                   // />
                   <Paid sx={{ fontSize: 15, color: "gray", marginLeft: 0.5 }} />
                 }
-                type="primay"
+                type="primary"
               />
             )}
           </Stack>

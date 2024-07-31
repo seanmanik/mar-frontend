@@ -21,6 +21,7 @@ export default memo<{
       onHandleRefetchData,
       symbol,
       poolId,
+      points
     } = useContext(PoolDetailContext);
 
     return (
@@ -31,8 +32,8 @@ export default memo<{
             onClose={onClose}
             balance={tokenBalanceAmout}
             symbol={symbol}
-            marPoint={23872}
-            puppyPoint={2938}
+            marPoint={points.find(e => e.symbol == 'MAR')?.pointsPerDay || 0}
+            puppyPoint={points.find(e => e.symbol == 'PUPPY')?.pointsPerDay || 0}
             totalValue={userStaked * 1}
             stakeAmount={userStaked}
             pendingValue={8000}

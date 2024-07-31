@@ -1,31 +1,39 @@
 import { memo } from "react";
 import ValueDisplay from "../ValueDisplay";
 import { formatNumber } from "../../utils/numbers";
+import { Box, Stack, Typography } from "@mui/joy";
 
 export default memo<{
   amount: number;
+  amountChange?: number
   symbol?: string;
   name: string;
   icon?: string;
-}>(({ amount, name, icon, symbol }) => {
+}>(({ amount, name, icon, symbol, amountChange = 0 }) => {
   return (
-    <ValueDisplay
-      text={`${formatNumber(amount)} ${symbol ? ` ${symbol}` : ""}`}
-      name={name}
-      icon={icon}
-    />
-    // <Stack sx={{
-    //     background: '#F5F5F5',
-    //     padding: 1,
-    //     borderRadius: 10
-    // }} direction={"row"} alignItems={"center"} spacing={1}>
-    //     <Box width={'40px'} height={'40px'}>
-    //         {icon && <img src={icon} width={40} />}
-    //     </Box>
-    //     <Box>
-    //         <Typography level="title-lg">{parseFloat(amount.toFixed(2)).toLocaleString()}{symbol ? ` ${symbol}`: ''}</Typography>
-    //         <Typography level="body-sm" color="neutral">{name}</Typography>
-    //     </Box>
-    // </Stack>
+    // <ValueDisplay
+    //   text={`${formatNumber(amount)} ${symbol ? ` ${symbol}` : ""}`}
+    //   smallText={amountChange > 0 ? `+${amountChange.toLocaleString()}` : amountChange < 0 ? amountChange.toLocaleString() : ''}
+    //   smallTextColor={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}
+    //   type={amountChange < 0 ? '#FFE8EF' : amountChange > 0 ? '#EEFFE7' : 'secondary'}
+    //   name={name}
+    //   icon={icon}
+    // />
+    <Stack sx={{
+        background: amountChange < 0 ? '#FFE8EF' : amountChange > 0 ? '#EEFFE7' : '#F5F5F5',
+        padding: 1,
+        borderRadius: 10
+    }} direction={"row"} alignItems={"center"} spacing={1}>
+        <Box width={'40px'} height={'40px'}>
+            {icon && <img src={icon} width={40} />}
+        </Box>
+        <Box flex={1}>
+            <Stack direction={"row"} justifyContent={"space-between"}>
+              <Typography level="title-lg">{parseFloat(amount.toFixed(2)).toLocaleString()}{symbol ? ` ${symbol}`: ''}</Typography>
+              {amountChange == 0 ? <></> : <Typography level="title-lg" color={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}>{amountChange > 0 ? '+': ''}{parseFloat(amountChange.toFixed(2)).toLocaleString()}</Typography>}
+            </Stack>
+            <Typography level="body-sm" color="neutral">{name}</Typography>
+        </Box>
+    </Stack>
   );
 });

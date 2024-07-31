@@ -5,21 +5,24 @@ export default memo<
   {
     text?: string;
     smallText?: string;
+    smallTextColor?: string;
     name?: string;
     icon?: string;
     images?: string[];
     variant?: "medium" | "small";
-    type?: "primay" | "secondary" | "tertiary";
+    type?: "primary" | "secondary" | "tertiary" | string;
     isNameAbove?: boolean;
     align?: "left" | "right";
     nameIcon?: any;
     iconWidth?: number;
+
   } & StackProps
 >(
   ({
     icon,
     text,
     smallText,
+    smallTextColor,
     name,
     images,
     variant = "medium",
@@ -35,11 +38,10 @@ export default memo<
       <Stack
         sx={{
           background:
-            type == "primay"
-              ? "linear-gradient(to right, #EAF1FF 20%, #D3CAFE 120%)"
-              : type === "tertiary"
-                ? "rgba(255, 247, 234, 1)"
-                : "#F5F5F5",
+            type == "primary" ? "linear-gradient(to right, #EAF1FF 20%, #D3CAFE 120%)"
+            : type == "tertiary" ? "rgba(255, 247, 234, 1)"
+            : type == 'secondary' ? "#F5F5F5"
+            : type,
           padding: 1,
           borderRadius: 10,
         }}
@@ -94,7 +96,7 @@ export default memo<
               </Typography>
             )}
             {variant == "medium" && (
-              <Typography level="title-lg">{text} <Typography level="body-xs">{smallText}</Typography></Typography>
+              <Typography display={"flex"} justifyContent={"space-between"} alignItems={"center"} level="title-lg">{text} {smallText&&<Typography level="title-md" color={smallTextColor as any} fontWeight={800}>{smallText}</Typography>}</Typography>
             )}
             {variant == "medium" && !isNameAbove && name && (
               <Typography level="title-sm" color="neutral">
@@ -111,9 +113,7 @@ export default memo<
           alignItems={align == "left" ? "flex-end" : "flex-start"}
         >
           {variant == "small" && text && (
-            <Typography level="title-lg" textAlign={"left"}>
-              {text} <Typography level="body-xs">{smallText}</Typography>
-            </Typography>
+            <Typography level="title-lg" textAlign={"left"}>{text} {smallText&&<Typography level="title-md" color={smallTextColor as any} fontWeight={800}>{smallText}</Typography>}</Typography>
           )}
           {images && images.length > 0 && (
             <Stack
