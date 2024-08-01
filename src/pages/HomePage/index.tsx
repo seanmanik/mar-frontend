@@ -89,28 +89,6 @@ const HomePage = () => {
     });
   }, [data, myPools, userToken]);
 
-  // const otherPools = useMemo(() => {
-  //   if (!data) {
-  //     return [];
-  //   }
-
-  //   if (!userStakedOfPoolMultiCall || !userToken) {
-  //     return data;
-  //   }
-
-  //   return data.filter((pool) => {
-  //     const mappedPool = (userStakedOfPoolMultiCall || []).find(
-  //       (p) => p.contractAddress === pool.contractAddress
-  //     );
-
-  //     if (mappedPool && mappedPool.amountBalance === 0) {
-  //       return true;
-  //     }
-
-  //     return false;
-  //   });
-  // }, [data, userStakedOfPoolMultiCall, userToken]);
-
   return (
     <Box
       maxWidth={1420}
@@ -361,9 +339,7 @@ const HomePage = () => {
               </Stack>
             )}
           </Stack>
-        )}
-
-        
+        )}    
       </PoolsContextProvider>
     </Box>
   );

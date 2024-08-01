@@ -29,14 +29,14 @@ export default memo<{
         <Box>
           <Stack direction={"row"} alignItems={"center"}>
             <Typography level="title-md" sx={{ color: "white" }}>
-              dbm.eth
+              Your wallet
             </Typography>
-            <BorderColor
+            {/* <BorderColor
               sx={{ color: "white", fontSize: "15px", marginLeft: 1 }}
-            />
+            /> */}
           </Stack>
           <Stack direction={"row"} alignItems={"center"}>
-            <Typography sx={{ color: "white", fontSize: 14, fontWeight: 500 }}>
+            <Typography sx={{ color: "white", fontSize: 14, fontWeight: 800 }}>
               {account.address?.slice(0, 6)}...{account.address?.slice(-4)}
             </Typography>
             <ContentCopy

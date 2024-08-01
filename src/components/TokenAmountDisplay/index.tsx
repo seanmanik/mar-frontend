@@ -6,10 +6,11 @@ import { Box, Stack, Typography } from "@mui/joy";
 export default memo<{
   amount: number;
   amountChange?: number
+  showChange?: boolean
   symbol?: string;
   name: string;
   icon?: string;
-}>(({ amount, name, icon, symbol, amountChange = 0 }) => {
+}>(({ amount, name, icon, symbol, amountChange = 0, showChange = true }) => {
   return (
     // <ValueDisplay
     //   text={`${formatNumber(amount)} ${symbol ? ` ${symbol}` : ""}`}
@@ -30,7 +31,7 @@ export default memo<{
         <Box flex={1}>
             <Stack direction={"row"} justifyContent={"space-between"}>
               <Typography level="title-lg">{parseFloat(amount.toFixed(2)).toLocaleString()}{symbol ? ` ${symbol}`: ''}</Typography>
-              {amountChange == 0 ? <></> : <Typography level="title-lg" color={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}>{amountChange > 0 ? '+': ''}{parseFloat(amountChange.toFixed(2)).toLocaleString()}</Typography>}
+              {amountChange == 0 || showChange == false ? <></> : <Typography level="title-lg" color={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}>{amountChange > 0 ? '+': ''}{parseFloat(amountChange.toFixed(2)).toLocaleString()}</Typography>}
             </Stack>
             <Typography level="body-sm" color="neutral">{name}</Typography>
         </Box>

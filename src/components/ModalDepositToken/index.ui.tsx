@@ -123,7 +123,7 @@ export default memo<{
 
     useEffect(() => {
       (async () => {
-        if (amount == 0) return
+        if (!amount) return
 
         var response = await onHandlePostEstimateRewardRequest(userToken, {
           quantity: amount,
@@ -168,7 +168,7 @@ export default memo<{
                 <Grid xs={12} sm={6}>
                   <TokenAmountDisplay
                     amount={marPoint}
-                    amountChange={estimateData?.pointsInfo.find(e => e.symbol == 'MAR')?.changeInPointsPerDay}
+                    amountChange={!amount ? 0 : estimateData?.pointsInfo.find(e => e.symbol == 'MAR')?.changeInPointsPerDay}
                     name="Mar points"
                     icon={IconMarPoint}
                   />
@@ -177,7 +177,7 @@ export default memo<{
                   {/* <Typography level="title-sm">&nbsp;</Typography> */}
                   <TokenAmountDisplay
                     amount={puppyPoint}
-                    amountChange={estimateData?.pointsInfo.find(e => e.symbol == 'PUPPY')?.changeInPointsPerDay}
+                    amountChange={!amount ? 0 : estimateData?.pointsInfo.find(e => e.symbol == 'PUPPY')?.changeInPointsPerDay}
                     name="Puppy points"
                     icon={IconMarPoint}
                   />
@@ -189,7 +189,14 @@ export default memo<{
                   </Typography>
                   <TokenAmountDisplay
                     amount={totalValue}
-                    name="USD"
+                    amountChange={(amount || 0)}
+                    showChange={false}
+                    symbol={symbol}
+                    name={`$${(totalValue * ({
+                      WBTC: 63217, 
+                      USDT: 1.1,
+                      USDC: 1.02
+                    }[symbol] || 1)).toLocaleString()}`}
                     icon={IconTotalValueStake}
                   />
                 </Grid>
@@ -199,7 +206,14 @@ export default memo<{
                   </Typography>
                   <TokenAmountDisplay
                     amount={stakeAmount}
-                    name="USDC"
+                    amountChange={(amount || 0)}
+                    showChange={false}
+                    symbol={symbol}
+                    name={`$${(stakeAmount * ({
+                      WBTC: 63217, 
+                      USDT: 1.1,
+                      USDC: 1.02
+                    }[symbol] || 1)).toLocaleString()}`}
                     icon={IconMyStake}
                   />
                 </Grid>
