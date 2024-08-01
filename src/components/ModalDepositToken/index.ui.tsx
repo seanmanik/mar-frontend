@@ -22,6 +22,8 @@ import { IEstimateInput, IEstimateOutput } from "../../apis/estimateRewardByInpu
 import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
 import { AppContext } from "../../context/AppContext";
 import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
+import { useRecoilValue } from "recoil";
+import { AuthTokenState } from "../../state/AuthTokenState";
 
 export default memo<{
   open: boolean;
@@ -64,9 +66,8 @@ export default memo<{
     isLoadingBalance,
     poolId,
   }) => {
-    const { userToken } = useContext(AppContext);
     const [depositedSuccess, setDepositedSuccess] = useState(false);
-    const account = useAccount();
+    const userToken = useRecoilValue(AuthTokenState)
     const [amount, setAmount] = useState(0);
     const [estimateData, setEstimateData] = useState<IEstimateOutput>();
 
@@ -87,15 +88,6 @@ export default memo<{
       decimals,
       abi: POOL_CONTRACT_ABI,
     });
-
-    // const onPostDepositAPI = useCallback(() => {
-    //   onHandlePostDepositRequest({
-    //     TokenPoolID: poolId,
-    //     WalletAddress: account.address as string,
-    //     TransactionHash: txHash as string,
-    //     Quantity: amount,
-    //   });
-    // }, [account.address, txHash, amount, poolId]);
 
     useEffect(() => {
       if (isConfirmedDeposit) {

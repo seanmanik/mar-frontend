@@ -25,7 +25,6 @@ import {
 } from "../../utils/numbers";
 import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
 import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
-import { PoolsContext } from "../../context/PoolsContext";
 import { AppContext } from "../../context/AppContext";
 import PoolDetailContextProvider from "./PoolDetailContext";
 import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
@@ -69,14 +68,9 @@ const TokenPoolCard = ({
   poolId,
   points
 }: ITokenPoolCardProps) => {
-  const { userToken } = useContext(AppContext);
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
   const [openModalWithraw, setOpenModalWithraw] = useState(false);
-  const {
-    refecthGetUserStakedOfPoolMultiCall,
-    refecthGetTotalStakedOfPoolMultiCall,
-  } = useContext(PoolsContext);
 
   const { setOpenModalUserAgreement } = useContext(AppContext);
 
@@ -132,14 +126,10 @@ const TokenPoolCard = ({
     refetchBalance();
     refetchTotalStakedOfPool();
     refetchTotalStakedOfUser();
-    refecthGetUserStakedOfPoolMultiCall();
-    refecthGetTotalStakedOfPoolMultiCall();
   }, [
     refetch,
     refetchTotalStakedOfPool,
     refetchTotalStakedOfUser,
-    refecthGetUserStakedOfPoolMultiCall,
-    refecthGetTotalStakedOfPoolMultiCall,
   ]);
 
   return (

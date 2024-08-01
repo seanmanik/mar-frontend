@@ -8,24 +8,18 @@ import ModalInviteFriends from "../components/ModalInviteFriends";
 import ModalAccountDetails from "../components/ModalAccountDetails";
 
 interface AppContextType {
-  userToken: string;
-  setUserToken: (token: string) => void;
   setOpenModalUserAgreement: (open: boolean) => void;
   setOpenModalInviteFriends: (open: boolean) => void;
   setOpenModalAccountDetails: (open: boolean) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
-  userToken: "",
-  setUserToken: () => {},
   setOpenModalUserAgreement: () => {},
   setOpenModalInviteFriends: () => {},
   setOpenModalAccountDetails: () => {},
 });
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [userToken, setUserToken] = useState<string>("");
-
   const [openModalConnectWallet, setOpenModalConnectWallet] = useState(false);
   const [openModalUserAgreement, setOpenModalUserAgreement] = useState(false);
   const [openModalInviteFriends, setOpenModalInviteFriends] = useState(false);
@@ -46,8 +40,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AppContext.Provider
       value={{
-        userToken,
-        setUserToken,
         setOpenModalUserAgreement,
         setOpenModalInviteFriends,
         setOpenModalAccountDetails,

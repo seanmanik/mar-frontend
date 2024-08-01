@@ -1,23 +1,8 @@
-import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/joy";
-import { useContext, useMemo, useState } from "react";
-import { IconMarPoint, IconMyStake, IconTotalValueStake } from "../../icons";
-import AccountLevel from "../../components/AccountLevel";
-import StatsCard from "../../components/StatsCard";
-import PoolsSelection from "../../components/PoolsSelection";
+import { Box, Grid, Stack, Typography } from "@mui/joy";
 import TokenPoolCard from "../../components/Pool/TokenPoolCard";
-import { AppContext } from "../../context/AppContext";
-import { useGetPools } from "../../apis/getPools";
-import { isArray } from "lodash";
-import { useGetUserStakedOfPoolMultiCall } from "../../apis/interactWallet/EVM/useGetUserStakedOfPoolMultiCall";
-import { useAccount } from "wagmi";
-import { useGetTotalStakedOfPoolMultiCall } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPoolMultiCall";
-import PoolsContextProvider from "../../context/PoolsContext";
-import { useRecoilState, useRecoilStateLoadable, useRecoilValue, useRecoilValueLoadable } from "recoil";
-import { AuthTokenState } from "../../state/AuthTokenState";
+import { useRecoilValueLoadable } from "recoil";
 import { PoolsState } from "../../state/PoolsState";
 import { IPoolDetail } from "../../apis/getPools/types";
-import { PoolTVLsSelector } from "../../state/PoolTVLsSelector";
-import Summary from "./Summary";
 
 const HomePage = () => {
     const poolsLoadable = useRecoilValueLoadable(PoolsState)

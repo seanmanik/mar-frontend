@@ -21,6 +21,8 @@ import { AppContext } from "../../context/AppContext";
 import { IEstimateOutput } from "../../apis/estimateRewardByInput/types";
 import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
 import { POOL_CONTRACT_ABI } from "../../constants/contract";
+import { useRecoilValue } from "recoil";
+import { AuthTokenState } from "../../state/AuthTokenState";
 
 export default memo<{
   open: boolean;
@@ -56,10 +58,8 @@ export default memo<{
     refetch,
     poolId,
   }) => {
-
-    const { userToken } = useContext(AppContext);
-
     const [estimateData, setEstimateData] = useState<IEstimateOutput>();
+    const userToken = useRecoilValue(AuthTokenState)
 
     const account = useAccount();
 
