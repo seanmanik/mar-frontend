@@ -4,18 +4,9 @@ import HomePage from "./pages/HomePage";
 import "./fonts/PPNeueMachina-PlainRegular.otf";
 import AppContextProvider from "./context/AppContext";
 
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
-
 function App() {
   return (
     <AppContextProvider>
-      <RecoilRoot>
         {/* Routes nest inside one another. Nested route paths build upon
             parent route paths, and nested route elements render inside
             parent route elements. See the note about <Outlet> below. */}
@@ -31,7 +22,6 @@ function App() {
             {/* <Route path="*" element={<NoMatch />} /> */}
           </Route>
         </Routes>
-      </RecoilRoot>
     </AppContextProvider>
   );
 }

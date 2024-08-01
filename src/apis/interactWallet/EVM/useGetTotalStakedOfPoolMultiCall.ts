@@ -3,8 +3,7 @@ import { Address } from "viem";
 import { config } from "../../../wagmi";
 import { multicall } from "@wagmi/core";
 import {
-  CONTRACT_DEFAUL_DATA,
-  MAP_POOL_TO_TOKEN,
+  POOL_CONTRACT_ABI,
 } from "../../../constants/contract";
 
 export const useGetTotalStakedOfPoolMultiCall = ({
@@ -40,7 +39,7 @@ export const useGetTotalStakedOfPoolMultiCall = ({
       const res = await multicall(config, {
         contracts: listContractAddress.map((contractAddress) => {
           return {
-            abi: CONTRACT_DEFAUL_DATA[contractAddress].abi,
+            abi: POOL_CONTRACT_ABI,
             address: contractAddress as Address,
             functionName: "totalStaked",
           } as any;
@@ -57,12 +56,7 @@ export const useGetTotalStakedOfPoolMultiCall = ({
             amount10:
               BigInt(amount.toString()) /
               BigInt(
-                10 **
-                  (
-                    CONTRACT_DEFAUL_DATA[
-                      MAP_POOL_TO_TOKEN[listContractAddress[i]]
-                    ] as any
-                  ).decimals
+                10 ** 18
               ),
             contractAddress: listContractAddress[i],
           };

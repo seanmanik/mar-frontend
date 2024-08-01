@@ -4,10 +4,7 @@ import { Address } from "viem";
 import { useReadContract } from "wagmi";
 import { config } from "../../../wagmi";
 import { multicall } from "@wagmi/core";
-import {
-  CONTRACT_DEFAUL_DATA,
-  MAP_POOL_TO_TOKEN,
-} from "../../../constants/contract";
+import { POOL_CONTRACT_ABI } from "../../../constants/contract";
 import BigNumber from "bignumber.js";
 
 interface UserStakedOfPoolResultType {
@@ -39,7 +36,7 @@ export const useGetUserStakedOfPoolMultiCall = ({
       const res = await multicall(config, {
         contracts: listContractAddress.map((contractAddress) => {
           return {
-            abi: CONTRACT_DEFAUL_DATA[contractAddress].abi,
+            abi: POOL_CONTRACT_ABI,
             address: contractAddress as Address,
             functionName: "userStaked",
             args: [userAddress],
@@ -55,12 +52,7 @@ export const useGetUserStakedOfPoolMultiCall = ({
           const amount10 =
             BigInt(amount.toString()) /
             BigInt(
-              10 **
-                (
-                  CONTRACT_DEFAUL_DATA[
-                    MAP_POOL_TO_TOKEN[listContractAddress[i]]
-                  ] as any
-                ).decimals
+              10 ** 18
             );
           return {
             amount: amount,

@@ -15,6 +15,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+
 globalThis.Buffer = Buffer;
 
 const queryClient = new QueryClient({
@@ -57,34 +65,35 @@ const theme = extendTheme({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <WagmiProvider config={config}>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{ persister }}
-      >
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <CssVarsProvider theme={theme}>
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                // pauseOnFocusLoss
-                // draggable
-                // pauseOnHover
-                theme="light"
-              />
-              <App />
+    <RecoilRoot>
+      <WagmiProvider config={config}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister }}
+        >
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <CssVarsProvider theme={theme}>
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  // pauseOnFocusLoss
+                  // draggable
+                  // pauseOnHover
+                  theme="light"
+                />
+                <App />
 
-              <ToastContainer />
-            </CssVarsProvider>
-          </BrowserRouter>
-        </QueryClientProvider>
-      </PersistQueryClientProvider>
-    </WagmiProvider>
-
+                <ToastContainer />
+              </CssVarsProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </PersistQueryClientProvider>
+      </WagmiProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

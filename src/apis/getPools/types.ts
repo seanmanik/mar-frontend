@@ -1,6 +1,7 @@
 export interface IPoolDetail {
   tokenPoolID: number
   contractAddress: string
+  tokenAddress: string
   blockchain: string
   assetName: string
   assetSymbol: string

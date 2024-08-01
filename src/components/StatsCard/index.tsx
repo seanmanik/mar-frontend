@@ -76,8 +76,8 @@ const StatsCard = ({
               borderRadius: "10px",
             }}
           >
-            {value && value.map(e => <Stack
-              key={e.name}
+            {value && value.map((e, i) => <Stack
+              key={i}
               direction="row"
               alignItems="center"
               justifyContent="space-between"

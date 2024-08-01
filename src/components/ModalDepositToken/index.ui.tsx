@@ -13,7 +13,6 @@ import { Bolt } from "@mui/icons-material";
 import { ImageLogoBlueCircle } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
-import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 import { useApprove } from "../../apis/interactWallet/EVM/useApprove";
 import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
 import { formatNumber } from "../../utils/numbers";
@@ -22,6 +21,7 @@ import { useAccount } from "wagmi";
 import { IEstimateInput, IEstimateOutput } from "../../apis/estimateRewardByInput/types";
 import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
 import { AppContext } from "../../context/AppContext";
+import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
 
 export default memo<{
   open: boolean;
@@ -70,14 +70,11 @@ export default memo<{
     const [amount, setAmount] = useState(0);
     const [estimateData, setEstimateData] = useState<IEstimateOutput>();
 
-    const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
-    const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
-
     const { isPending, isConfirmed, onApprove } = useApprove({
       contractAddress: tokenAddress,
       decimals,
       spenderAddress: poolAddress,
-      abi: tokenDefaultData.abi,
+      abi: ERC20_CONTRACT_ABI,
     });
 
     const {
@@ -88,7 +85,7 @@ export default memo<{
     } = useDeposit({
       contractAddress: poolAddress,
       decimals,
-      abi: poolDefaultData.abi,
+      abi: POOL_CONTRACT_ABI,
     });
 
     // const onPostDepositAPI = useCallback(() => {

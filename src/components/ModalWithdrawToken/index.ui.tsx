@@ -13,7 +13,6 @@ import { ArrowForward } from "@mui/icons-material";
 import { ImageLogoBlueCircle } from "../../images";
 import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
-import { CONTRACT_DEFAUL_DATA } from "../../constants/contract";
 import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
 import { formatNumber } from "../../utils/numbers";
 import { onHandlePostWithdrawRequest } from "../../apis/withdraw";
@@ -21,6 +20,7 @@ import { useAccount } from "wagmi";
 import { AppContext } from "../../context/AppContext";
 import { IEstimateOutput } from "../../apis/estimateRewardByInput/types";
 import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
+import { POOL_CONTRACT_ABI } from "../../constants/contract";
 
 export default memo<{
   open: boolean;
@@ -66,13 +66,10 @@ export default memo<{
     const [onSuccess, setOnSuccess] = useState(false);
     const [amount, setAmount] = useState(0);
 
-    const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
-    const poolDefaultData = CONTRACT_DEFAUL_DATA[poolAddress];
-
     const { isPending, isConfirmed, txHash, onWithdraw } = useWithdraw({
       contractAddress: poolAddress,
       decimals,
-      abi: poolDefaultData.abi,
+      abi: POOL_CONTRACT_ABI,
     });
 
     const onPostWithdrawAPI = useCallback(() => {

@@ -15,10 +15,6 @@ import { ArrowForward, Bolt, Paid, Redeem, Wallet } from "@mui/icons-material";
 import Button from "../Button";
 import { useAccount, useBalance } from "wagmi";
 import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
-import {
-  CONTRACT_DEFAUL_DATA,
-  MAP_POOL_TO_TOKEN,
-} from "../../constants/contract";
 import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { Address } from "viem";
@@ -32,6 +28,7 @@ import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUser
 import { PoolsContext } from "../../context/PoolsContext";
 import { AppContext } from "../../context/AppContext";
 import PoolDetailContextProvider from "./PoolDetailContext";
+import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
 export interface ITokenPoolCardProps {
   tvl: number;
   dailyReward: number;
@@ -44,6 +41,7 @@ export interface ITokenPoolCardProps {
   assetSymbol: string;
   poolAddress: string;
   poolId: number | string;
+  tokenAddress: string
 
   usdRate: number
 
@@ -64,6 +62,7 @@ const TokenPoolCard = ({
   // yourStaked,
   // yourDailyReward,
   // assetName,
+  tokenAddress,
   usdRate = 1,
   assetSymbol,
   poolAddress,
@@ -87,17 +86,11 @@ const TokenPoolCard = ({
     return !!account && !!account.isConnected;
   }, [account]);
 
-  const tokenAddress = useMemo(() => {
-    return MAP_POOL_TO_TOKEN[poolAddress] as Address;
-  }, [poolAddress]);
-
-  const tokenDefaultData = CONTRACT_DEFAUL_DATA[tokenAddress];
-
   const { data: allowance, refetch } = useGetAllowance({
     contractAddress: tokenAddress,
     ownerAddress: account.address as string,
     spenderAddress: poolAddress,
-    abi: tokenDefaultData.abi,
+    abi: ERC20_CONTRACT_ABI,
   });
 
   const {
@@ -106,7 +99,7 @@ const TokenPoolCard = ({
     isFetching: isFetchBalance,
     isLoading: isLoadingBalance,
   } = useBalance({
-    token: MAP_POOL_TO_TOKEN[poolAddress] as Address,
+    token: tokenAddress as any,
     address: account.address,
   });
 
@@ -117,7 +110,7 @@ const TokenPoolCard = ({
   const { data: totalStakedOfPool, refetch: refetchTotalStakedOfPool } =
     useGetTotalStakedOfPool({
       contractAddress: poolAddress,
-      abi: CONTRACT_DEFAUL_DATA[poolAddress].abi,
+      abi: POOL_CONTRACT_ABI,
     });
 
   const totalStakedOfPoolAmount = getTokenAmount(totalStakedOfPool, decimals);
@@ -126,7 +119,7 @@ const TokenPoolCard = ({
     useGetUserStakedOfPool({
       contractAddress: poolAddress,
       userAddress: account.address as string,
-      abi: CONTRACT_DEFAUL_DATA[poolAddress].abi,
+      abi: POOL_CONTRACT_ABI,
     });
 
   const totalStakedOfUserAmount = getTokenAmount(totalStakedOfUser, decimals);

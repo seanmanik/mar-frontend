@@ -7,6 +7,8 @@ import { loginRequest } from "../../login";
 import { toast } from "react-toastify";
 import { AppContext } from "../../../context/AppContext";
 import { Address } from "viem";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { AuthTokenState } from "../../../state/AuthTokenState";
 
 export const useHandleLogin = ({
   actionCallBack,
@@ -17,6 +19,7 @@ export const useHandleLogin = ({
   const { signMessageAsync } = useSignMessage();
   const { onHandleLogout } = useHandleLogout();
   const { setUserToken } = useContext(AppContext);
+  const setAuthTokenState = useSetRecoilState(AuthTokenState)
 
   const onHandleLogin = useCallback(async () => {
     if (!getItem(`${account.address}_signature`) && account.address) {
@@ -35,6 +38,8 @@ export const useHandleLogin = ({
         });
 
         setUserToken(result);
+
+        setAuthTokenState(result);
 
         actionCallBack && actionCallBack();
         toast.success("Login success");
@@ -58,8 +63,11 @@ export const useHandleLogin = ({
         });
   
         setUserToken(result);
+
+        setAuthTokenState(result);
       } catch (error) {
         setUserToken("")
+        setAuthTokenState("");
       }
     };
 
