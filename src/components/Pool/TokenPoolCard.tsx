@@ -28,46 +28,12 @@ import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUser
 import { AppContext } from "../../context/AppContext";
 import PoolDetailContextProvider from "./PoolDetailContext";
 import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
-export interface ITokenPoolCardProps {
-  tvl: number;
-  dailyReward: number;
-  tvs: number;
-  pts: number;
-  yourStaked: number;
-  // yourDailyReward: number;
+import { IPoolDetail } from "../../apis/getPools/types";
 
-  assetName: string;
-  assetSymbol: string;
-  poolAddress: string;
-  poolId: number | string;
-  tokenAddress: string
 
-  usdRate: number
-
-  points: {
-    name: string
-    symbol: string
-    points: number
-    pointsPerDay: number
-    calculatedAt: Date
-  }[]
-}
-
-const TokenPoolCard = ({
-  tvl,
-  dailyReward,
-  tvs,
-  // pts,
-  // yourStaked,
-  // yourDailyReward,
-  // assetName,
-  tokenAddress,
-  usdRate = 1,
-  assetSymbol,
-  poolAddress,
-  poolId,
-  points
-}: ITokenPoolCardProps) => {
+const TokenPoolCard = ({pool}: {
+  pool: IPoolDetail
+}) => {
   const [openModalDeposit, setOpenModalDeposit] = useState(false);
 
   const [openModalWithraw, setOpenModalWithraw] = useState(false);
@@ -81,9 +47,9 @@ const TokenPoolCard = ({
   }, [account]);
 
   const { data: allowance, refetch } = useGetAllowance({
-    contractAddress: tokenAddress,
+    contractAddress: pool.tokenAddress,
     ownerAddress: account.address as string,
-    spenderAddress: poolAddress,
+    spenderAddress: pool.contractAddress,
     abi: ERC20_CONTRACT_ABI,
   });
 
@@ -93,7 +59,7 @@ const TokenPoolCard = ({
     isFetching: isFetchBalance,
     isLoading: isLoadingBalance,
   } = useBalance({
-    token: tokenAddress as any,
+    token: pool.tokenAddress as any,
     address: account.address,
   });
 
@@ -103,7 +69,7 @@ const TokenPoolCard = ({
 
   const { data: totalStakedOfPool, refetch: refetchTotalStakedOfPool } =
     useGetTotalStakedOfPool({
-      contractAddress: poolAddress,
+      contractAddress: pool.contractAddress,
       abi: POOL_CONTRACT_ABI,
     });
 
@@ -111,7 +77,7 @@ const TokenPoolCard = ({
 
   const { data: totalStakedOfUser, refetch: refetchTotalStakedOfUser } =
     useGetUserStakedOfPool({
-      contractAddress: poolAddress,
+      contractAddress: pool.contractAddress,
       userAddress: account.address as string,
       abi: POOL_CONTRACT_ABI,
     });
@@ -135,13 +101,13 @@ const TokenPoolCard = ({
   return (
     <PoolDetailContextProvider
       symbol={tokenSymbol}
-      tokenAddress={tokenAddress}
-      poolAddress={poolAddress}
+      tokenAddress={pool.tokenAddress}
+      poolAddress={pool.contractAddress}
       decimals={decimals}
       userStaked={totalStakedOfUserAmount}
       onHandleRefetchData={onHandleRefetchData}
-      poolId={poolId}
-      points={points}
+      poolId={pool.tokenPoolID}
+      points={pool.points}
     >
       <Card
         sx={{
@@ -151,7 +117,7 @@ const TokenPoolCard = ({
           borderRadius: "12px",
         }}
       >
-        <PoolTitle assetSymbol={assetSymbol} />
+        <PoolTitle assetSymbol={pool.assetSymbol} />
         <Stack
           direction="column"
           gap={3}
@@ -161,7 +127,7 @@ const TokenPoolCard = ({
           <Stack direction={"row"} alignItems={"flex-start"} spacing={1}>
             <ValueDisplay
               name="TVL"
-              text={`$${formatNumber(totalStakedOfPoolAmount * usdRate * 1)}`}
+              text={`$${formatNumber(totalStakedOfPoolAmount * pool.usdRate * 1)}`}
               // smallText={assetSymbol}
               isNameAbove
               flex={1}
@@ -173,7 +139,7 @@ const TokenPoolCard = ({
             {isConnectWallet && (
               <ValueDisplay
                 name="MY DEPOSIT"
-                text={`$${formatNumber(totalStakedOfUserAmount * usdRate * 1)}`}
+                text={`$${formatNumber(totalStakedOfUserAmount * pool.usdRate * 1)}`}
                 // smallText={assetSymbol}
                 align="right"
                 isNameAbove
@@ -205,7 +171,7 @@ const TokenPoolCard = ({
                   backgroundColor: "rgba(0, 0, 0, 0.1)",
                 }}
               />
-              {points.map(e => (
+              {(pool.points || []).map(e => (
                 <ValueDisplay
                   key={e.symbol}
                   variant="small"

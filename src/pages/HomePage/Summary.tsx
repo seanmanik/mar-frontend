@@ -31,11 +31,7 @@ export default memo(() => {
                         pools.map((e) => ({
                             name: e.assetName,
                             symbol: e.assetSymbol,
-                            amount: parseInt(e.tvl.toString()) * ({ //TODO: Fixit
-                                WBTC: 63217,
-                                USDT: 1.1,
-                                USDC: 1.02
-                            }[e.assetSymbol] || 1)
+                            amount: parseInt(e.tvl.toString()) * e.usdRate
                         }))
                             .filter((e) => e.amount > 0)
                     }

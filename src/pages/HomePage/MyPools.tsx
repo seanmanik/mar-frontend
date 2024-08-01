@@ -31,23 +31,7 @@ const HomePage = () => {
                         }}
                         >
                             <TokenPoolCard
-                                tvl={item.tvl}
-                                tvs={0}
-                                pts={0}
-                                dailyReward={1}
-                                yourStaked={item.depositedAmount}
-                                assetSymbol={item.assetSymbol}
-                                assetName={item.assetName}
-                                poolAddress={item.contractAddress}
-                                poolId={item.tokenPoolID}
-                                points={item.points}
-                                tokenAddress={item.tokenAddress}
-
-                                usdRate={{
-                                    WBTC: 63217,
-                                    USDT: 1.1,
-                                    USDC: 1.02
-                                }[item.assetSymbol] || 1}
+                                pool={item}
                             />
                         </Box>
                     </Grid>

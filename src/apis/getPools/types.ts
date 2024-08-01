@@ -10,6 +10,7 @@ export interface IPoolDetail {
   apy: number
   depositedAmount: number
   depositedValue: number
+  usdRate: number
   points: {
     name: string
     symbol: string
