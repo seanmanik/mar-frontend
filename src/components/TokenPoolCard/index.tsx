@@ -1,5 +1,5 @@
 import { Card, Divider, Stack, Typography } from "@mui/joy";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import ValueDisplay from "../ValueDisplay";
 import {
   IconMarPoint,
@@ -8,8 +8,7 @@ import {
 } from "../../icons";
 import { ArrowForward, Bolt, Paid, Redeem, Wallet } from "@mui/icons-material";
 import Button from "../Button";
-import { useAccount, useBalance } from "wagmi";
-import { useGetAllowance } from "../../apis/interactWallet/EVM/useGetAllowance";
+import { useAccount } from "wagmi";
 import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { get } from "lodash";
