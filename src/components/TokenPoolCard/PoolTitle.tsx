@@ -14,7 +14,6 @@ const PoolTitle = ({assetSymbol} : {assetSymbol: string}) => {
       </Stack>
       <Stack direction="row" gap={1} alignItems="center">
         <BootsTag />
-        <BootsTag />
       </Stack>
     </Stack>
   );
