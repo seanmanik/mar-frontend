@@ -15,15 +15,12 @@ import ModalDepositToken from "../ModalDepositToken";
 import { get } from "lodash";
 import {
   formatNumber,
-  getTokenAmount,
+  formatNumber1
 } from "../../utils/numbers";
-import { useGetTotalStakedOfPool } from "../../apis/interactWallet/EVM/useGetTotalStakedOfPool";
-import { useGetUserStakedOfPool } from "../../apis/interactWallet/EVM/useGetUserStakedOfPool";
 import { AppContext } from "../../context/AppContext";
-import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
 import { IPoolDetail } from "../../apis/getPools/types";
 import PoolTitle from "./PoolTitle";
-import { useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilValue } from "recoil";
 import { AccountBalanceForPool } from "../../state/AccountBalanceForPool";
 
 
@@ -41,16 +38,10 @@ const TokenPoolCard = ({pool}: {
     return !!account && !!account.isConnected;
   }, [account]);
 
-  const { data: allowance, refetch } = useGetAllowance({
-    contractAddress: pool.tokenAddress,
-    ownerAddress: account.address as string,
-    spenderAddress: pool.contractAddress,
-    abi: ERC20_CONTRACT_ABI,
-  });
+  const accountBalanceState = useRecoilValue(AccountBalanceForPool({poolId: pool.tokenPoolID}))
 
-  const accountBalanceLoadable = useRecoilValueLoadable(AccountBalanceForPool({poolId: pool.tokenPoolID, ethAddress: account.address?.toString() || ''}))
-  const accountBalance = accountBalanceLoadable.valueMaybe()?.amount10 || 0
-  const accountAllowanceBalance = accountBalanceLoadable.valueMaybe()?.allowanceAmount10 || 0
+  const accountBalance = accountBalanceState?.amount10 || 0
+  const accountAllowanceBalance = accountBalanceState?.allowanceAmount10 || 0
 
   return (
     <Card
@@ -179,7 +170,7 @@ const TokenPoolCard = ({pool}: {
       <ModalDepositToken
         open={openModalDeposit}
         onClose={() => setOpenModalDeposit(false)}
-        tokenBalanceAmout={accountBalance}
+        tokenBalanceAmout={accountBalance || 0}
         allowanceAmount={accountAllowanceBalance}
         pool={pool}
       />

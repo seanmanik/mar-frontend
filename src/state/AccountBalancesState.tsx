@@ -1,25 +1,33 @@
-import { atomFamily, selector, selectorFamily } from "recoil";
+import { atom, atomFamily, selector, selectorFamily, useRecoilState, useRecoilValueLoadable } from "recoil";
 import { multicall } from "@wagmi/core";
 import { config } from "../wagmi";
 import { PoolsState } from "./PoolsState";
 import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI, TOKEN_DECIMALS } from "../constants/contract";
+import { useEffect } from "react";
 
-export const AccountBalancesState = atomFamily<{
+export const AccountBalancesState = atom<{
     amount: BigInt
     amount10: number
     allowanceAmount: BigInt
     allowanceAmount10: number
     poolId: number
-}[], {
-    ethAddress: string
-}>({
+}[]>({
     key: 'AccountBalancesState',
-    default: selectorFamily({
-        key: 'AccountBalancesState/Default',
-        get: ({ethAddress}: { ethAddress: string }) => async ({ get }) => {
-            console.log('calll', 'AccountBalancesState/Default')
-            const pools = get(PoolsState)
+    default: []
+})
+
+export function useAccountBalanceStateUpdate({ ethAddress }: {
+    ethAddress: string
+}) {
+    const [value, setValue] = useRecoilState(AccountBalancesState)
+
+    const poolsLoadable = useRecoilValueLoadable(PoolsState)
+    const pools = poolsLoadable.state == 'hasValue' ? poolsLoadable.contents : []
+
+    useEffect(() => {
+        (async () => {
             if (pools.length == 0) return []
+            console.log('update AccountBalanceState')
             const res = await multicall(config, {
                 contracts: [...pools.map(e => {
                     return {
@@ -38,7 +46,7 @@ export const AccountBalancesState = atomFamily<{
                 })],
             });
 
-            return pools.map((e, i) => {
+            setValue(pools.map((e, i) => {
                 var resAmount = res[i]
                 var resAllowance = res[i + pools.length]
 
@@ -55,19 +63,20 @@ export const AccountBalancesState = atomFamily<{
                     amount10:
                         parseFloat((BigInt(amount.toString()) /
                             BigInt(
-                            10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
+                                10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
                         ).toString()),
 
                     allowanceAmount: allowance,
                     allowanceAmount10:
                         parseFloat((BigInt(allowance.toString()) /
                             BigInt(
-                            10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
+                                10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
                         ).toString()),
                     poolId: pools[i].tokenPoolID
                 };
-            })
-        }
-    }) 
-})
+            }))
+        })()
+    }, [ethAddress, pools])
 
+    return value
+}

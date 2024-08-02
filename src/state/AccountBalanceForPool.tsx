@@ -3,11 +3,10 @@ import { AccountBalancesState } from "./AccountBalancesState";
 
 export const AccountBalanceForPool = selectorFamily({
     key: 'AccountBalanceForPool',
-    get: ({poolId, ethAddress}: {
+    get: ({poolId}: {
         poolId: number
-        ethAddress: string
     }) => ({ get }) => {
-        const balances = get(AccountBalancesState({ethAddress}))
+        const balances = get(AccountBalancesState)
         
         return balances.find(e => e.poolId == poolId)
     }
