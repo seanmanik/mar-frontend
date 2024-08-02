@@ -2,7 +2,6 @@ import { memo, useContext } from "react";
 
 import UI from "./index.ui";
 import { PoolDetailContext } from "../Pool/PoolDetailContext";
-import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
 
 export default memo<{
   open: boolean;

@@ -8,7 +8,6 @@ export const PoolTVLsSelector = selector({
     key: 'PoolTVLsSelector',
     get: async ({ get }) => {
         const pools = get(PoolsState)
-        console.log('PoolTVLsSelector', pools)
         if (pools.length == 0) return []
         const res = await multicall(config, {
             contracts: pools.map(e => e.contractAddress).map((contractAddress) => {
@@ -26,10 +25,10 @@ export const PoolTVLsSelector = selector({
             ) as BigInt;
             return {
                 amount: amount,
-                amount10:
-                    BigInt(amount.toString()) /
+                amount10: parseFloat((BigInt(amount.toString()) /
                     BigInt(
-                        10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()]),
+                        10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
+                ).toString()),
                 tokenPoolId: pools[i].tokenPoolID
             };
         }) as any

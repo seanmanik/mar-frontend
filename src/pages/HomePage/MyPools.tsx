@@ -1,5 +1,5 @@
 import { Box, Grid, Stack, Typography } from "@mui/joy";
-import TokenPoolCard from "../../components/Pool/TokenPoolCard";
+import TokenPoolCard from "../../components/TokenPoolCard";
 import { useRecoilValueLoadable } from "recoil";
 import { PoolsState } from "../../state/PoolsState";
 import { IPoolDetail } from "../../apis/getPools/types";

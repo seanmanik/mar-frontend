@@ -6,7 +6,6 @@ import TokenAmountDisplay from "../TokenAmountDisplay";
 import {
   IconMarPoint,
   IconMyStake,
-  IconPending,
   IconTotalValueStake,
 } from "../../icons";
 import { ArrowForward } from "@mui/icons-material";
@@ -15,48 +14,23 @@ import TokenToIcon from "../../utils/TokenToIcon";
 import Button from "../Button";
 import { useWithdraw } from "../../apis/interactWallet/EVM/useWithdraw";
 import { formatNumber } from "../../utils/numbers";
-import { onHandlePostWithdrawRequest } from "../../apis/withdraw";
 import { useAccount } from "wagmi";
-import { AppContext } from "../../context/AppContext";
 import { IEstimateOutput } from "../../apis/estimateRewardByInput/types";
-import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
-import { POOL_CONTRACT_ABI } from "../../constants/contract";
+import { depositRequest } from "../../apis/estimateRewardByInput";
+import { POOL_CONTRACT_ABI, TOKEN_DECIMALS } from "../../constants/contract";
 import { useRecoilValue } from "recoil";
 import { AuthTokenState } from "../../state/AuthTokenState";
+import { IPoolDetail } from "../../apis/getPools/types";
 
 export default memo<{
   open: boolean;
-  marPoint: number;
-  puppyPoint: number;
-  totalValue: number;
-  stakeAmount: number;
-  pendingValue: number;
-  balance: number;
-  symbol: string;
   onClose: () => void;
-
-  tokenAddress: string
-  poolAddress: string
-  decimals: number
-  refetch: () => void;
-  poolId: number | string;
+  pool: IPoolDetail
 }>(
   ({
     open,
-    marPoint,
-    puppyPoint,
-    totalValue,
-    stakeAmount,
-    pendingValue,
-    symbol,
-    balance,
     onClose,
-
-    tokenAddress,
-    poolAddress,
-    decimals,
-    refetch,
-    poolId,
+    pool
   }) => {
     const [estimateData, setEstimateData] = useState<IEstimateOutput>();
     const userToken = useRecoilValue(AuthTokenState)
@@ -67,26 +41,10 @@ export default memo<{
     const [amount, setAmount] = useState(0);
 
     const { isPending, isConfirmed, txHash, onWithdraw } = useWithdraw({
-      contractAddress: poolAddress,
-      decimals,
+      contractAddress: pool.contractAddress,
+      decimals: TOKEN_DECIMALS[pool.tokenAddress] || 18,
       abi: POOL_CONTRACT_ABI,
     });
-
-    const onPostWithdrawAPI = useCallback(() => {
-      onHandlePostWithdrawRequest({
-        TokenPoolID: poolId,
-        WalletAddress: account.address as string,
-        TransactionHash: txHash as string,
-        Quantity: amount,
-      });
-    }, [account.address, txHash, amount, poolId]);
-
-    useEffect(() => {
-      if (isConfirmed) {
-        refetch && refetch();
-        // onPostWithdrawAPI()
-      }
-    }, [refetch, isConfirmed, onPostWithdrawAPI]);
 
     useEffect(() => {
       if (!isPending && isConfirmed) {
@@ -102,16 +60,16 @@ export default memo<{
       (async () => {
         if (!amount) return
 
-        var response = await onHandlePostEstimateRewardRequest(userToken, {
+        var response = await depositRequest(userToken, {
           quantity: -(amount || 0),
-          tokenPoolID: parseInt(poolId.toString())
+          tokenPoolID: pool.tokenPoolID
         })
 
         if (-amount == response?.quantity) {
           setEstimateData(response)
         }
       })()
-    }, [amount, poolId])
+    }, [amount, pool.tokenPoolID])
 
     return (
       <ModalBlue
@@ -119,7 +77,7 @@ export default memo<{
         onClose={onClose}
         title={
           onSuccess
-            ? `${symbol}
+            ? `${pool.assetSymbol}
             Withdrawn Successfully`
             : `Withdraw your USDT
             from this pool`
@@ -130,10 +88,10 @@ export default memo<{
             <>
               <Box maxWidth={"100%"} overflow={"hidden"}>
                 <InputAmount
-                  title={`Withdraw ${symbol}`}
+                  title={`Withdraw ${pool.assetSymbol}`}
                   subTitle={"Your Staked"}
-                  symbol={symbol}
-                  balance={balance}
+                  symbol={pool.assetSymbol}
+                  balance={pool.depositedAmount}
                   value={amount}
                   onChange={(v) => setAmount(v)}
                 />
@@ -144,7 +102,7 @@ export default memo<{
                 </Grid>
                 <Grid xs={12} sm={6}>
                   <TokenAmountDisplay
-                    amount={marPoint}
+                    amount={pool.points.find(e => e.symbol == 'MAR')?.pointsPerDay || 0}
                     amountChange={!amount ? 0 : estimateData?.pointsInfo.find(e => e.symbol == 'MAR')?.changeInPointsPerDay}
                     name="Mar points"
                     icon={IconMarPoint}
@@ -153,7 +111,7 @@ export default memo<{
                 <Grid xs={12} sm={6}>
                   {/* <Typography level="title-sm">&nbsp;</Typography> */}
                   <TokenAmountDisplay
-                    amount={puppyPoint}
+                    amount={pool.points.find(e => e.symbol == 'PUPPY')?.pointsPerDay || 0}
                     amountChange={!amount ? 0 : estimateData?.pointsInfo.find(e => e.symbol == 'PUPPY')?.changeInPointsPerDay}
                     name="Puppy points"
                     icon={IconMarPoint}
@@ -165,15 +123,11 @@ export default memo<{
                     Total Value Staked
                   </Typography>
                   <TokenAmountDisplay
-                    amount={totalValue}
+                    amount={pool.tvl}
                     amountChange={-(amount || 0)}
                     showChange={false}
-                    symbol={symbol}
-                    name={`$${(totalValue * ({
-                      WBTC: 63217, 
-                      USDT: 1.1,
-                      USDC: 1.02
-                    }[symbol] || 1)).toLocaleString()}`}
+                    symbol={pool.assetSymbol}
+                    name={`$${pool.tvl * pool.usdRate}`}
                     icon={IconTotalValueStake}
                   />
                 </Grid>
@@ -182,15 +136,11 @@ export default memo<{
                     My Staked
                   </Typography>
                   <TokenAmountDisplay
-                    amount={stakeAmount}
+                    amount={pool.depositedAmount}
                     amountChange={-(amount || 0)}
                     showChange={false}
-                    symbol={symbol}
-                    name={`$${(stakeAmount * ({
-                      WBTC: 63217, 
-                      USDT: 1.1,
-                      USDC: 1.02
-                    }[symbol] || 1)).toLocaleString()}`}
+                    symbol={pool.assetSymbol}
+                    name={`$${pool.depositedAmount * pool.usdRate}`}
                     icon={IconMyStake}
                   />
                 </Grid>
@@ -215,7 +165,7 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                disabled={amount == 0 || amount > balance || isPending}
+                disabled={amount == 0 || amount > pool.depositedAmount || isPending}
                 onClick={() => onWithdraw && onWithdraw(amount)}
                 loading={isPending}
               >
@@ -229,7 +179,7 @@ export default memo<{
               <Stack alignItems={"center"} paddingTop={5} paddingBottom={5}>
                 <AvatarGroup>
                   <Avatar src={ImageLogoBlueCircle} />
-                  <Avatar src={TokenToIcon[symbol]} />
+                  <Avatar src={TokenToIcon[pool.assetSymbol]} />
                 </AvatarGroup>
                 <Typography
                   fontSize={32}
@@ -246,9 +196,9 @@ export default memo<{
               </Typography>
               <TokenAmountDisplay
                 amount={amount}
-                symbol={symbol}
+                symbol={pool.assetSymbol}
                 name={`$${formatNumber(amount)}`}
-                icon={TokenToIcon[symbol]}
+                icon={TokenToIcon[pool.assetSymbol]}
               />
 
               <Button

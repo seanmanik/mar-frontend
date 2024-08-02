@@ -12,14 +12,6 @@ export default memo<{
   icon?: string;
 }>(({ amount, name, icon, symbol, amountChange = 0, showChange = true }) => {
   return (
-    // <ValueDisplay
-    //   text={`${formatNumber(amount)} ${symbol ? ` ${symbol}` : ""}`}
-    //   smallText={amountChange > 0 ? `+${amountChange.toLocaleString()}` : amountChange < 0 ? amountChange.toLocaleString() : ''}
-    //   smallTextColor={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}
-    //   type={amountChange < 0 ? '#FFE8EF' : amountChange > 0 ? '#EEFFE7' : 'secondary'}
-    //   name={name}
-    //   icon={icon}
-    // />
     <Stack sx={{
         background: amountChange < 0 ? '#FFE8EF' : amountChange > 0 ? '#EEFFE7' : '#F5F5F5',
         padding: 1,

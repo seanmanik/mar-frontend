@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
 import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
@@ -6,7 +6,6 @@ import TokenAmountDisplay from "../TokenAmountDisplay";
 import {
   IconMarPoint,
   IconMyStake,
-  IconPending,
   IconTotalValueStake,
 } from "../../icons";
 import { Bolt } from "@mui/icons-material";
@@ -16,11 +15,8 @@ import Button from "../Button";
 import { useApprove } from "../../apis/interactWallet/EVM/useApprove";
 import { useDeposit } from "../../apis/interactWallet/EVM/useDeposit";
 import { formatNumber } from "../../utils/numbers";
-import { onHandlePostDepositRequest } from "../../apis/deposit";
-import { useAccount } from "wagmi";
-import { IEstimateInput, IEstimateOutput } from "../../apis/estimateRewardByInput/types";
-import { onHandlePostEstimateRewardRequest } from "../../apis/estimateRewardByInput";
-import { AppContext } from "../../context/AppContext";
+import { IEstimateOutput } from "../../apis/estimateRewardByInput/types";
+import { depositRequest } from "../../apis/estimateRewardByInput";
 import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../../constants/contract";
 import { useRecoilValue } from "recoil";
 import { AuthTokenState } from "../../state/AuthTokenState";
@@ -114,7 +110,7 @@ export default memo<{
       (async () => {
         if (!amount) return
 
-        var response = await onHandlePostEstimateRewardRequest(userToken, {
+        var response = await depositRequest(userToken, {
           quantity: amount,
           tokenPoolID: parseInt(poolId.toString())
         })

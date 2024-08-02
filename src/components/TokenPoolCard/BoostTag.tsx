@@ -13,7 +13,7 @@ const BootsTag = () => {
       paddingX={"6px"}
       paddingY={"2px"}
     >
-      <img src={IconCoin} width={12} height={12} />
+      {/* <img src={IconCoin} width={12} height={12} /> */}
       <Typography fontWeight={700} fontSize={12} textColor="#ffffff">
         1X MAR
       </Typography>

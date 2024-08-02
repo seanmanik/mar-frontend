@@ -1,12 +1,10 @@
 import { Box, Stack, Typography } from "@mui/joy";
+import { useRecoilState } from "recoil";
+import { SelectPoolFilter } from "../../state/SelectPoolFilter";
+import { memo } from "react";
 
-const PoolsSelection = ({
-  poolSelected,
-  setPoolSelected,
-}: {
-  poolSelected: string;
-  setPoolSelected: (_: string) => void;
-}) => {
+export default memo(() => {
+  const [poolSelected, setPoolSelected] = useRecoilState(SelectPoolFilter)
   return (
     <Stack
       direction={{
@@ -116,6 +114,4 @@ const PoolsSelection = ({
       </Stack>
     </Stack>
   );
-};
-
-export default PoolsSelection;
+})

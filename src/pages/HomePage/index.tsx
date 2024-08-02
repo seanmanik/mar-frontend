@@ -5,14 +5,11 @@ import PoolsSelection from "../../components/PoolsSelection";
 import { useAccount } from "wagmi";
 import { useRecoilValueLoadable } from "recoil";
 import { PoolsState, useAutoRefreshPoolsState } from "../../state/PoolsState";
-import { IPoolDetail } from "../../apis/getPools/types";
 import Summary from "./Summary";
 import OtherPools from "./OtherPools";
 import MyPools from "./MyPools";
 
 const HomePage = () => {
-  const [poolSelected, setPoolSelected] = useState("all");
-
   const account = useAccount();
 
   const isConnectWallet = useMemo(() => {
@@ -20,9 +17,8 @@ const HomePage = () => {
   }, [account]);
 
   const poolsLoadable = useRecoilValueLoadable(PoolsState)
-  const isHasPoolsData = poolsLoadable.state == 'hasValue'
   
-  useAutoRefreshPoolsState()
+  // useAutoRefreshPoolsState()
 
   return (
     <Box maxWidth={1420} paddingLeft={"20px"} paddingRight={"20px"} paddingBottom={"84px"} paddingTop={"44px"} margin={"auto"}>
@@ -34,10 +30,7 @@ const HomePage = () => {
 
       <Summary />
 
-      <PoolsSelection
-        poolSelected={poolSelected}
-        setPoolSelected={setPoolSelected}
-      />
+      <PoolsSelection/>
 
       {poolsLoadable.state == 'loading'
         ? (

@@ -49,13 +49,13 @@ export default memo(() => {
           }}
           gap={2}
         >
-          <Button
+          {/* <Button
             variant="outlined"
             color="neutral"
             endDecorator={<GroupAdd fontSize="small" />}
           >
             Get 123 Points
-          </Button>
+          </Button> */}
           <SelectNetwork/>
           <WalletButton
             onClick={() => setOpenModalUserAgreement(true)}
@@ -87,14 +87,14 @@ export default memo(() => {
                 gap={2}
               >
                 <img src={ImageLogoFullBlue} width={140} />
-                <Button
+                {/* <Button
                   variant="outlined"
                   color="neutral"
                   endDecorator={<GroupAdd fontSize="small" />}
                   fullWidth
                 >
                   Get 123 Points
-                </Button>
+                </Button> */}
                 <WalletButton
                   onClick={() => setOpenModalUserAgreement(true)}
                   onInviteFriendsClick={() => setOpenModalInviteFriends(true)}
