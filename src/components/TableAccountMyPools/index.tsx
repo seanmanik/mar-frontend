@@ -1,45 +1,22 @@
 import { Box, Divider, Grid, Typography } from "@mui/joy";
 import { memo } from "react";
 import TokenToIcon from "../../utils/TokenToIcon";
+import { useRecoilValueLoadable } from "recoil";
+import { PoolsState } from "../../state/PoolsState";
+import { IPoolDetail } from "../../apis/getPools/types";
+import { formatNumber } from "../../utils/numbers";
 
 //TODO: 
 export default memo(() => {
-  const data = [
-    {
-      type: "erc20",
-      poolName: "WETH",
-      symbol: "WETH",
-      stakeAmount: 200,
-      stakeValue: 600000,
-      marReward: 200000,
-      puppyReward: 150000,
-      TVL: 250000000,
-    },
-    {
-      type: "erc20",
-      poolName: "WBTC",
-      symbol: "WETH",
-      stakeAmount: 1,
-      stakeValue: 60000,
-      marReward: 100000,
-      puppyReward: 50000,
-      TVL: 999000000,
-    },
-    {
-      type: "erc721",
-      poolName: "Pudgy",
-      symbol: "Pudgy",
-      nftIds: [102],
-      stakeValue: 10000,
-      marReward: 120000,
-      puppyReward: 150000,
-      TVL: 250000000,
-    },
-  ];
+  const poolsLoadable = useRecoilValueLoadable(PoolsState)
+  const isHasPoolsData = poolsLoadable.state == 'hasValue'
+  const pools = isHasPoolsData ? poolsLoadable.contents as IPoolDetail[] : []
+
+  const myPools = pools.filter((pool) => pool.depositedAmount > 0);
   return (
     <Box>
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        <Grid xs={2}>
+        <Grid xs={3}>
           <Typography level="body-sm" textAlign={"center"}>
             Pool
           </Typography>
@@ -54,25 +31,25 @@ export default memo(() => {
             My Rewards
           </Typography>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={3}>
           <Typography level="body-sm" textAlign={"center"}>
             TVL
           </Typography>
         </Grid>
       </Grid>
       <Divider sx={{ marginTop: 1, marginBottom: 1 }} />
-      {data.map((e, i) => (
+      {myPools.map((e, i) => (
         <Box key={i}>
           <Grid container spacing={2} sx={{ flexGrow: 1 }}>
             <Grid
-              xs={2}
+              xs={3}
               display={"flex"}
               flexDirection={"row"}
               alignItems={"center"}
               justifyContent={"center"}
             >
               <img
-                src={TokenToIcon[e.poolName]}
+                src={TokenToIcon[e.assetSymbol]}
                 width={16}
                 style={{ marginRight: 5 }}
               />
@@ -81,7 +58,7 @@ export default memo(() => {
                 level="title-sm"
                 textAlign={"center"}
               >
-                {e.poolName}
+                {e.assetName}
               </Typography>
             </Grid>
             <Grid
@@ -96,9 +73,9 @@ export default memo(() => {
                 level="title-sm"
                 textAlign={"center"}
               >
-                {e.type == "erc20"
-                  ? `${e.stakeAmount?.toLocaleString()} ${e.symbol}`
-                  : `${e.symbol} ${e.nftIds?.map((v) => `#${v}`).join(", ")}`}
+                {e.depositedAmount > 0
+                  ? `${e.depositedAmount?.toLocaleString()} ${e.assetSymbol}`
+                  : `${e.assetSymbol} ${((e as any).nftIds || []).map((v: any) => `#${v}`).join(", ")}`}
               </Typography>
               <Typography
                 fontWeight={700}
@@ -106,11 +83,29 @@ export default memo(() => {
                 color="neutral"
                 textAlign={"center"}
               >
-                ${e.stakeValue.toLocaleString()}
+                ${formatNumber(e.depositedAmount * e.usdRate * 1)}
               </Typography>
             </Grid>
             <Grid
               xs={4}
+              display={"flex"}
+              flexDirection={"column"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              {(e.points || []).map(e => (
+                <Typography
+                    key={e.name}
+                    fontWeight={700}
+                    level="title-sm"
+                    textAlign={"center"}
+                  >
+                    {e.points.toLocaleString()} {e.symbol}
+                  </Typography>
+                ))}
+            </Grid>
+            <Grid
+              xs={3}
               display={"flex"}
               flexDirection={"column"}
               alignItems={"center"}
@@ -121,33 +116,11 @@ export default memo(() => {
                 level="title-sm"
                 textAlign={"center"}
               >
-                {e.marReward.toLocaleString()} MAR
-              </Typography>
-              <Typography
-                fontWeight={700}
-                level="title-sm"
-                textAlign={"center"}
-              >
-                {e.puppyReward.toLocaleString()} PUPPY
-              </Typography>
-            </Grid>
-            <Grid
-              xs={4}
-              display={"flex"}
-              flexDirection={"column"}
-              alignItems={"center"}
-              justifyContent={"center"}
-            >
-              <Typography
-                fontWeight={700}
-                level="title-sm"
-                textAlign={"center"}
-              >
-                ${e.TVL.toLocaleString()}
+                ${formatNumber(e.tvl * e.usdRate * 1)}
               </Typography>
             </Grid>
           </Grid>
-          {i < data.length - 1 && (
+          {i < pools.length - 1 && (
             <Divider sx={{ marginTop: 1, marginBottom: 1 }} />
           )}
         </Box>

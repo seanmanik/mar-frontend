@@ -143,7 +143,7 @@ export default memo<{
                     amount={pool.tvl}
                     showChange={false}
                     symbol={pool.assetSymbol}
-                    name={`$${pool.tvl * pool.usdRate}`}
+                    name={`$${formatNumber(pool.tvl * pool.usdRate)}`}
                     icon={IconTotalValueStake}
                   />
                 </Grid>
@@ -156,7 +156,7 @@ export default memo<{
                     amount={pool.depositedAmount}
                     showChange={false}
                     symbol={pool.assetSymbol}
-                    name={`$${pool.depositedAmount * pool.usdRate}`}
+                    name={`$${formatNumber(pool.depositedAmount * pool.usdRate)}`}
                     icon={IconMyStake}
                   />
                 </Grid>

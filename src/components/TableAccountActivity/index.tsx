@@ -48,6 +48,7 @@ export default memo(() => {
 
   return (
     <Box>
+      <Typography textAlign={"center"} level="title-sm" fontWeight={600} color="danger" marginBottom={3}>(Sample data)</Typography>
       {data.map((e, i) => (
         <Box key={i}>
           {i == 0 ? (

@@ -12,7 +12,8 @@ import {
 } from "@mui/joy";
 import { useAccount } from "wagmi";
 import { BorderColor, ContentCopy } from "@mui/icons-material";
-import TableAccountSummary from "../TableAccountSummary";
+import TableAccountMyPools from "../TableAccountMyPools";
+import TableAccountMyPoints from "../TableAccountMyPoints";
 import TableAccountActivity from "../TableAccountActivity";
 
 export default memo<{
@@ -78,7 +79,10 @@ export default memo<{
             }}
           >
             <Tab indicatorInset sx={{ width: 120 }}>
-              Summary
+              My Points
+            </Tab>
+            <Tab indicatorInset sx={{ width: 120 }}>
+              My Pools
             </Tab>
             <Tab indicatorInset sx={{ width: 120 }}>
               Activity
@@ -94,10 +98,15 @@ export default memo<{
           >
             <TabPanel value={0} sx={{ padding: 0 }}>
               <Box marginTop={3} height={350}>
-                <TableAccountSummary />
+                <TableAccountMyPoints />
               </Box>
             </TabPanel>
             <TabPanel value={1} sx={{ padding: 0 }}>
+              <Box marginTop={3} height={350}>
+                <TableAccountMyPools />
+              </Box>
+            </TabPanel>
+            <TabPanel value={2} sx={{ padding: 0 }}>
               <Box marginTop={3} height={350}>
                 <TableAccountActivity />
               </Box>
