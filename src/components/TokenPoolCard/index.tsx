@@ -14,8 +14,7 @@ import ModalWithdrawToken from "../ModalWithdrawToken";
 import ModalDepositToken from "../ModalDepositToken";
 import { get } from "lodash";
 import {
-  formatNumber,
-  formatNumber1
+  formatNumber
 } from "../../utils/numbers";
 import { AppContext } from "../../context/AppContext";
 import { IPoolDetail } from "../../apis/getPools/types";
