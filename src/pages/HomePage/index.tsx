@@ -18,7 +18,7 @@ const HomePage = () => {
 
   const poolsLoadable = useRecoilValueLoadable(PoolsState)
   
-  // useAutoRefreshPoolsState()
+  useAutoRefreshPoolsState()
 
   return (
     <Box maxWidth={1420} paddingLeft={"20px"} paddingRight={"20px"} paddingBottom={"84px"} paddingTop={"44px"} margin={"auto"}>

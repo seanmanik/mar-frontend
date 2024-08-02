@@ -181,8 +181,7 @@ const TokenPoolCard = ({pool}: {
         onClose={() => setOpenModalDeposit(false)}
         tokenBalanceAmout={accountBalance}
         allowanceAmount={accountAllowanceBalance}
-        refetchAllowance={refetch}
-        isLoadingBalance={false}
+        pool={pool}
       />
     </Card>
   );

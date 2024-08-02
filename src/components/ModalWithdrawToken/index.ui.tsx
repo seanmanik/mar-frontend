@@ -123,8 +123,8 @@ export default memo<{
                     Total Value Staked
                   </Typography>
                   <TokenAmountDisplay
-                    amount={pool.tvl}
                     amountChange={-(amount || 0)}
+                    amount={pool.tvl}
                     showChange={false}
                     symbol={pool.assetSymbol}
                     name={`$${pool.tvl * pool.usdRate}`}
@@ -136,8 +136,8 @@ export default memo<{
                     My Staked
                   </Typography>
                   <TokenAmountDisplay
-                    amount={pool.depositedAmount}
                     amountChange={-(amount || 0)}
+                    amount={pool.depositedAmount}
                     showChange={false}
                     symbol={pool.assetSymbol}
                     name={`$${pool.depositedAmount * pool.usdRate}`}
