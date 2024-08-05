@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
-import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
+import { Alert, Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
 import {
@@ -21,6 +21,7 @@ import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI, TOKEN_DECIMALS } from "../../con
 import { useRecoilValue } from "recoil";
 import { AuthTokenState } from "../../state/AuthTokenState";
 import { IPoolDetail } from "../../apis/getPools/types";
+import { useIsCorrectNetwork } from "../../hooks/useIsCorrectNetwork";
 
 export default memo<{
   open: boolean;
@@ -40,6 +41,8 @@ export default memo<{
     const userToken = useRecoilValue(AuthTokenState)
     const [amount, setAmount] = useState(0);
     const [estimateData, setEstimateData] = useState<IEstimateOutput>();
+
+    const checkNetwork = useIsCorrectNetwork()
 
     const { isPending, isConfirmed, onApprove } = useApprove({
       contractAddress: pool.tokenAddress,
@@ -197,7 +200,7 @@ export default memo<{
                   justifyContentChild="center"
                   endDecorator={<Bolt />}
                   fullWidth
-                  disabled={amount == 0 || amount > balance || isPendingDeposit}
+                  disabled={amount == 0 || amount > balance || isPendingDeposit || !checkNetwork.isCorrect}
                   onClick={() => onDeposit && onDeposit(amount)}
                   loading={isPendingDeposit}
                 >
@@ -206,6 +209,8 @@ export default memo<{
               )}
             </>
           )}
+
+          {!checkNetwork.isCorrect && <Alert sx={{marginTop: 1}} color="danger"><b>WRONG NETWORK</b>We only support {checkNetwork.supportedNetworks.map(e => e.name.toUpperCase()).join(', ')}</Alert>}
 
           {depositedSuccess && (
             <>

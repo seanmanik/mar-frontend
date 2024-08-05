@@ -15,7 +15,7 @@ import { sepolia } from "viem/chains";
 
 export default memo<{
   open: boolean;
-  onClose: () => void;
+  onClose: (e: any, r: string) => void;
 }>(({ ...modalProps }) => {
   const { chains, switchChain } = useSwitchChain();
 
@@ -27,7 +27,7 @@ export default memo<{
   }
 
   return (
-    <Modal {...modalProps}>
+    <Modal {...modalProps} disableEnforceFocus={true}>
       <ModalDialog
         variant={"outlined"}
         size="sm"

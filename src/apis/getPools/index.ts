@@ -11,11 +11,7 @@ export const getPoolsRequest = async ({token,}: {
   });
 
   (response.data as IPoolDetail[]).forEach(e => {
-    e.usdRate = {
-        WBTC: 63217,
-        USDT: 1.1,
-        USDC: 1.02
-    }[e.assetSymbol] || 1
+    e.usdRate = e.tokenPrice
 })
 
   return response.data;

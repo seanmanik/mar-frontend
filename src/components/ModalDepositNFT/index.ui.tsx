@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import ModalBlue from "../ModalBlue";
-import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
+import { Alert, Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import TokenAmountDisplay from "../TokenAmountDisplay";
 import {
   IconMarPoint,
@@ -14,6 +14,7 @@ import NFTDisplay from "../NFTDisplay";
 import InputNFT from "../InputNFT";
 import ValueDisplay from "../ValueDisplay";
 import Button from "../Button";
+import { useIsCorrectNetwork } from "../../hooks/useIsCorrectNetwork";
 
 export default memo<{
   open: boolean;
@@ -49,6 +50,8 @@ export default memo<{
     onDeposit,
   }) => {
     const [value, setValue] = useState<number[]>([]);
+
+    const checkNetwork = useIsCorrectNetwork()
     return (
       <ModalBlue
         open={open}
@@ -139,13 +142,15 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<Bolt />}
                 fullWidth
-                disabled={value.length == 0}
+                disabled={value.length == 0 || !checkNetwork.isCorrect}
                 onClick={() => onDeposit && onDeposit(value)}
               >
                 Deposit
               </Button>
             </>
           )}
+
+          {!checkNetwork.isCorrect && <Alert sx={{marginTop: 1}} color="danger"><b>WRONG NETWORK</b>We only support {checkNetwork.supportedNetworks.map(e => e.name.toUpperCase()).join(', ')}</Alert>}
 
           {isSuccess && (
             <>

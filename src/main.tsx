@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import { WagmiProvider, deserialize, serialize } from "wagmi";
 
 import App from "./App.tsx";
-import { config } from "./wagmi.ts";
+import { wagmiConfig } from "./wagmi.ts";
 
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
@@ -66,7 +66,7 @@ const theme = extendTheme({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RecoilRoot>
-      <WagmiProvider config={config}>
+      <WagmiProvider config={wagmiConfig}>
         <PersistQueryClientProvider
           client={queryClient}
           persistOptions={{ persister }}

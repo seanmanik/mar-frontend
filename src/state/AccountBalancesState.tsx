@@ -1,6 +1,6 @@
 import { atom, atomFamily, selector, selectorFamily, useRecoilState, useRecoilValueLoadable } from "recoil";
 import { multicall } from "@wagmi/core";
-import { config } from "../wagmi";
+import { wagmiConfig } from "../wagmi";
 import { PoolsState } from "./PoolsState";
 import { ERC20_CONTRACT_ABI, POOL_CONTRACT_ABI, TOKEN_DECIMALS } from "../constants/contract";
 import { useEffect } from "react";
@@ -28,7 +28,7 @@ export function useAccountBalanceStateUpdate({ ethAddress }: {
         (async () => {
             if (pools.length == 0) return []
             console.log('update AccountBalanceState')
-            const res = await multicall(config, {
+            const res = await multicall(wagmiConfig, {
                 contracts: [...pools.map(e => {
                     return {
                         abi: ERC20_CONTRACT_ABI,
@@ -62,15 +62,13 @@ export function useAccountBalanceStateUpdate({ ethAddress }: {
                     amount: amount,
                     amount10:
                         parseFloat((BigInt(amount.toString()) /
-                            BigInt(
-                                10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
+                            BigInt(10 ** pools[i].decimals)
                         ).toString()),
 
                     allowanceAmount: allowance,
                     allowanceAmount10:
                         parseFloat((BigInt(allowance.toString()) /
-                            BigInt(
-                                10 ** TOKEN_DECIMALS[pools[i].tokenAddress.toLowerCase()])
+                            BigInt(10 ** pools[i].decimals)
                         ).toString()),
                     poolId: pools[i].tokenPoolID
                 };

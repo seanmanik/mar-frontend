@@ -56,7 +56,7 @@ export default memo(() => {
           >
             Get 123 Points
           </Button> */}
-          <SelectNetwork/>
+          {/* <SelectNetwork/> */}
           <WalletButton
             onClick={() => setOpenModalUserAgreement(true)}
             onInviteFriendsClick={() => setOpenModalInviteFriends(true)}

@@ -2,6 +2,7 @@ export interface IPoolDetail {
   tokenPoolID: number
   contractAddress: string
   tokenAddress: string
+  decimals: number
   blockchain: string
   assetName: string
   assetSymbol: string
@@ -11,6 +12,7 @@ export interface IPoolDetail {
   depositedAmount: number
   depositedValue: number
   usdRate: number
+  tokenPrice: number
   points: {
     name: string
     symbol: string

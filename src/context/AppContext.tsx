@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { sepolia } from "viem/chains";
-import { useChainId } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import ModalSwitchNetwork from "../components/ModalSwitchNetwork";
 import ModalUserAgreement from "../components/ModalUserAgreement";
 import ModalConnectWallet from "../components/ModalConnectWallet";
@@ -25,17 +25,19 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [openModalInviteFriends, setOpenModalInviteFriends] = useState(false);
   const [openModalAccountDetails, setOpenModalAccountDetails] = useState(false);
 
-  const chainId = useChainId();
+  const acc = useAccount()
   const [openModalSwitchNetwork, setOpenModalSwitchNetwork] = useState(false);
 
-  useEffect(() => {
-    if (chainId !== sepolia.id) {
-      console.log("wrong network!");
-      setOpenModalSwitchNetwork(true);
-    } else {
-      setOpenModalSwitchNetwork(false);
-    }
-  }, [chainId]);
+  // useEffect(() => {
+  //   if (acc) {
+  //     if (acc.isConnected && acc.chainId != sepolia.id) {
+  //       console.log("wrong network!");
+  //       setOpenModalSwitchNetwork(true);
+  //     } else {
+  //       setOpenModalSwitchNetwork(false);
+  //     }
+  //   }
+  // }, [acc, acc.chainId]);
 
   return (
     <AppContext.Provider
@@ -48,7 +50,9 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       {children}
       <ModalSwitchNetwork
         open={openModalSwitchNetwork}
-        onClose={() => setOpenModalSwitchNetwork(false)}
+        onClose={(e: any, r: string) => {
+          setOpenModalSwitchNetwork(false)
+        }}
       />
 
       <ModalUserAgreement

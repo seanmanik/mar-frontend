@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
 import ModalBlue from "../ModalBlue";
-import { Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
+import { Alert, Avatar, AvatarGroup, Box, Grid, Stack, Typography } from "@mui/joy";
 import InputAmount from "../InputAmount";
 import TokenAmountDisplay from "../TokenAmountDisplay";
 import {
@@ -21,6 +21,7 @@ import { POOL_CONTRACT_ABI, TOKEN_DECIMALS } from "../../constants/contract";
 import { useRecoilValue } from "recoil";
 import { AuthTokenState } from "../../state/AuthTokenState";
 import { IPoolDetail } from "../../apis/getPools/types";
+import { useIsCorrectNetwork } from "../../hooks/useIsCorrectNetwork";
 
 export default memo<{
   open: boolean;
@@ -34,6 +35,8 @@ export default memo<{
   }) => {
     const [estimateData, setEstimateData] = useState<IEstimateOutput>();
     const userToken = useRecoilValue(AuthTokenState)
+
+    const checkNetwork = useIsCorrectNetwork()
 
     const account = useAccount();
 
@@ -165,7 +168,7 @@ export default memo<{
                 justifyContentChild="center"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                disabled={amount == 0 || amount > pool.depositedAmount || isPending}
+                disabled={amount == 0 || amount > pool.depositedAmount || isPending || !checkNetwork.isCorrect}
                 onClick={() => onWithdraw && onWithdraw(amount)}
                 loading={isPending}
               >
@@ -173,6 +176,8 @@ export default memo<{
               </Button>
             </>
           )}
+
+          {!checkNetwork.isCorrect && <Alert sx={{marginTop: 1}} color="danger"><b>WRONG NETWORK</b>We only support {checkNetwork.supportedNetworks.map(e => e.name.toUpperCase()).join(', ')}</Alert>}
 
           {onSuccess && (
             <>
