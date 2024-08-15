@@ -179,7 +179,7 @@ export default memo<{
                   />
                 </Grid> */}
               </Grid>
-              {amount > allowanceAmount ? (
+              {amount > allowanceAmount && !isPendingDeposit ? (
                 <Button
                   sx={{
                     marginTop: 5,
