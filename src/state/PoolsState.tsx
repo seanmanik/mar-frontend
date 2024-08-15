@@ -10,14 +10,15 @@ import { useAccount } from "wagmi";
 
 export const PoolsState = atom<IPoolDetail[]>({
     key: 'PoolsState',
-    default: selector({
-        key: 'PoolsState/Default',
-        get: async ({ get }) => {
-            console.log('PoolsState/Default')
-            const token = get(AuthTokenState)
-            return await getPoolsRequest({token})
-        }
-    })
+    default: []
+    // default: selector({
+    //     key: 'PoolsState/Default',
+    //     get: async ({ get }) => {
+    //         console.log('PoolsState/Default')
+    //         const token = get(AuthTokenState)
+    //         return await getPoolsRequest({token})
+    //     }
+    // })
 })
 
 export function useFirstFetchPoolsState() {
@@ -25,7 +26,6 @@ export function useFirstFetchPoolsState() {
     const account = useAccount();
     const setPoolsState = useSetRecoilState(PoolsState)
     useEffect(() => {
-        if (!(token && (account || {}).address)) return;
         (async () => {
             const pools = await getPoolsRequest({token})
     
@@ -72,7 +72,7 @@ export function useFirstFetchPoolsState() {
             })
         
             setPoolsState(pools)
-        })
+        })()
     }, [token, (account || {}).address])
 }
 
@@ -83,7 +83,6 @@ export function useAutoPoolsStateIntervalRefresh() {
     useEffect(() => {
         if (!token) return
         const id = setInterval(async () => {
-            console.log(account.address)
             const pools = await getPoolsRequest({token})
 
             if (pools.length == 0) return []
@@ -107,11 +106,6 @@ export function useAutoPoolsStateIntervalRefresh() {
             pools.forEach((e, i) => {
                 let resTVL = res[i]
                 let resStaked = res[i + pools.length]
-
-                console.log({
-                    resTVL,
-                    resStaked
-                })
 
                 if (resTVL.status == "success") {
                     e.tvl = parseFloat((BigInt((resTVL.result as BigInt).toString()) /
