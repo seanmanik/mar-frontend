@@ -22,6 +22,7 @@ import { useRecoilValue } from "recoil";
 import { AuthTokenState } from "../../state/AuthTokenState";
 import { IPoolDetail } from "../../apis/getPools/types";
 import { useIsCorrectNetwork } from "../../hooks/useIsCorrectNetwork";
+import { toast } from "react-toastify";
 
 export default memo<{
   open: boolean;
@@ -52,6 +53,7 @@ export default memo<{
     useEffect(() => {
       if (!isPending && isConfirmed) {
         setOnSuccess(true);
+        toast.success("Withdrawal successful.");
         // onClose && onClose();
       } else if (!isPending && !isConfirmed) {
         setOnSuccess(false);

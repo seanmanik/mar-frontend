@@ -22,6 +22,7 @@ import { useRecoilValue } from "recoil";
 import { AuthTokenState } from "../../state/AuthTokenState";
 import { IPoolDetail } from "../../apis/getPools/types";
 import { useIsCorrectNetwork } from "../../hooks/useIsCorrectNetwork";
+import { toast } from "react-toastify";
 
 export default memo<{
   open: boolean;
@@ -44,7 +45,7 @@ export default memo<{
 
     const checkNetwork = useIsCorrectNetwork()
 
-    const { isPending, isConfirmed, onApprove } = useApprove({
+    const { isPending: isPendingApprove, isConfirmed: isConfirmedApprove, onApprove } = useApprove({
       contractAddress: pool.tokenAddress,
       decimals: TOKEN_DECIMALS[pool.tokenAddress] || 18,
       spenderAddress: pool.contractAddress,
@@ -63,13 +64,15 @@ export default memo<{
     });
 
     useEffect(() => {
-      if (isConfirmedDeposit) {
+      if (isConfirmedApprove) {
+        toast.success("Approval successful")
       }
-    }, [isConfirmedDeposit]);
+    }, [isConfirmedApprove]);
 
     useEffect(() => {
       if (!isPendingDeposit && isConfirmedDeposit) {
         setDepositedSuccess(true);
+        toast.success("Deposit successful");
       } else if (!isPendingDeposit && !isConfirmedDeposit) {
         setDepositedSuccess(false);
       }
@@ -186,8 +189,8 @@ export default memo<{
                   endDecorator={<Bolt />}
                   fullWidth
                   onClick={() => onApprove && onApprove(amount)}
-                  loading={isPending}
-                  disabled={isPending}
+                  loading={isPendingApprove}
+                  disabled={isPendingApprove}
                 >
                   Approve
                 </Button>

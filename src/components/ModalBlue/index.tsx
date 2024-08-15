@@ -18,9 +18,13 @@ export default memo<
     header?: React.ReactElement;
     headerChildren?: React.ReactElement;
   }
->(({ title, header, headerChildren, children, ...modalProps }) => {
+>(({ title, header, headerChildren, children, onClose, ...modalProps }) => {
   return (
-    <Modal {...modalProps}>
+    <Modal {...modalProps} onClose={(event, reason) => {
+      if (reason !== 'backdropClick') {
+        onClose && onClose(event, reason);
+      }
+    }}>
       <ModalDialog
         variant={"outlined"}
         size="sm"

@@ -4,7 +4,7 @@ import AccountLevel from "../../components/AccountLevel";
 import PoolsSelection from "../../components/PoolsSelection";
 import { useAccount } from "wagmi";
 import { useRecoilValueLoadable } from "recoil";
-import { PoolsState, useAutoPoolsStateIntervalRefresh } from "../../state/PoolsState";
+import { PoolsState, useAutoPoolsStateIntervalRefresh, useFirstFetchPoolsState } from "../../state/PoolsState";
 import Summary from "./Summary";
 import OtherPools from "./OtherPools";
 import MyPools from "./MyPools";
@@ -19,6 +19,7 @@ const HomePage = () => {
 
   const poolsLoadable = useRecoilValueLoadable(PoolsState)
   
+  useFirstFetchPoolsState()
   useAutoPoolsStateIntervalRefresh()
   useAccountBalanceStateUpdate({ethAddress: account.address?.toString() || ''})
 
