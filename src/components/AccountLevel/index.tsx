@@ -3,9 +3,14 @@ import { Box, Stack, Tooltip, Typography } from "@mui/joy";
 import { memo, useState } from "react";
 import ModalHowToLevelUp from "../ModalHowToLevelUp";
 import Button from "../Button";
+import { useRecoilValue } from "recoil";
+import { UserInfoState } from "../../state/UserInfoState";
+import { useAccount } from "wagmi";
 
 export default memo(() => {
   const [openModalHowToLevelUp, setOpenModalHowToLevelUp] = useState(false);
+  const userInfo = useRecoilValue(UserInfoState)
+  const wallet = useAccount()
   return (
     <Box
       sx={{
@@ -31,7 +36,7 @@ export default memo(() => {
             color="neutral"
             fontWeight={"700"}
           >
-            DBM.sol
+            {`${wallet?.address?.slice(0, 6)}...${wallet?.address?.slice(-5)}`}
           </Typography>
           <Tooltip
             title={
@@ -60,7 +65,7 @@ export default memo(() => {
                 textAlign: "left",
               }}
             >
-              Level 1 <span style={{ color: "gray" }}>- 30% Booster</span>
+              Level {userInfo.level} <span style={{ color: "gray" }}>- {userInfo.boostPercentage || 0}% Booster</span>
             </Typography>
           </Tooltip>
         </Box>

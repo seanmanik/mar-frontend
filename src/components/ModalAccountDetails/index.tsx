@@ -97,17 +97,17 @@ export default memo<{
             })}
           >
             <TabPanel value={0} sx={{ padding: 0 }}>
-              <Box marginTop={3} height={350}>
+              <Box marginTop={3} height={350} sx={{overflowY: 'auto', overflowX: 'hidden'}}>
                 <TableAccountMyPoints />
               </Box>
             </TabPanel>
             <TabPanel value={1} sx={{ padding: 0 }}>
-              <Box marginTop={3} height={350}>
+              <Box marginTop={3} height={350} sx={{overflowY: 'auto', overflowX: 'hidden'}}>
                 <TableAccountMyPools />
               </Box>
             </TabPanel>
             <TabPanel value={2} sx={{ padding: 0 }}>
-              <Box marginTop={3} height={350}>
+              <Box marginTop={3} height={350} sx={{overflowY: 'auto', overflowX: 'hidden'}}>
                 <TableAccountActivity />
               </Box>
             </TabPanel>

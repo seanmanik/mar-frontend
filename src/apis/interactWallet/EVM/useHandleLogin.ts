@@ -7,6 +7,7 @@ import { loginRequest } from "../../login";
 import { Address } from "viem";
 import { useSetRecoilState } from "recoil";
 import { AuthTokenState } from "../../../state/AuthTokenState";
+import { UserInfoState } from "../../../state/UserInfoState";
 
 export const useHandleLogin = ({
   actionCallBack,
@@ -17,6 +18,7 @@ export const useHandleLogin = ({
   const { signMessageAsync } = useSignMessage();
   const { onHandleLogout } = useHandleLogout();
   const setAuthTokenState = useSetRecoilState(AuthTokenState)
+  const setUserInfoState = useSetRecoilState(UserInfoState)
 
   const onHandleLogin = useCallback(async () => {
     if (!getItem(`${account.address}_signature`) && account.address) {
@@ -33,7 +35,11 @@ export const useHandleLogin = ({
           BlockchainType: configurations.EVM_BLOCKCHAIN_TYPE,
           Message: configurations.MESSAGE_LOGIN,
         });
-        setAuthTokenState(result);
+        setAuthTokenState(result.token);
+        setUserInfoState({
+          level: result.level,
+          boostPercentage: result.boostPercentage
+        })
 
         actionCallBack && actionCallBack();
       } catch (ex) {
@@ -54,9 +60,17 @@ export const useHandleLogin = ({
           Message: configurations.MESSAGE_LOGIN,
         });
 
-        setAuthTokenState(result);
+        setAuthTokenState(result.token);
+        setUserInfoState({
+          level: result.level,
+          boostPercentage: result.boostPercentage
+        })
       } catch (error) {
         setAuthTokenState("");
+        setUserInfoState({
+          level: 0,
+          boostPercentage: 0
+        })
       }
     };
 

@@ -1,64 +1,39 @@
 import { Box, Divider, Stack, Typography } from "@mui/joy";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   KeyboardDoubleArrowDown,
   KeyboardDoubleArrowUp,
 } from "@mui/icons-material";
 import TokenToIcon from "../../utils/TokenToIcon";
+import { useRecoilValue } from "recoil";
+import { AuthTokenState } from "../../state/AuthTokenState";
+import { getActivitiesRequest, IActivity } from "../../apis/getActivities";
 
 export default memo(() => {
-  const data = [
-    {
-      createdAt: new Date().toISOString(),
-      type: "withdraw",
-      tokenType: "erc20",
-      poolName: "USDT",
-      symbol: "USDT",
-      stakeAmount: 2000,
-      stakeValue: 2000,
-    },
-    {
-      createdAt: new Date().toISOString(),
-      type: "deposit",
-      tokenType: "erc20",
-      poolName: "WETH",
-      symbol: "WETH",
-      stakeAmount: 2000,
-      stakeValue: 2000,
-    },
-    {
-      createdAt: new Date().toISOString(),
-      type: "withdraw",
-      tokenType: "erc20",
-      poolName: "USDT",
-      symbol: "USDT",
-      stakeAmount: 2000,
-      stakeValue: 2000,
-    },
-    {
-      createdAt: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000),
-      type: "withdraw",
-      tokenType: "erc721",
-      poolName: "Pudgy",
-      symbol: "Pudgy",
-      nftIds: [123, 441],
-      stakeValue: 2000,
-    },
-  ];
+  const auth = useRecoilValue(AuthTokenState)
+  const [activities, setActivities] = useState<IActivity[]>([])
+
+  useEffect(() => {
+    (async () => {
+      if (auth) {
+        const v = await getActivitiesRequest({token: auth})
+        setActivities(v)
+      }
+    })()
+  }, [auth])
 
   return (
     <Box>
-      <Typography textAlign={"center"} level="title-sm" fontWeight={600} color="danger" marginBottom={3}>(Sample data)</Typography>
-      {data.map((e, i) => (
+      {activities.map((e, i) => (
         <Box key={i}>
           {i == 0 ? (
             <Typography color="neutral" fontSize={14} marginTop={0}>
-              {new Date(e.createdAt).toLocaleDateString()}
+              {new Date(e.activityDate).toLocaleDateString()}
             </Typography>
-          ) : new Date(e.createdAt).toLocaleDateString() !=
-            new Date(data[i - 1].createdAt).toLocaleDateString() ? (
+          ) : new Date(e.activityDate).toLocaleDateString() !=
+            new Date(activities[i - 1].activityDate).toLocaleDateString() ? (
             <Typography color="neutral" fontSize={14} marginTop={2}>
-              {new Date(e.createdAt).toLocaleDateString()}
+              {new Date(e.activityDate).toLocaleDateString()}
             </Typography>
           ) : (
             <></>
@@ -72,16 +47,16 @@ export default memo(() => {
           >
             <Stack direction={"row"}>
               <img
-                src={TokenToIcon[e.poolName]}
+                src={TokenToIcon[e.assetSymbol]}
                 width={40}
                 style={{ marginRight: 10 }}
               />
               <Box>
                 <Typography level="title-sm" fontWeight={600}>
-                  {e.type == "withdraw" ? "Withdraw funds" : "Deposit funds"}
+                  {e.type == "Withdraw" ? "Withdraw funds" : "Deposit funds"}
                 </Typography>
                 <Typography level="body-sm" color="neutral">
-                  {e.symbol}
+                  {e.assetSymbol}
                 </Typography>
               </Box>
             </Stack>
@@ -89,25 +64,25 @@ export default memo(() => {
               <Box>
                 <Typography level="title-sm" fontWeight={600}>
                   {/* {e.stakeAmount.toLocaleString()} {e.symbol} */}
-                  {e.tokenType == "erc20"
-                    ? `${e.stakeAmount?.toLocaleString()} ${e.symbol}`
-                    : `${e.symbol} ${e.nftIds?.map((v) => `#${v}`).join(", ")}`}
+                  {e.tokenType == "ERC20"
+                    ? `${e.quantity?.toLocaleString()} ${e.assetSymbol}`
+                    : `${e.assetSymbol} ${e.nftIds?.map((v) => `#${v}`).join(", ")}`}
                 </Typography>
                 <Typography level="body-sm" color="neutral" textAlign={"right"}>
-                  {e.type == "withdraw" ? "-" : "+"}$
-                  {e.stakeValue.toLocaleString()}
+                  {e.type == "Withdraw" ? "-" : "+"}$
+                  {(e.quantity * e.tokenPrice).toLocaleString()}
                 </Typography>
               </Box>
-              {e.type == "withdraw" ? (
-                <KeyboardDoubleArrowDown color="error" />
+              {e.type == "Withdraw" ? (
+                <KeyboardDoubleArrowDown sx={{color: 'red'}} />
               ) : (
-                <KeyboardDoubleArrowUp color="success" />
+                <KeyboardDoubleArrowUp sx={{color: 'green'}} />
               )}
             </Stack>
           </Stack>
-          {i < data.length - 1 &&
-            new Date(e.createdAt).toLocaleDateString() ==
-              new Date(data[i + 1].createdAt).toLocaleDateString() && (
+          {i < activities.length - 1 &&
+            new Date(e.activityDate).toLocaleDateString() ==
+              new Date(activities[i + 1].activityDate).toLocaleDateString() && (
               <Divider />
             )}
         </Box>
