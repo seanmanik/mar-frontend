@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { memo } from "react";
 import TokenToIcon from "../../utils/TokenToIcon";
-import { useRecoilValueLoadable } from "recoil";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { PoolsState } from "../../state/PoolsState";
 import { IPoolDetail } from "../../apis/getPools/types";
 import { formatNumber } from "../../utils/numbers";
@@ -9,9 +9,7 @@ import ValueDisplay from "../ValueDisplay";
 
 //TODO: 
 export default memo(() => {
-  const poolsLoadable = useRecoilValueLoadable(PoolsState)
-  const isHasPoolsData = poolsLoadable.state == 'hasValue'
-  const pools = isHasPoolsData ? poolsLoadable.contents as IPoolDetail[] : []
+  const pools = useRecoilValue(PoolsState)
 
   const myPools = pools.filter((pool) => pool.depositedAmount > 0);
   const points: any = []

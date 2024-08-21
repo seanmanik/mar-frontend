@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { useRecoilValueLoadable } from "recoil";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { PoolsState } from "../../state/PoolsState";
 import { IPoolDetail } from "../../apis/getPools/types";
 import { Grid } from "@mui/joy";
@@ -14,9 +14,7 @@ export default memo(() => {
         return !!account && !!account.isConnected;
     }, [account]);
 
-    const poolsLoadable = useRecoilValueLoadable(PoolsState)
-    const isHasPoolsData = poolsLoadable.state == 'hasValue'
-    const pools = isHasPoolsData ? poolsLoadable.contents as IPoolDetail[] : []
+    const pools = useRecoilValue(PoolsState)
 
     return (
         <Grid

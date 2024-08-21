@@ -6,7 +6,7 @@ import Button from "../Button";
 import { useRecoilValue } from "recoil";
 import { UserInfoState } from "../../state/UserInfoState";
 import { useAccount } from "wagmi";
-import { AccountNFTState, useAccountNFTUpdate } from "../../state/AccountNFTState";
+import { AccountNFTState } from "../../state/AccountNFTState";
 import { useMintNFT } from "../../apis/interactWallet/EVM/useMintNFT";
 import { toast } from "react-toastify";
 
@@ -23,10 +23,6 @@ export default memo(() => {
       toast.success("Mint an NFT successfully.")
     }
   }, [isConfirmed]);
-
-  useAccountNFTUpdate({
-    ethAddress: wallet.address || ''
-  })
   
   return (
     <Box
@@ -66,7 +62,7 @@ export default memo(() => {
                   maxWidth: "400px",
                 }}
               >
-                You own {userNFT.ids.length} Booster NFTs, <br />
+                You own {userNFT.balance} Booster NFTs, <br />
                 each NFT gives you 1 progression leveL
               </Box>
             }
@@ -82,7 +78,7 @@ export default memo(() => {
                 textAlign: "left",
               }}
             >
-              Level {userInfo.level + (userNFT.ids.length >= 3 ? 3 : userNFT.ids.length)} <span style={{ color: "gray" }}>- {(userInfo.boostPercentage || 0) + (userNFT.ids.length >= 3 ? 3 : userNFT.ids.length) * 10}% Booster</span>
+              Level {userInfo.level + (userNFT.balance >= 3 ? 3 : userNFT.balance)} <span style={{ color: "gray" }}>- {(userInfo.boostPercentage || 0) + (userNFT.balance >= 3 ? 3 : userNFT.balance) * 10}% Booster</span>
             </Typography>
           </Tooltip>
         </Box>

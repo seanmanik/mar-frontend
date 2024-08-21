@@ -57,7 +57,7 @@ export default memo<{
               justifyContent={"flex-end"}
               flexWrap={"wrap"}
             >
-              {userNFT.ids.map((e, i) => (
+              {Array(userNFT.balance).map((e, i) => (
                 <img
                   key={i}
                   src={ImageLevelUpNFT}
@@ -66,7 +66,7 @@ export default memo<{
                   style={{ objectFit: "cover", margin: 2, borderRadius: 5 }}
                 />
               ))}
-              {userNFT.ids.length > 0 && (
+              {userNFT.balance > 0 && (
                 <Typography level="title-sm" marginLeft={1}>
                   NFTs Minted
                 </Typography>

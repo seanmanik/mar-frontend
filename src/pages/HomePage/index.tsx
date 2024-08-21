@@ -3,12 +3,12 @@ import { useMemo, useState } from "react";
 import AccountLevel from "../../components/AccountLevel";
 import PoolsSelection from "../../components/PoolsSelection";
 import { useAccount } from "wagmi";
-import { useRecoilValueLoadable } from "recoil";
-import { PoolsState, useAutoPoolsStateIntervalRefresh, useFirstFetchPoolsState } from "../../state/PoolsState";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { PoolsState } from "../../state/PoolsState";
 import Summary from "./Summary";
 import OtherPools from "./OtherPools";
 import MyPools from "./MyPools";
-import { useAccountBalanceStateUpdate } from "../../state/AccountBalancesState";
+import { useInitAndUpdateStateInterval } from "../../hooks/useInitAndUpdateStateInterval";
 
 const HomePage = () => {
   const account = useAccount();
@@ -17,11 +17,9 @@ const HomePage = () => {
     return !!account && !!account.isConnected;
   }, [account]);
 
-  const poolsLoadable = useRecoilValueLoadable(PoolsState)
+  const pools = useRecoilValue(PoolsState)
   
-  useFirstFetchPoolsState()
-  useAutoPoolsStateIntervalRefresh()
-  useAccountBalanceStateUpdate({ethAddress: account.address?.toString() || ''})
+  useInitAndUpdateStateInterval()
 
   return (
     <Box maxWidth={1420} paddingLeft={"20px"} paddingRight={"20px"} paddingBottom={"84px"} paddingTop={"44px"} margin={"auto"}>
@@ -35,7 +33,7 @@ const HomePage = () => {
 
       <PoolsSelection/>
 
-      {poolsLoadable.state == 'loading'
+      {pools.length == 0
         ? (
           <Stack width={"100%"} height={"400px"} alignItems="center" justifyContent="center">
             <CircularProgress variant="soft" size="lg" />
