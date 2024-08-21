@@ -21,6 +21,7 @@ export default memo<{
       toast.success("Mint an NFT successfully.")
     }
   }, [isConfirmed]);
+  console.log(userNFT)
   
   return (
     <ModalWhite
@@ -57,7 +58,7 @@ export default memo<{
               justifyContent={"flex-end"}
               flexWrap={"wrap"}
             >
-              {Array(userNFT.balance).map((e, i) => (
+              {[...Array(userNFT.balance)].map((e, i) => (
                 <img
                   key={i}
                   src={ImageLevelUpNFT}
