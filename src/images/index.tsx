@@ -8,3 +8,4 @@ export { default as ImageBTC } from './resource/btc.png';
 export { default as ImageSolanaCircle } from './resource/SolanaCircle.png';
 export { default as ImageLogoBlueSquare } from './resource/LogoBlueSquare.png';
 export { default as ImageEthBlue } from './resource/EthBlue.png';
+export { default as ImageLevelUpNFT } from './resource/levelupnft.png';

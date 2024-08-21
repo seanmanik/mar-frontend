@@ -1,18 +1,27 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import ModalWhite from "../ModalWhite";
 import { Box, Stack, Typography } from "@mui/joy";
 import imgInfo from "./info.png";
 import { Bolt } from "@mui/icons-material";
 import Button from "../Button";
+import { useRecoilValue } from "recoil";
+import { AccountNFTState } from "../../state/AccountNFTState";
+import { ImageLevelUpNFT, ImageLogoBlack } from "../../images";
+import { useMintNFT } from "../../apis/interactWallet/EVM/useMintNFT";
+import { toast } from "react-toastify";
 export default memo<{
   open: boolean;
   onClose: () => void;
 }>(({ ...modalProps }) => {
-  const images = [
-    "https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk",
-    "https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk",
-    "https://i.seadn.io/gae/WG55wHkFEYqegub2kkMZbUJwmI0TfW75LRrgI4odvsfqZ0sTEX9CCr3QUenYrf9tzIsSUp7vNccImZtDO-kcTLzsqxlb98DKiO2mLOk",
-  ];
+  const userNFT = useRecoilValue(AccountNFTState)
+  const { isPending, isConfirming, isConfirmed, onMint } = useMintNFT()
+
+  useEffect(() => {
+    if (isConfirmed) {
+      toast.success("Mint an NFT successfully.")
+    }
+  }, [isConfirmed]);
+  
   return (
     <ModalWhite
       {...modalProps}
@@ -34,8 +43,11 @@ export default memo<{
             justifyContent={"space-between"}
           >
             <Button
+              disabled={isPending}
+              loading={isConfirming}
               buttonType="primary"
               endDecorator={<Bolt fontSize="small" />}
+              onClick={() => onMint()}
             >
               Mint NFT Booster
             </Button>
@@ -45,16 +57,16 @@ export default memo<{
               justifyContent={"flex-end"}
               flexWrap={"wrap"}
             >
-              {images.map((e, i) => (
+              {userNFT.ids.map((e, i) => (
                 <img
                   key={i}
-                  src={e}
+                  src={ImageLevelUpNFT}
                   width={40}
                   height={40}
                   style={{ objectFit: "cover", margin: 2, borderRadius: 5 }}
                 />
               ))}
-              {images.length > 0 && (
+              {userNFT.ids.length > 0 && (
                 <Typography level="title-sm" marginLeft={1}>
                   NFTs Minted
                 </Typography>

@@ -1,16 +1,33 @@
 import { Bolt, EmojiObjects } from "@mui/icons-material";
 import { Box, Stack, Tooltip, Typography } from "@mui/joy";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import ModalHowToLevelUp from "../ModalHowToLevelUp";
 import Button from "../Button";
 import { useRecoilValue } from "recoil";
 import { UserInfoState } from "../../state/UserInfoState";
 import { useAccount } from "wagmi";
+import { AccountNFTState, useAccountNFTUpdate } from "../../state/AccountNFTState";
+import { useMintNFT } from "../../apis/interactWallet/EVM/useMintNFT";
+import { toast } from "react-toastify";
 
 export default memo(() => {
   const [openModalHowToLevelUp, setOpenModalHowToLevelUp] = useState(false);
   const userInfo = useRecoilValue(UserInfoState)
   const wallet = useAccount()
+  const userNFT = useRecoilValue(AccountNFTState)
+
+  const { isPending, isConfirming, isConfirmed, onMint } = useMintNFT()
+
+  useEffect(() => {
+    if (isConfirmed) {
+      toast.success("Mint an NFT successfully.")
+    }
+  }, [isConfirmed]);
+
+  useAccountNFTUpdate({
+    ethAddress: wallet.address || ''
+  })
+  
   return (
     <Box
       sx={{
@@ -49,7 +66,7 @@ export default memo(() => {
                   maxWidth: "400px",
                 }}
               >
-                You own 2 Booster NFTs, <br />
+                You own {userNFT.ids.length} Booster NFTs, <br />
                 each NFT gives you 1 progression leveL
               </Box>
             }
@@ -65,7 +82,7 @@ export default memo(() => {
                 textAlign: "left",
               }}
             >
-              Level {userInfo.level} <span style={{ color: "gray" }}>- {userInfo.boostPercentage || 0}% Booster</span>
+              Level {userInfo.level + userNFT.ids.length > 3 ? 3 : userNFT.ids.length} <span style={{ color: "gray" }}>- {(userInfo.boostPercentage || 0) + (userNFT.ids.length > 3 ? 3 : userNFT.ids.length) * 10}% Booster</span>
             </Typography>
           </Tooltip>
         </Box>
@@ -85,9 +102,15 @@ export default memo(() => {
           >
             How to Level Up
           </Button>
-          <Button buttonType="primary" endDecorator={<Bolt fontSize="small" />}>
-            Mint NFT Booster
-          </Button>
+          <Button
+              disabled={isPending}
+              loading={isConfirming}
+              buttonType="primary"
+              endDecorator={<Bolt fontSize="small" />}
+              onClick={() => onMint()}
+            >
+              Mint NFT Booster
+            </Button>
         </Stack>
       </Stack>
 
