@@ -160,6 +160,7 @@ const TokenPoolCard = ({pool}: {
         )}
       </Stack>
 
+      {/* TODO: move modal to homepage */}
       <ModalWithdrawToken
         open={openModalWithraw}
         onClose={() => setOpenModalWithraw(false)}

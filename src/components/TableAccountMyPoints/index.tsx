@@ -7,7 +7,6 @@ import { IPoolDetail } from "../../apis/getPools/types";
 import { formatNumber } from "../../utils/numbers";
 import ValueDisplay from "../ValueDisplay";
 
-//TODO: 
 export default memo(() => {
   const pools = useRecoilValue(PoolsState)
 
