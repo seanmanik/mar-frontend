@@ -17,7 +17,7 @@ export default memo(() => {
   const userNFT = useRecoilValue(AccountNFTState)
 
   const { isPending, isConfirming, isConfirmed, onMint } = useMintNFT()
-
+  
   useEffect(() => {
     if (isConfirmed) {
       toast.success("Mint an NFT successfully.")
@@ -82,7 +82,7 @@ export default memo(() => {
                 textAlign: "left",
               }}
             >
-              Level {userInfo.level + userNFT.ids.length > 3 ? 3 : userNFT.ids.length} <span style={{ color: "gray" }}>- {(userInfo.boostPercentage || 0) + (userNFT.ids.length > 3 ? 3 : userNFT.ids.length) * 10}% Booster</span>
+              Level {userInfo.level + (userNFT.ids.length >= 3 ? 3 : userNFT.ids.length)} <span style={{ color: "gray" }}>- {(userInfo.boostPercentage || 0) + (userNFT.ids.length >= 3 ? 3 : userNFT.ids.length) * 10}% Booster</span>
             </Typography>
           </Tooltip>
         </Box>

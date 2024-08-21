@@ -121,8 +121,6 @@ export function useAutoPoolsStateIntervalRefresh() {
                     ).toString())
                 }
             })
-
-            // console.log(pools)
         
             setPoolsState(pools)
         }, 3000)
