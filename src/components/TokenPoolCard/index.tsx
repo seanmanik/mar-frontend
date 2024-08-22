@@ -18,15 +18,14 @@ import {
 import { AppContext } from "../../context/AppContext";
 import { IPoolDetail } from "../../apis/getPools/types";
 import PoolTitle from "./PoolTitle";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { AccountBalanceForPool } from "../../state/AccountBalanceForPool";
+import { SelectPoolForDepositWithdraw } from "../../state/SelectPoolForDepositWithdraw";
 
 
 const TokenPoolCard = ({pool}: {
   pool: IPoolDetail
 }) => {
-  const [openModalDeposit, setOpenModalDeposit] = useState(false);
-  const [openModalWithraw, setOpenModalWithraw] = useState(false);
 
   const { setOpenModalUserAgreement } = useContext(AppContext);
 
@@ -35,11 +34,11 @@ const TokenPoolCard = ({pool}: {
   const isConnectWallet = useMemo(() => {
     return !!account && !!account.isConnected;
   }, [account]);
+  const setSelectPool = useSetRecoilState(SelectPoolForDepositWithdraw)
 
   const accountBalanceState = useRecoilValue(AccountBalanceForPool({poolId: pool.tokenPoolID}))
 
   const accountBalance = accountBalanceState?.amount10 || 0
-  const accountAllowanceBalance = accountBalanceState?.allowanceAmount10 || 0
 
   return (
     <Card
@@ -143,7 +142,7 @@ const TokenPoolCard = ({pool}: {
                 buttonType="secondary"
                 endDecorator={<ArrowForward />}
                 fullWidth
-                onClick={() => setOpenModalWithraw(true)}
+                onClick={() => setSelectPool(v => ({...v, withdrawPoolId: pool.tokenPoolID}))}
               >
                 Withdraw
               </Button>
@@ -152,27 +151,13 @@ const TokenPoolCard = ({pool}: {
               buttonType="primary"
               endDecorator={<Bolt />}
               fullWidth
-              onClick={() => setOpenModalDeposit(true)}
+              onClick={() => setSelectPool(v => ({...v, depositPoolId: pool.tokenPoolID}))}
             >
               Deposit
             </Button>
           </Stack>
         )}
       </Stack>
-
-      {/* TODO: move modal to homepage */}
-      <ModalWithdrawToken
-        open={openModalWithraw}
-        onClose={() => setOpenModalWithraw(false)}
-        pool={pool}
-      />
-      <ModalDepositToken
-        open={openModalDeposit}
-        onClose={() => setOpenModalDeposit(false)}
-        tokenBalanceAmout={accountBalance || 0}
-        allowanceAmount={accountAllowanceBalance}
-        pool={pool}
-      />
     </Card>
   );
 };

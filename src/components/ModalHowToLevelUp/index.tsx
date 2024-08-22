@@ -21,7 +21,6 @@ export default memo<{
       toast.success("Mint an NFT successfully.")
     }
   }, [isConfirmed]);
-  console.log(userNFT)
   
   return (
     <ModalWhite

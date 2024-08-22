@@ -2,24 +2,29 @@ import { memo, useContext } from "react";
 
 import UI from "./index.ui";
 import { IPoolDetail } from "../../apis/getPools/types";
+import { useRecoilValue } from "recoil";
+import { SelectPoolState } from "../../state/SelectPoolState";
 
 export default memo<{
   open: boolean;
-  pool: IPoolDetail
+  poolId: number
   onClose: () => void;
 }>(
   ({
     open,
     onClose,
-    pool
+    poolId
   }) => {
+    const pool = useRecoilValue(SelectPoolState({
+      poolId
+    }))
     return (
       <>
-        {open && (
+        {open && pool && (
           <UI
             open={open}
             onClose={onClose}
-            pool={pool}
+            pool={pool as IPoolDetail}
           />
         )}
       </>

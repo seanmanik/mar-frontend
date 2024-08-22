@@ -8,8 +8,16 @@ import { wagmiConfig } from "../wagmi";
 import { POOL_CONTRACT_ABI } from "../constants/contract";
 import { useAccount } from "wagmi";
 import { selectorFamily } from "recoil";
+import { PoolsState } from "./PoolsState";
 
-export const PoolsState = atom<IPoolDetail[]>({
-    key: 'PoolsState',
-    default: []
+
+export const SelectPoolState = selectorFamily({
+    key: 'SelectPoolState',
+    get: ({poolId}: {
+        poolId: number
+    }) => ({ get }) => {
+        const pools = get(PoolsState)
+        
+        return pools.find(e => e.tokenPoolID == poolId)
+    }
 })
