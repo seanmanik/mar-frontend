@@ -6,7 +6,14 @@ export const loginRequest = async (data: LoginRequestBody): Promise<{
   token: string,
   boostPercentage: number
 }> => {
-  const response = await api.post("/User/Login", data);
+  var reqData: any = {
+    ...data
+  }
+
+  if (localStorage.getItem('refCode')) {
+    reqData.referralCode = localStorage.getItem('refCode')
+  }
+  const response = await api.post("/User/Login", reqData);
 
   return response.data;
 };
