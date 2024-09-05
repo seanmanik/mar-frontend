@@ -204,7 +204,7 @@ export default memo<{
               <TokenAmountDisplay
                 amount={amount}
                 symbol={pool.assetSymbol}
-                name={`$${formatNumber(amount)}`}
+                name={`$${formatNumber(amount * pool.usdRate)}`}
                 icon={TokenToIcon[pool.assetSymbol]}
               />
 

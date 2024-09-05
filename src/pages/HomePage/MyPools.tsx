@@ -2,7 +2,6 @@ import { Box, Grid, Stack, Typography } from "@mui/joy";
 import TokenPoolCard from "../../components/TokenPoolCard";
 import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { PoolsState } from "../../state/PoolsState";
-import { IPoolDetail } from "../../apis/getPools/types";
 
 const HomePage = () => {
     const pools = useRecoilValue(PoolsState)

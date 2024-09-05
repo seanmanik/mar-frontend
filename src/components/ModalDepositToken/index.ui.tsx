@@ -23,6 +23,7 @@ import { AuthTokenState } from "../../state/AuthTokenState";
 import { IPoolDetail } from "../../apis/getPools/types";
 import { useIsCorrectNetwork } from "../../hooks/useIsCorrectNetwork";
 import { toast } from "react-toastify";
+import { zeroAddress } from "viem";
 
 export default memo<{
   open: boolean;
@@ -61,6 +62,7 @@ export default memo<{
       contractAddress: pool.contractAddress,
       decimals: TOKEN_DECIMALS[pool.tokenAddress] || 18,
       abi: POOL_CONTRACT_ABI,
+      type: pool.tokenAddress == zeroAddress ? 'ETH' : 'ERC20' //TODO: use type
     });
 
     useEffect(() => {

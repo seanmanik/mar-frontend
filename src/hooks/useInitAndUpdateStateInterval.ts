@@ -9,13 +9,12 @@ import { AccountNFTState } from "../state/AccountNFTState"
 import { AuthTokenState } from "../state/AuthTokenState";
 import { useAccount, useClient } from "wagmi";
 import { getPoolsRequest } from "../apis/getPools";
-import { formatEther, zeroAddress } from "viem";
+import { formatEther, formatUnits, zeroAddress } from "viem";
 import { getBalance } from "viem/actions";
 
 
-
 function toNumber(v: any, decimals: number = 0) {
-    return parseFloat((BigInt((v as BigInt).toString()) / BigInt(10 ** decimals)).toString())
+    return parseFloat(formatUnits(v, decimals))
 }
 
 export function useInitAndUpdateStateInterval() {

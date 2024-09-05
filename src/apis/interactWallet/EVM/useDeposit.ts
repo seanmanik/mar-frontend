@@ -10,10 +10,12 @@ export const useDeposit = ({
   contractAddress,
   decimals,
   abi,
+  type
 }: {
   contractAddress: string;
   decimals: number;
   abi: any;
+  type: 'ETH' | 'ERC20'
 }) => {
   const { data: hash, isPending, writeContract } = useWriteContract();
 
@@ -23,11 +25,16 @@ export const useDeposit = ({
         address: contractAddress as Address,
         abi,
         functionName: "stake",
-        args: [
+        args: type == 'ETH' ? [] : [
           BigInt(
-            new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toFixed()
+            new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toString()
           ),
         ],
+        value: type == 'ETH' ? 
+          BigInt(
+            new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toString()
+          )
+          : BigInt(0)
       });
     },
     [contractAddress, writeContract, abi, decimals]

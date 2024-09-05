@@ -58,6 +58,10 @@ export const formatNumberNotation = (
   }).format(num)
 };
 
+export function toNumberFixed(num: number, decimalPlaces: number) {
+  return parseFloat(formatNumber(num, decimalPlaces).toString())
+}
+
 export function formatNumber(
     number: any,
     precision?: number,

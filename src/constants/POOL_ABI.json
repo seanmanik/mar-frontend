@@ -162,6 +162,13 @@
   },
   {
     "inputs": [],
+    "name": "stake",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "stakingToken",
     "outputs": [
       {
