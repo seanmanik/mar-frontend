@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { PoolsState } from "../../state/PoolsState";
 import { IPoolDetail } from "../../apis/getPools/types";
@@ -15,6 +15,48 @@ export default memo(() => {
     }, [account]);
 
     const pools = useRecoilValue(PoolsState)
+
+    const [marPoints, setMarPoints] = useState<any>([])
+    const [puppyPoints, setPuppyPoints] = useState<any>([])
+
+    useEffect(() => {
+        function calculate() {
+            setMarPoints(pools.map(e => ({
+                name: e.assetName,
+                symbol: 'MAR',
+                amount: (() => {
+                    var v = e.points.find(p => p.symbol == 'MAR')
+                    if (!v) return 0
+                    return (
+                        v.points + 
+                        (
+                            (v.pointsPerDay / 24 / 60 / 60) *
+                            ((Date.now() - new Date(v.calculatedAt).getTime()) / 1000)
+                        )
+                    )
+                })()
+            })).filter(e => e.amount > 0))
+    
+            setPuppyPoints(pools.map(e => ({
+                name: e.assetName,
+                symbol: 'PUPPY',
+                amount: (() => {
+                    var v = e.points.find(p => p.symbol == 'MAR')
+                    if (!v) return 0
+                    return (
+                        v.points + 
+                        (
+                            (v.pointsPerDay / 24 / 60 / 60) *
+                            ((Date.now() - new Date(v.calculatedAt).getTime()) / 1000)
+                        )
+                    )
+                })()
+            })).filter(e => e.amount > 0))
+        }
+        calculate()
+        let id = setInterval(calculate, 5000)
+        return () => clearInterval(id)
+    }, [pools])
 
     return (
         <Grid
@@ -57,11 +99,7 @@ export default memo(() => {
                     <StatsCard
                         title="MAR POINTS"
                         isUsdValue={false}
-                        value={pools.map(e => ({
-                            name: e.assetName,
-                            symbol: 'MAR',
-                            amount: (e.points.find(p => p.symbol == 'MAR') || {}).points || 0
-                        })).filter(e => e.amount > 0)}
+                        value={marPoints}
                         icon={IconMarPoint}
                     />
                 </Grid>
@@ -71,11 +109,7 @@ export default memo(() => {
                     <StatsCard
                         title="PUPPY POINTS"
                         isUsdValue={false}
-                        value={pools.map(e => ({
-                            name: e.assetName,
-                            symbol: 'PUPPY',
-                            amount: (e.points.find(p => p.symbol == 'PUPPY') || {}).points || 0
-                        })).filter(e => e.amount > 0)}
+                        value={puppyPoints}
                         icon={IconPuppyPoint}
                     />
                 </Grid>

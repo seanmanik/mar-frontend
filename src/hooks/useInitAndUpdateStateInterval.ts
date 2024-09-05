@@ -7,8 +7,10 @@ import { wagmiConfig } from "../wagmi";
 import { ERC20_CONTRACT_ABI, NFT_CONTRACT, NFT_CONTRACT_ABI, POOL_CONTRACT_ABI } from "../constants/contract"
 import { AccountNFTState } from "../state/AccountNFTState"
 import { AuthTokenState } from "../state/AuthTokenState";
-import { useAccount } from "wagmi";
+import { useAccount, useClient } from "wagmi";
 import { getPoolsRequest } from "../apis/getPools";
+import { formatEther, zeroAddress } from "viem";
+import { getBalance } from "viem/actions";
 
 
 
@@ -19,6 +21,7 @@ function toNumber(v: any, decimals: number = 0) {
 export function useInitAndUpdateStateInterval() {
     const token = useRecoilValue(AuthTokenState)
     const account = useAccount();
+    const client = useClient()
     const setPoolsState = useSetRecoilState(PoolsState)
     const setAccountBalance = useSetRecoilState(AccountBalancesState)
     const setAccountNFT= useSetRecoilState(AccountNFTState)
@@ -33,6 +36,8 @@ export function useInitAndUpdateStateInterval() {
             nextRun = Date.now() + delay
 
             const pools = await getPoolsRequest({token})
+            var ETHPool = pools.find(e => e.assetSymbol == 'ETH');
+            (ETHPool as any).tokenAddress = zeroAddress // TODO: remove this line
 
             if (pools.length == 0) return []
 
@@ -98,13 +103,23 @@ export function useInitAndUpdateStateInterval() {
                 return e
             }))
 
-            setAccountBalance(pools.map((e, i) => {
-                return {
-                    amount10: balanceOfResult[i],
-                    allowanceAmount10: allowanceResult[i],
-                    poolId: pools[i].tokenPoolID
-                };
-            }))
+            setAccountBalance([
+                ...pools.map((e, i) => {
+                    if (e.tokenAddress == zeroAddress) return null
+                    return {
+                        amount10: balanceOfResult[i],
+                        allowanceAmount10: allowanceResult[i],
+                        poolId: pools[i].tokenPoolID
+                    };
+                }),
+                ETHPool ? {
+                    amount10: parseFloat(formatEther(await getBalance(client as any, {
+                        address: account.address as any
+                    }))),
+                    allowanceAmount10: 9999999999999999999,
+                    poolId: ETHPool?.tokenPoolID
+                } : null
+            ].filter(e => !!e))
 
             setAccountNFT({
                 balance: balanceOfNFT,
