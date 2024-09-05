@@ -118,7 +118,7 @@ export function useInitAndUpdateStateInterval() {
                     allowanceAmount10: 9999999999999999999,
                     poolId: ETHPool?.tokenPoolID
                 } : null
-            ].filter(e => !!e))
+            ].filter(e => !!e) as any)
 
             setAccountNFT({
                 balance: balanceOfNFT,
