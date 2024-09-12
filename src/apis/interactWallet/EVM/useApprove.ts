@@ -26,7 +26,7 @@ export const useApprove = ({
             address: contractAddress as Address,
             abi,
             functionName: 'approve',
-            args: [spenderAddress, BigInt(new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toString())],
+            args: [spenderAddress, BigInt(value) * (BigInt(10) ** BigInt(decimals))],
         })
     }, [contractAddress, writeContract, abi, spenderAddress, decimals])
 

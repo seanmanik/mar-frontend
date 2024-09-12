@@ -39,7 +39,7 @@ const TokenPoolCard = ({pool}: {
   const accountBalanceState = useRecoilValue(AccountBalanceForPool({poolId: pool.tokenPoolID}))
 
   const accountBalance = accountBalanceState?.amount10 || 0
-
+  
   return (
     <Card
       sx={{

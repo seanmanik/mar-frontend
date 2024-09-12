@@ -36,7 +36,9 @@ export function useInitAndUpdateStateInterval() {
 
             const pools = await getPoolsRequest({token})
             var ETHPool = pools.find(e => e.assetSymbol == 'ETH');
-            (ETHPool as any).tokenAddress = zeroAddress // TODO: remove this line
+            if (ETHPool) {
+                (ETHPool as any).tokenAddress = zeroAddress // TODO: remove this line
+            }
 
             if (pools.length == 0) return []
 

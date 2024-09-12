@@ -26,14 +26,10 @@ export const useDeposit = ({
         abi,
         functionName: "stake",
         args: type == 'ETH' ? [] : [
-          BigInt(
-            new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toString()
-          ),
+          BigInt(value) * (BigInt(10) ** BigInt(decimals))
         ],
         value: type == 'ETH' ? 
-          BigInt(
-            new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toString()
-          )
+        BigInt(value) * (BigInt(10) ** BigInt(decimals))
           : BigInt(0)
       });
     },

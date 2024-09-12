@@ -1,6 +1,6 @@
 import { memo } from "react";
 import ValueDisplay from "../ValueDisplay";
-import { formatNumber, toNumberFixed } from "../../utils/numbers";
+import { formatNumber } from "../../utils/numbers";
 import { Box, Stack, Typography } from "@mui/joy";
 
 export default memo<{
@@ -22,8 +22,8 @@ export default memo<{
         </Box>
         <Box flex={1}>
             <Stack direction={"row"} justifyContent={"space-between"}>
-              <Typography level="title-lg">{toNumberFixed(amount, 2).toLocaleString()}{symbol ? ` ${symbol}`: ''}</Typography>
-              {amountChange == 0 || showChange == false ? <></> : <Typography level="title-lg" color={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}>{amountChange > 0 ? '+': ''}{toNumberFixed(amountChange, 2).toLocaleString()}</Typography>}
+              <Typography level="title-lg">{formatNumber(amount, 2)}{symbol ? ` ${symbol}`: ''}</Typography>
+              {amountChange == 0 || showChange == false ? <></> : <Typography level="title-lg" color={amountChange > 0 ? 'success' : amountChange < 0 ? 'danger': 'primary'}>{amountChange > 0 ? '+': ''}{formatNumber(amountChange, 2).toLocaleString()}</Typography>}
             </Stack>
             <Typography level="body-sm" color="neutral">{name}</Typography>
         </Box>

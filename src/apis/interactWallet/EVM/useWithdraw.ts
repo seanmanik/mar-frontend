@@ -24,7 +24,7 @@ export const useWithdraw = ({
             address: contractAddress as Address,
             abi,
             functionName: 'withdraw',
-            args: [BigInt(new BigNumber(value).multipliedBy(Math.pow(10, decimals)).toString())],
+            args: [BigInt(value) * (BigInt(10) ** BigInt(decimals))],
         })
     }, [contractAddress, writeContract, abi, decimals])
 
