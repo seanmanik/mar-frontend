@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import { useCallback } from "react";
-import { Address } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
+
 import {
   useWaitForTransactionReceipt,
   useWriteContract,
@@ -26,11 +27,11 @@ export const useDeposit = ({
         abi,
         functionName: "stake",
         args: type == 'ETH' ? [] : [
-          BigInt(value) * (BigInt(10) ** BigInt(decimals))
+          parseUnits(value.toString(), decimals)
         ],
         value: type == 'ETH' ? 
-        BigInt(value) * (BigInt(10) ** BigInt(decimals))
-          : BigInt(0)
+        parseUnits(value.toString(), decimals)
+          : BigInt('0')
       });
     },
     [contractAddress, writeContract, abi, decimals]

@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useCallback } from "react";
-import { Address } from "viem";
+import { Address, parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi"
 
 export const useWithdraw = ({
@@ -24,7 +24,7 @@ export const useWithdraw = ({
             address: contractAddress as Address,
             abi,
             functionName: 'withdraw',
-            args: [BigInt(value) * (BigInt(10) ** BigInt(decimals))],
+            args: [parseUnits(value.toString(), decimals)],
         })
     }, [contractAddress, writeContract, abi, decimals])
 

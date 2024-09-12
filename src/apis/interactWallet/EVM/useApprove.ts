@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useCallback } from "react";
-import { Address } from "viem";
+import { Address, parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi"
 
 export const useApprove = ({
@@ -26,7 +26,7 @@ export const useApprove = ({
             address: contractAddress as Address,
             abi,
             functionName: 'approve',
-            args: [spenderAddress, BigInt(value) * (BigInt(10) ** BigInt(decimals))],
+            args: [spenderAddress, parseUnits(value.toString(), decimals)],
         })
     }, [contractAddress, writeContract, abi, spenderAddress, decimals])
 

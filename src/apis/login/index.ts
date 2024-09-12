@@ -10,9 +10,12 @@ export const loginRequest = async (data: LoginRequestBody): Promise<{
     ...data
   }
 
-  if (localStorage.getItem('refCode')) {
-    reqData.referralCode = localStorage.getItem('refCode')
+  if (location.search) {
+    reqData.referralCode =  location.search.replace('?', '')
   }
+  // if (localStorage.getItem('refCode')) {
+  //   reqData.referralCode = localStorage.getItem('refCode')
+  // }
   const response = await api.post("/User/Login", reqData);
 
   return response.data;

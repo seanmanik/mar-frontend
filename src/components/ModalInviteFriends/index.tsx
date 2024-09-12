@@ -71,7 +71,7 @@ export default memo<{
           </Button>
           <Button buttonType="primary" endDecorator={<Twitter />} fullWidth onClick={(() => {
             const twitterBaseUrl = "https://twitter.com/intent/tweet";
-            const url = `https://${'chat.openapi.com'}?${refCode}`
+            const url = `${location.host}?${refCode}`
             const text = 'Use my ref code and get started with #pointpro.\n'
             const fullUrl = `${twitterBaseUrl}?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
             

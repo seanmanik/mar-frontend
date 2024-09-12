@@ -33,12 +33,12 @@ const queryClient = new QueryClient({
   },
 })
 
-if (location.search) {
-  if (!localStorage.getItem('refCode')) {
-    const refCode = location.search.replace('?', '')
-    localStorage.setItem('refCode', refCode)
-  }
-}
+// if (location.search) {
+//   if (!localStorage.getItem('refCode')) {
+//     const refCode = location.search.replace('?', '')
+//     localStorage.setItem('refCode', refCode)
+//   }
+// }
 
 const persister = createSyncStoragePersister({
   key: 'marpoint',
